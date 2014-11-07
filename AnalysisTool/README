@@ -1,0 +1,35 @@
+The AnalysisTool library is part of an easy to use and flexible analysis framework for CMS.
+Its counterpart ist MyRootMaker a CMSSW plugin to produce simple root-file that can be
+used as input for programs using the AnalysisTool library.
+
+Installation:
+./configure --prefix=[/full/path]
+make
+make install
+
+Usage:
+A setup-script can be found in prefix/bin. 
+
+source AnalysisToolUseThis
+
+This will setup all important environment variables:
+ATINCLUDE path to include
+ATLIB path to library
+LD_LIBRARY_PATH the library path is added
+
+Example of simple Makefile:
+
+  1 CC = g++
+  2 CFLAGS = -O2 -Wall
+  3 INCLUDES = -I $(shell root-config --incdir) -I$(ATINCLUDE)
+  4 ROOTLIBS = $(shell root-config --libs) -lMinuit -lMathCore -lrt -L$(ATLIB) -lAnalysisTool
+  5 OBJ = main.o
+  6 
+  7 myanalysis: $(OBJ)
+  8         $(CC) $(CFLAGS) $(ROOTLIBS) -o myanalysis $(OBJ)
+  9 
+ 10 %.o: %.cc
+ 11         $(CC) $(CFLAGS) $(INCLUDES) -c $<
+
+Version 1.2.1
+Added Muon: NumChambers, NumChambersWithSegments
