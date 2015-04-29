@@ -1,5 +1,5 @@
 CC = g++ 
-CFLAGS = -O2 -Wall 
+CFLAGS = -O2 -Wall -Wno-unused-variable -Wno-unused-but-set-variable -Wno-sign-compare
 INCLUDES = -I $(shell root-config --incdir) -I$(ATINCLUDE) 
 ROOTLIBS = $(shell root-config --libs) -lMinuit -lMathCore -lrt -L$(ATLIB) -lAnalysisTool 
 OBJ = main.o 

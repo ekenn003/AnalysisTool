@@ -77,17 +77,17 @@ class Analyse
 	Int_t loadphotons;
 	Int_t loadtaus;
 	Int_t loadmet;
-	Int_t loadak5calojets;
-	Int_t loadak5jptjets;
-	Int_t loadak5pfchsjets;
-	Int_t loadak5pfjets;
+	Int_t loadak4calojets;
+	Int_t loadak4jptjets;
+	Int_t loadak4pfchsjets;
+	Int_t loadak4pfjets;
 	Int_t loadtracks;
 	Int_t loadsuperclusters;
 	Int_t loadprimvertices;
 	Int_t loadtrigger;
 	Int_t loadgeninfo;
 	Int_t loadgenparticles;
-	Int_t loadgenak5jets;
+	Int_t loadgenak4jets;
 	Int_t loadallgenparticles;
 	void SetLoad();
 	void Load();
@@ -299,112 +299,112 @@ class Analyse
 	UInt_t muon_trigger[M_muonmaxcount];
 	UInt_t muon_trackermuonquality[M_muonmaxcount];
 
-	UInt_t ak5calojet_count;
-	Float_t ak5calojet_e[M_jetmaxcount];
-	Float_t ak5calojet_px[M_jetmaxcount];
-	Float_t ak5calojet_py[M_jetmaxcount];
-	Float_t ak5calojet_pz[M_jetmaxcount];
-	Float_t ak5calojet_hadronicenergy[M_jetmaxcount];
-	Float_t ak5calojet_emenergy[M_jetmaxcount];
-	Float_t ak5calojet_energycorr[M_jetmaxcount];
-	Float_t ak5calojet_energycorrl7uds[M_jetmaxcount];
-	Float_t ak5calojet_energycorrl7bottom[M_jetmaxcount];
-	Float_t ak5calojet_fhpd[M_jetmaxcount];
-	Float_t ak5calojet_restrictedemf[M_jetmaxcount];
-	Float_t ak5calojet_btag[M_jetmaxcount][M_btagmax];
-	UInt_t ak5calojet_n90[M_jetmaxcount];
-	UInt_t ak5calojet_n60[M_jetmaxcount];
+	UInt_t ak4calojet_count;
+	Float_t ak4calojet_e[M_jetmaxcount];
+	Float_t ak4calojet_px[M_jetmaxcount];
+	Float_t ak4calojet_py[M_jetmaxcount];
+	Float_t ak4calojet_pz[M_jetmaxcount];
+	Float_t ak4calojet_hadronicenergy[M_jetmaxcount];
+	Float_t ak4calojet_emenergy[M_jetmaxcount];
+	Float_t ak4calojet_energycorr[M_jetmaxcount];
+	Float_t ak4calojet_energycorrl7uds[M_jetmaxcount];
+	Float_t ak4calojet_energycorrl7bottom[M_jetmaxcount];
+	Float_t ak4calojet_fhpd[M_jetmaxcount];
+	Float_t ak4calojet_restrictedemf[M_jetmaxcount];
+	Float_t ak4calojet_btag[M_jetmaxcount][M_btagmax];
+	UInt_t ak4calojet_n90[M_jetmaxcount];
+	UInt_t ak4calojet_n60[M_jetmaxcount];
 
-	UInt_t ak5jptjet_count;
-	Float_t ak5jptjet_e[M_jetmaxcount];
-	Float_t ak5jptjet_px[M_jetmaxcount];
-	Float_t ak5jptjet_py[M_jetmaxcount];
-	Float_t ak5jptjet_pz[M_jetmaxcount];
-	Float_t ak5jptjet_hadronicenergy[M_jetmaxcount];
-	Float_t ak5jptjet_chargedhadronicenergy[M_jetmaxcount];
-	Float_t ak5jptjet_emenergy[M_jetmaxcount];
-	Float_t ak5jptjet_chargedemenergy[M_jetmaxcount];
-	UInt_t ak5jptjet_chargedmulti[M_jetmaxcount];	
-	Float_t ak5jptjet_energycorr[M_jetmaxcount];
-	Float_t ak5jptjet_energycorrl7uds[M_jetmaxcount];
-	Float_t ak5jptjet_energycorrl7bottom[M_jetmaxcount];
-	Float_t ak5jptjet_fhpd[M_jetmaxcount];
-	Float_t ak5jptjet_restrictedemf[M_jetmaxcount];
-	Float_t ak5jptjet_btag[M_jetmaxcount][M_btagmax];
-	UInt_t ak5jptjet_n90[M_jetmaxcount];
+	UInt_t ak4jptjet_count;
+	Float_t ak4jptjet_e[M_jetmaxcount];
+	Float_t ak4jptjet_px[M_jetmaxcount];
+	Float_t ak4jptjet_py[M_jetmaxcount];
+	Float_t ak4jptjet_pz[M_jetmaxcount];
+	Float_t ak4jptjet_hadronicenergy[M_jetmaxcount];
+	Float_t ak4jptjet_chargedhadronicenergy[M_jetmaxcount];
+	Float_t ak4jptjet_emenergy[M_jetmaxcount];
+	Float_t ak4jptjet_chargedemenergy[M_jetmaxcount];
+	UInt_t ak4jptjet_chargedmulti[M_jetmaxcount];	
+	Float_t ak4jptjet_energycorr[M_jetmaxcount];
+	Float_t ak4jptjet_energycorrl7uds[M_jetmaxcount];
+	Float_t ak4jptjet_energycorrl7bottom[M_jetmaxcount];
+	Float_t ak4jptjet_fhpd[M_jetmaxcount];
+	Float_t ak4jptjet_restrictedemf[M_jetmaxcount];
+	Float_t ak4jptjet_btag[M_jetmaxcount][M_btagmax];
+	UInt_t ak4jptjet_n90[M_jetmaxcount];
 
-	UInt_t ak5pfjet_count;
-	Float_t ak5pfjet_e[M_jetmaxcount];
-	Float_t ak5pfjet_px[M_jetmaxcount];
-	Float_t ak5pfjet_py[M_jetmaxcount];
-	Float_t ak5pfjet_pz[M_jetmaxcount];
-	Float_t ak5pfjet_area[M_jetmaxcount];
-	Float_t ak5pfjet_hadronicenergy[M_jetmaxcount];
-	Float_t ak5pfjet_chargedhadronicenergy[M_jetmaxcount];
-	Float_t ak5pfjet_emenergy[M_jetmaxcount];
-	Float_t ak5pfjet_chargedemenergy[M_jetmaxcount];
-	Float_t ak5pfjet_hfemenergy[M_jetmaxcount];
-	Float_t ak5pfjet_hfhadronicenergy[M_jetmaxcount];
-	Float_t ak5pfjet_electronenergy[M_jetmaxcount];
-	Float_t ak5pfjet_muonenergy[M_jetmaxcount];
-	UInt_t ak5pfjet_chargedmulti[M_jetmaxcount];	
-	UInt_t ak5pfjet_neutralmulti[M_jetmaxcount];	
-	UInt_t ak5pfjet_hfhadronicmulti[M_jetmaxcount];	
-	UInt_t ak5pfjet_hfemmulti[M_jetmaxcount];	
-	UInt_t ak5pfjet_electronmulti[M_jetmaxcount];	
-	UInt_t ak5pfjet_muonmulti[M_jetmaxcount];	
-	Float_t ak5pfjet_chargeda[M_jetmaxcount];
-	Float_t ak5pfjet_chargedb[M_jetmaxcount];
-	Float_t ak5pfjet_neutrala[M_jetmaxcount];
-	Float_t ak5pfjet_neutralb[M_jetmaxcount];
-	Float_t ak5pfjet_alla[M_jetmaxcount];
-	Float_t ak5pfjet_allb[M_jetmaxcount];
-	Float_t ak5pfjet_chargedfractionmv[M_jetmaxcount];
-	Float_t ak5pfjet_energycorr[M_jetmaxcount];
-	Float_t ak5pfjet_energycorrunc[M_jetmaxcount];
-	Float_t ak5pfjet_energycorrl7uds[M_jetmaxcount];
-	Float_t ak5pfjet_energycorrl7bottom[M_jetmaxcount];
-	Float_t ak5pfjet_puidfull[M_jetmaxcount];
-	Float_t ak5pfjet_puidsimple[M_jetmaxcount];
-	Float_t ak5pfjet_puidcutbased[M_jetmaxcount];
-	Float_t ak5pfjet_btag[M_jetmaxcount][M_btagmax];
-	UInt_t ak5pfjet_trigger[M_jetmaxcount];
-	Int_t ak5pfjet_mcflavour[M_jetmaxcount];
+	UInt_t ak4pfjet_count;
+	Float_t ak4pfjet_e[M_jetmaxcount];
+	Float_t ak4pfjet_px[M_jetmaxcount];
+	Float_t ak4pfjet_py[M_jetmaxcount];
+	Float_t ak4pfjet_pz[M_jetmaxcount];
+	Float_t ak4pfjet_area[M_jetmaxcount];
+	Float_t ak4pfjet_hadronicenergy[M_jetmaxcount];
+	Float_t ak4pfjet_chargedhadronicenergy[M_jetmaxcount];
+	Float_t ak4pfjet_emenergy[M_jetmaxcount];
+	Float_t ak4pfjet_chargedemenergy[M_jetmaxcount];
+	Float_t ak4pfjet_hfemenergy[M_jetmaxcount];
+	Float_t ak4pfjet_hfhadronicenergy[M_jetmaxcount];
+	Float_t ak4pfjet_electronenergy[M_jetmaxcount];
+	Float_t ak4pfjet_muonenergy[M_jetmaxcount];
+	UInt_t ak4pfjet_chargedmulti[M_jetmaxcount];	
+	UInt_t ak4pfjet_neutralmulti[M_jetmaxcount];	
+	UInt_t ak4pfjet_hfhadronicmulti[M_jetmaxcount];	
+	UInt_t ak4pfjet_hfemmulti[M_jetmaxcount];	
+	UInt_t ak4pfjet_electronmulti[M_jetmaxcount];	
+	UInt_t ak4pfjet_muonmulti[M_jetmaxcount];	
+	Float_t ak4pfjet_chargeda[M_jetmaxcount];
+	Float_t ak4pfjet_chargedb[M_jetmaxcount];
+	Float_t ak4pfjet_neutrala[M_jetmaxcount];
+	Float_t ak4pfjet_neutralb[M_jetmaxcount];
+	Float_t ak4pfjet_alla[M_jetmaxcount];
+	Float_t ak4pfjet_allb[M_jetmaxcount];
+	Float_t ak4pfjet_chargedfractionmv[M_jetmaxcount];
+	Float_t ak4pfjet_energycorr[M_jetmaxcount];
+	Float_t ak4pfjet_energycorrunc[M_jetmaxcount];
+	Float_t ak4pfjet_energycorrl7uds[M_jetmaxcount];
+	Float_t ak4pfjet_energycorrl7bottom[M_jetmaxcount];
+	Float_t ak4pfjet_puidfull[M_jetmaxcount];
+	Float_t ak4pfjet_puidsimple[M_jetmaxcount];
+	Float_t ak4pfjet_puidcutbased[M_jetmaxcount];
+	Float_t ak4pfjet_btag[M_jetmaxcount][M_btagmax];
+	UInt_t ak4pfjet_trigger[M_jetmaxcount];
+	Int_t ak4pfjet_mcflavour[M_jetmaxcount];
 
-	UInt_t ak5pfchsjet_count;
-	Float_t ak5pfchsjet_e[M_jetmaxcount];
-	Float_t ak5pfchsjet_px[M_jetmaxcount];
-	Float_t ak5pfchsjet_py[M_jetmaxcount];
-	Float_t ak5pfchsjet_pz[M_jetmaxcount];
-	Float_t ak5pfchsjet_area[M_jetmaxcount];
-	Float_t ak5pfchsjet_hadronicenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_chargedhadronicenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_emenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_chargedemenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_hfemenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_hfhadronicenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_electronenergy[M_jetmaxcount];
-	Float_t ak5pfchsjet_muonenergy[M_jetmaxcount];
-	UInt_t ak5pfchsjet_chargedmulti[M_jetmaxcount];	
-	UInt_t ak5pfchsjet_neutralmulti[M_jetmaxcount];	
-	UInt_t ak5pfchsjet_hfhadronicmulti[M_jetmaxcount];	
-	UInt_t ak5pfchsjet_hfemmulti[M_jetmaxcount];	
-	UInt_t ak5pfchsjet_electronmulti[M_jetmaxcount];	
-	UInt_t ak5pfchsjet_muonmulti[M_jetmaxcount];	
-	Float_t ak5pfchsjet_chargeda[M_jetmaxcount];
-	Float_t ak5pfchsjet_chargedb[M_jetmaxcount];
-	Float_t ak5pfchsjet_neutrala[M_jetmaxcount];
-	Float_t ak5pfchsjet_neutralb[M_jetmaxcount];
-	Float_t ak5pfchsjet_alla[M_jetmaxcount];
-	Float_t ak5pfchsjet_allb[M_jetmaxcount];
-	Float_t ak5pfchsjet_chargedfractionmv[M_jetmaxcount];
-	Float_t ak5pfchsjet_energycorr[M_jetmaxcount];
-	Float_t ak5pfchsjet_energycorrunc[M_jetmaxcount];
-	Float_t ak5pfchsjet_energycorrl7uds[M_jetmaxcount];
-	Float_t ak5pfchsjet_energycorrl7bottom[M_jetmaxcount];
-	Float_t ak5pfchsjet_btag[M_jetmaxcount][M_btagmax];
-	UInt_t ak5pfchsjet_trigger[M_jetmaxcount];
-	Int_t ak5pfchsjet_mcflavour[M_jetmaxcount];
+	UInt_t ak4pfchsjet_count;
+	Float_t ak4pfchsjet_e[M_jetmaxcount];
+	Float_t ak4pfchsjet_px[M_jetmaxcount];
+	Float_t ak4pfchsjet_py[M_jetmaxcount];
+	Float_t ak4pfchsjet_pz[M_jetmaxcount];
+	Float_t ak4pfchsjet_area[M_jetmaxcount];
+	Float_t ak4pfchsjet_hadronicenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_chargedhadronicenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_emenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_chargedemenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_hfemenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_hfhadronicenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_electronenergy[M_jetmaxcount];
+	Float_t ak4pfchsjet_muonenergy[M_jetmaxcount];
+	UInt_t ak4pfchsjet_chargedmulti[M_jetmaxcount];	
+	UInt_t ak4pfchsjet_neutralmulti[M_jetmaxcount];	
+	UInt_t ak4pfchsjet_hfhadronicmulti[M_jetmaxcount];	
+	UInt_t ak4pfchsjet_hfemmulti[M_jetmaxcount];	
+	UInt_t ak4pfchsjet_electronmulti[M_jetmaxcount];	
+	UInt_t ak4pfchsjet_muonmulti[M_jetmaxcount];	
+	Float_t ak4pfchsjet_chargeda[M_jetmaxcount];
+	Float_t ak4pfchsjet_chargedb[M_jetmaxcount];
+	Float_t ak4pfchsjet_neutrala[M_jetmaxcount];
+	Float_t ak4pfchsjet_neutralb[M_jetmaxcount];
+	Float_t ak4pfchsjet_alla[M_jetmaxcount];
+	Float_t ak4pfchsjet_allb[M_jetmaxcount];
+	Float_t ak4pfchsjet_chargedfractionmv[M_jetmaxcount];
+	Float_t ak4pfchsjet_energycorr[M_jetmaxcount];
+	Float_t ak4pfchsjet_energycorrunc[M_jetmaxcount];
+	Float_t ak4pfchsjet_energycorrl7uds[M_jetmaxcount];
+	Float_t ak4pfchsjet_energycorrl7bottom[M_jetmaxcount];
+	Float_t ak4pfchsjet_btag[M_jetmaxcount][M_btagmax];
+	UInt_t ak4pfchsjet_trigger[M_jetmaxcount];
+	Int_t ak4pfchsjet_mcflavour[M_jetmaxcount];
 
 	UInt_t electron_count;
 	Int_t electron_vtx[M_electronmaxcount];
@@ -605,17 +605,17 @@ class Analyse
 	Float_t tau_calocomp[M_taumaxcount];
 	Float_t tau_segcomp[M_taumaxcount];
 	UInt_t tau_trigger[M_taumaxcount];
-	Float_t tau_ak5pfjet_e[M_taumaxcount];
-	Float_t tau_ak5pfjet_px[M_taumaxcount];
-	Float_t tau_ak5pfjet_py[M_taumaxcount];
-	Float_t tau_ak5pfjet_pz[M_taumaxcount];
-	Float_t tau_ak5pfjet_hadronicenergy[M_taumaxcount];
-	Float_t tau_ak5pfjet_chargedhadronicenergy[M_taumaxcount];
-	Float_t tau_ak5pfjet_emenergy[M_taumaxcount];
-	Float_t tau_ak5pfjet_chargedemenergy[M_taumaxcount];
-	UInt_t tau_ak5pfjet_chargedmulti[M_taumaxcount];	
-	UInt_t tau_ak5pfjet_neutralmulti[M_taumaxcount];	
-	UInt_t tau_ak5pfjet_trigger[M_taumaxcount];
+	Float_t tau_ak4pfjet_e[M_taumaxcount];
+	Float_t tau_ak4pfjet_px[M_taumaxcount];
+	Float_t tau_ak4pfjet_py[M_taumaxcount];
+	Float_t tau_ak4pfjet_pz[M_taumaxcount];
+	Float_t tau_ak4pfjet_hadronicenergy[M_taumaxcount];
+	Float_t tau_ak4pfjet_chargedhadronicenergy[M_taumaxcount];
+	Float_t tau_ak4pfjet_emenergy[M_taumaxcount];
+	Float_t tau_ak4pfjet_chargedemenergy[M_taumaxcount];
+	UInt_t tau_ak4pfjet_chargedmulti[M_taumaxcount];	
+	UInt_t tau_ak4pfjet_neutralmulti[M_taumaxcount];	
+	UInt_t tau_ak4pfjet_trigger[M_taumaxcount];
 	UInt_t tau_chargedbegin[M_taumaxcount];
 	UInt_t tau_charged_count;
 	Float_t tau_charged_px[M_taumaxcount*10];
@@ -641,8 +641,8 @@ class Analyse
 	UChar_t tau_charged_npixellayers[M_taumaxcount*10];
 	UChar_t tau_charged_nstriplayers[M_taumaxcount*10];
 
-	Float_t ak5pfjet_rho;
-	Float_t ak5pfjet_sigma;
+	Float_t ak4pfjet_rho;
+	Float_t ak4pfjet_sigma;
 
 	Float_t pfmet_ex;
 	Float_t pfmet_ey;
@@ -722,14 +722,14 @@ class Analyse
 	Float_t genmettrue_ex;
 	Float_t genmettrue_ey;
 
-	UInt_t genak5jet_count;
-	Float_t genak5jet_e[M_genjetmaxcount];
-	Float_t genak5jet_px[M_genjetmaxcount];
-	Float_t genak5jet_py[M_genjetmaxcount];
-	Float_t genak5jet_pz[M_genjetmaxcount];
-	Float_t genak5jet_einvisible[M_genjetmaxcount];
-	Int_t genak5jet_flavour[M_genjetmaxcount];
-	UInt_t genak5jet_info[M_genjetmaxcount];
+	UInt_t genak4jet_count;
+	Float_t genak4jet_e[M_genjetmaxcount];
+	Float_t genak4jet_px[M_genjetmaxcount];
+	Float_t genak4jet_py[M_genjetmaxcount];
+	Float_t genak4jet_pz[M_genjetmaxcount];
+	Float_t genak4jet_einvisible[M_genjetmaxcount];
+	Int_t genak4jet_flavour[M_genjetmaxcount];
+	UInt_t genak4jet_info[M_genjetmaxcount];
 
 	UInt_t genparticles_count;
 	Float_t genparticles_e[M_genparticlesmaxcount];
@@ -781,8 +781,8 @@ class Analyse
 	UInt_t LumiBlock() const {return(event_luminosityblock);}
 	UInt_t TimeUnix() const {return(event_timeunix);}
 	UInt_t TimeMicroSec() const {return(event_timemicrosec);}
-	Double_t AK5PFRho() const {return(ak5pfjet_rho);}
-	Double_t AK5PFSigma() const {return(ak5pfjet_sigma);}
+	Double_t AK4PFRho() const {return(ak4pfjet_rho);}
+	Double_t AK4PFSigma() const {return(ak4pfjet_sigma);}
 
 	//RECO-level information
 	void LoadBeamSpot(bool select = true);
@@ -813,21 +813,21 @@ class Analyse
 	TLorentzVector PFMETTYPE1() const;
 	TLorentzVector PFMETTYPE0TYPE1() const;
 
-	//void LoadAK5CaloJets(bool select = true);
-	//Jet AK5CaloJets(UInt_t n) const;
-	//UInt_t NumAK5CaloJets() const {return(ak5calojet_count);}
+	//void LoadAK4CaloJets(bool select = true);
+	//Jet AK4CaloJets(UInt_t n) const;
+	//UInt_t NumAK4CaloJets() const {return(ak4calojet_count);}
 
-	//void LoadAK5JPTJets(bool select = true);
-	//Jet AK5JPTJets(UInt_t n) const;
-	//UInt_t NumAK5JPTJets() const {return(ak5jptjet_count);}
+	//void LoadAK4JPTJets(bool select = true);
+	//Jet AK4JPTJets(UInt_t n) const;
+	//UInt_t NumAK4JPTJets() const {return(ak4jptjet_count);}
 
-	void LoadAK5PFCHSJets(bool select = true);
-	Jet AK5PFCHSJets(UInt_t n) const;
-	UInt_t NumAK5PFCHSJets() const {return(ak5pfchsjet_count);}
+	void LoadAK4PFCHSJets(bool select = true);
+	Jet AK4PFCHSJets(UInt_t n) const;
+	UInt_t NumAK4PFCHSJets() const {return(ak4pfchsjet_count);}
 
-	void LoadAK5PFJets(bool select = true);
-	Jet AK5PFJets(UInt_t n) const;
-	UInt_t NumAK5PFJets() const {return(ak5pfjet_count);}
+	void LoadAK4PFJets(bool select = true);
+	Jet AK4PFJets(UInt_t n) const;
+	UInt_t NumAK4PFJets() const {return(ak4pfjet_count);}
 
 	void LoadTracks(bool select = true);
 	Track Tracks(UInt_t n) const;
@@ -874,9 +874,9 @@ class Analyse
 	GenLightParticle GenParticles(UInt_t n) const;
 	UInt_t NumGenParticles() const {return(genparticles_count);}
 
-	void LoadGenAK5Jets(bool select = true);
-	GenJet GenAK5Jets(UInt_t n) const;
-	UInt_t NumGenAK5Jets() const {return(genak5jet_count);}
+	void LoadGenAK4Jets(bool select = true);
+	GenJet GenAK4Jets(UInt_t n) const;
+	UInt_t NumGenAK4Jets() const {return(genak4jet_count);}
 
 	TLorentzVector GenMETCalo() const;
 	TLorentzVector GenMETTrue() const;

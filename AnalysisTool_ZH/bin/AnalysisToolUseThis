@@ -1,7 +1,7 @@
 #!/bin/sh
-ATINCLUDE=/afs/cern.ch/work/e/ekennedy/work/SMHtoMUMU/CMSSW_6_2_3/src/AnalysisTool_ZH/include
-ATLIB=/afs/cern.ch/work/e/ekennedy/work/SMHtoMUMU/CMSSW_6_2_3/src/AnalysisTool_ZH/lib
-PATH=/afs/cern.ch/work/e/ekennedy/work/SMHtoMUMU/CMSSW_6_2_3/src/AnalysisTool_ZH/bin:$PATH
+ATINCLUDE=/afs/cern.ch/work/e/ekennedy/work/fsanalysis/CMSSW_7_2_5/src/AnalysisTool/AnalysisTool_ZH/include
+ATLIB=/afs/cern.ch/work/e/ekennedy/work/fsanalysis/CMSSW_7_2_5/src/AnalysisTool/AnalysisTool_ZH/lib
+PATH=/afs/cern.ch/work/e/ekennedy/work/fsanalysis/CMSSW_7_2_5/src/AnalysisTool/AnalysisTool_ZH/bin:$PATH
 LD_LIBRARY_PATH=$ATLIB:$LD_LIBRARY_PATH
 export ATLIB
 export ATINCLUDE

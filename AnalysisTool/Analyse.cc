@@ -19,17 +19,17 @@ Analyse::Analyse(int argc, char** argv, bool batchmode) :
 	loadphotons(0),
 	loadtaus(0),
 	loadmet(0),
-	loadak5calojets(0),
-	loadak5jptjets(0),
-	loadak5pfchsjets(0),
-	loadak5pfjets(0),
+	loadak4calojets(0),
+	loadak4jptjets(0),
+	loadak4pfchsjets(0),
+	loadak4pfjets(0),
 	loadtracks(0),
 	loadsuperclusters(0),
 	loadprimvertices(0),
 	loadtrigger(0),
 	loadgeninfo(0),
 	loadgenparticles(0),
-	loadgenak5jets(0),
+	loadgenak4jets(0),
 	loadallgenparticles(0),
 	duplicatecheck(false),
 	skimtree(0),
@@ -59,9 +59,9 @@ Analyse::Analyse(int argc, char** argv, bool batchmode) :
 	supercluster_escluster_count(0),
 	supercluster_escluster_hit_count(0),
 	muon_count(0),
-	ak5calojet_count(0),
-	ak5jptjet_count(0),
-	ak5pfjet_count(0),
+	ak4calojet_count(0),
+	ak4jptjet_count(0),
+	ak4pfjet_count(0),
 	electron_count(0),
 	photon_count(0),
 	conversion_count(0),
@@ -129,8 +129,8 @@ void Analyse::SetLoad()
 	tree->SetBranchStatus("event_*", true);
 	tree->SetBranchStatus("numpileupinteractions*", true);
 	tree->SetBranchStatus("numtruepileupinteractions", true);
-	tree->SetBranchStatus("ak5pfjet_rho", true);
-	tree->SetBranchStatus("ak5pfjet_sigma", true);
+	tree->SetBranchStatus("ak4pfjet_rho", true);
+	tree->SetBranchStatus("ak4pfjet_sigma", true);
 
 	if(loadbeamspot == 1)
 	{
@@ -197,42 +197,42 @@ void Analyse::SetLoad()
 		tree->SetBranchStatus("pfmet*", false);
 	}
 
-	if(loadak5calojets == 1)
+	if(loadak4calojets == 1)
 	{
-		tree->SetBranchStatus("ak5calojet_*", true);
+		tree->SetBranchStatus("ak4calojet_*", true);
 	}
 	else
 	{
-		tree->SetBranchStatus("ak5calojet_*", false);
+		tree->SetBranchStatus("ak4calojet_*", false);
 	}
 
-	if(loadak5jptjets == 1)
+	if(loadak4jptjets == 1)
 	{
-		tree->SetBranchStatus("ak5jptjet_*", true);
+		tree->SetBranchStatus("ak4jptjet_*", true);
 	}
 	else
 	{
-		tree->SetBranchStatus("ak5jptjet_*", false);
+		tree->SetBranchStatus("ak4jptjet_*", false);
 	}
 
-	if(loadak5pfchsjets == 1)
+	if(loadak4pfchsjets == 1)
 	{
-		tree->SetBranchStatus("ak5pfchsjet_*", true);
+		tree->SetBranchStatus("ak4pfchsjet_*", true);
 	}
 	else
 	{
-		tree->SetBranchStatus("ak5pfchsjet_*", false);
+		tree->SetBranchStatus("ak4pfchsjet_*", false);
 	}
 
-	if(loadak5pfjets == 1)
+	if(loadak4pfjets == 1)
 	{
-		tree->SetBranchStatus("ak5pfjet_*", true);
+		tree->SetBranchStatus("ak4pfjet_*", true);
 	}
 	else
 	{
-		tree->SetBranchStatus("ak5pfjet_*", false);
-		tree->SetBranchStatus("ak5pfjet_rho", true);
-		tree->SetBranchStatus("ak5pfjet_sigma", true);
+		tree->SetBranchStatus("ak4pfjet_*", false);
+		tree->SetBranchStatus("ak4pfjet_rho", true);
+		tree->SetBranchStatus("ak4pfjet_sigma", true);
 	}
 
 	if(loadtracks == 1)
@@ -320,13 +320,13 @@ void Analyse::SetLoad()
 		tree->SetBranchStatus("genparticle*", false);
 	}
 
-	if(loadgenak5jets == 1)
+	if(loadgenak4jets == 1)
 	{
-		tree->SetBranchStatus("genak5jet*", true);
+		tree->SetBranchStatus("genak4jet*", true);
 	}
 	else
 	{
-		tree->SetBranchStatus("genak5jet*", false);
+		tree->SetBranchStatus("genak4jet*", false);
 	}
 }
 
@@ -713,107 +713,107 @@ void Analyse::Load()
 	tree->SetBranchAddress("muon_trigger", muon_trigger);
 	tree->SetBranchAddress("muon_trackermuonquality", muon_trackermuonquality);
 
-	tree->SetBranchAddress("ak5calojet_count", &ak5calojet_count);
-	tree->SetBranchAddress("ak5calojet_e", ak5calojet_e);
-	tree->SetBranchAddress("ak5calojet_px", ak5calojet_px);
-	tree->SetBranchAddress("ak5calojet_py", ak5calojet_py);
-	tree->SetBranchAddress("ak5calojet_pz", ak5calojet_pz);
-	tree->SetBranchAddress("ak5calojet_hadronicenergy", ak5calojet_hadronicenergy);
-	tree->SetBranchAddress("ak5calojet_emenergy", ak5calojet_emenergy);
-	tree->SetBranchAddress("ak5calojet_energycorr", ak5calojet_energycorr);
-	tree->SetBranchAddress("ak5calojet_energycorrl7uds", ak5calojet_energycorrl7uds);
-	tree->SetBranchAddress("ak5calojet_energycorrl7bottom", ak5calojet_energycorrl7bottom);
-	tree->SetBranchAddress("ak5calojet_fhpd", ak5calojet_fhpd);
-	tree->SetBranchAddress("ak5calojet_restrictedemf", ak5calojet_restrictedemf);
-	tree->SetBranchAddress("ak5calojet_btag", ak5calojet_btag);
-	tree->SetBranchAddress("ak5calojet_n90", ak5calojet_n90);
-	tree->SetBranchAddress("ak5calojet_n60", ak5calojet_n60);
+	tree->SetBranchAddress("ak4calojet_count", &ak4calojet_count);
+	tree->SetBranchAddress("ak4calojet_e", ak4calojet_e);
+	tree->SetBranchAddress("ak4calojet_px", ak4calojet_px);
+	tree->SetBranchAddress("ak4calojet_py", ak4calojet_py);
+	tree->SetBranchAddress("ak4calojet_pz", ak4calojet_pz);
+	tree->SetBranchAddress("ak4calojet_hadronicenergy", ak4calojet_hadronicenergy);
+	tree->SetBranchAddress("ak4calojet_emenergy", ak4calojet_emenergy);
+	tree->SetBranchAddress("ak4calojet_energycorr", ak4calojet_energycorr);
+	tree->SetBranchAddress("ak4calojet_energycorrl7uds", ak4calojet_energycorrl7uds);
+	tree->SetBranchAddress("ak4calojet_energycorrl7bottom", ak4calojet_energycorrl7bottom);
+	tree->SetBranchAddress("ak4calojet_fhpd", ak4calojet_fhpd);
+	tree->SetBranchAddress("ak4calojet_restrictedemf", ak4calojet_restrictedemf);
+	tree->SetBranchAddress("ak4calojet_btag", ak4calojet_btag);
+	tree->SetBranchAddress("ak4calojet_n90", ak4calojet_n90);
+	tree->SetBranchAddress("ak4calojet_n60", ak4calojet_n60);
 
-	tree->SetBranchAddress("ak5jptjet_count", &ak5jptjet_count);
-	tree->SetBranchAddress("ak5jptjet_e", ak5jptjet_e);
-	tree->SetBranchAddress("ak5jptjet_px", ak5jptjet_px);
-	tree->SetBranchAddress("ak5jptjet_py", ak5jptjet_py);
-	tree->SetBranchAddress("ak5jptjet_pz", ak5jptjet_pz);
-	tree->SetBranchAddress("ak5jptjet_hadronicenergy", ak5jptjet_hadronicenergy);
-	tree->SetBranchAddress("ak5jptjet_chargedhadronicenergy", ak5jptjet_chargedhadronicenergy);
-	tree->SetBranchAddress("ak5jptjet_emenergy", ak5jptjet_emenergy);
-	tree->SetBranchAddress("ak5jptjet_chargedemenergy", ak5jptjet_chargedemenergy);
-	tree->SetBranchAddress("ak5jptjet_chargedmulti", ak5jptjet_chargedmulti);
-	tree->SetBranchAddress("ak5jptjet_energycorr", ak5jptjet_energycorr);
-	tree->SetBranchAddress("ak5jptjet_energycorrl7uds", ak5jptjet_energycorrl7uds);
-	tree->SetBranchAddress("ak5jptjet_energycorrl7bottom", ak5jptjet_energycorrl7bottom);
-	tree->SetBranchAddress("ak5jptjet_btag", ak5jptjet_btag);
+	tree->SetBranchAddress("ak4jptjet_count", &ak4jptjet_count);
+	tree->SetBranchAddress("ak4jptjet_e", ak4jptjet_e);
+	tree->SetBranchAddress("ak4jptjet_px", ak4jptjet_px);
+	tree->SetBranchAddress("ak4jptjet_py", ak4jptjet_py);
+	tree->SetBranchAddress("ak4jptjet_pz", ak4jptjet_pz);
+	tree->SetBranchAddress("ak4jptjet_hadronicenergy", ak4jptjet_hadronicenergy);
+	tree->SetBranchAddress("ak4jptjet_chargedhadronicenergy", ak4jptjet_chargedhadronicenergy);
+	tree->SetBranchAddress("ak4jptjet_emenergy", ak4jptjet_emenergy);
+	tree->SetBranchAddress("ak4jptjet_chargedemenergy", ak4jptjet_chargedemenergy);
+	tree->SetBranchAddress("ak4jptjet_chargedmulti", ak4jptjet_chargedmulti);
+	tree->SetBranchAddress("ak4jptjet_energycorr", ak4jptjet_energycorr);
+	tree->SetBranchAddress("ak4jptjet_energycorrl7uds", ak4jptjet_energycorrl7uds);
+	tree->SetBranchAddress("ak4jptjet_energycorrl7bottom", ak4jptjet_energycorrl7bottom);
+	tree->SetBranchAddress("ak4jptjet_btag", ak4jptjet_btag);
 
-	tree->SetBranchAddress("ak5pfjet_count", &ak5pfjet_count);
-	tree->SetBranchAddress("ak5pfjet_e", ak5pfjet_e);
-	tree->SetBranchAddress("ak5pfjet_px", ak5pfjet_px);
-	tree->SetBranchAddress("ak5pfjet_py", ak5pfjet_py);
-	tree->SetBranchAddress("ak5pfjet_pz", ak5pfjet_pz);
-	tree->SetBranchAddress("ak5pfjet_area", ak5pfjet_area);
-	tree->SetBranchAddress("ak5pfjet_hadronicenergy", ak5pfjet_hadronicenergy);
-	tree->SetBranchAddress("ak5pfjet_chargedhadronicenergy", ak5pfjet_chargedhadronicenergy);
-	tree->SetBranchAddress("ak5pfjet_emenergy", ak5pfjet_emenergy);
-	tree->SetBranchAddress("ak5pfjet_chargedemenergy", ak5pfjet_chargedemenergy);
-	tree->SetBranchAddress("ak5pfjet_hfemenergy", ak5pfjet_hfemenergy);
-	tree->SetBranchAddress("ak5pfjet_hfhadronicenergy", ak5pfjet_hfhadronicenergy);
-	tree->SetBranchAddress("ak5pfjet_electronenergy", ak5pfjet_electronenergy);
-	tree->SetBranchAddress("ak5pfjet_muonenergy", ak5pfjet_muonenergy);
-	tree->SetBranchAddress("ak5pfjet_chargedmulti", ak5pfjet_chargedmulti);
-	tree->SetBranchAddress("ak5pfjet_neutralmulti", ak5pfjet_neutralmulti);
-	tree->SetBranchAddress("ak5pfjet_hfhadronicmulti", ak5pfjet_hfhadronicmulti);
-	tree->SetBranchAddress("ak5pfjet_hfemmulti", ak5pfjet_hfemmulti);
-	tree->SetBranchAddress("ak5pfjet_electronmulti", ak5pfjet_electronmulti);
-	tree->SetBranchAddress("ak5pfjet_muonmulti", ak5pfjet_muonmulti);
-	tree->SetBranchAddress("ak5pfjet_chargeda", ak5pfjet_chargeda);
-	tree->SetBranchAddress("ak5pfjet_chargedb", ak5pfjet_chargedb);
-	tree->SetBranchAddress("ak5pfjet_neutrala", ak5pfjet_neutrala);
-	tree->SetBranchAddress("ak5pfjet_neutralb", ak5pfjet_neutralb);
-	tree->SetBranchAddress("ak5pfjet_alla", ak5pfjet_alla);
-	tree->SetBranchAddress("ak5pfjet_allb", ak5pfjet_allb);
-	tree->SetBranchAddress("ak5pfjet_chargedfractionmv", ak5pfjet_chargedfractionmv);
-	tree->SetBranchAddress("ak5pfjet_energycorr", ak5pfjet_energycorr);
-	tree->SetBranchAddress("ak5pfjet_energycorrunc", ak5pfjet_energycorrunc);
-	tree->SetBranchAddress("ak5pfjet_energycorrl7uds", ak5pfjet_energycorrl7uds);
-	tree->SetBranchAddress("ak5pfjet_energycorrl7bottom", ak5pfjet_energycorrl7bottom);
-	tree->SetBranchAddress("ak5pfjet_puidfull", ak5pfjet_puidfull);
-	tree->SetBranchAddress("ak5pfjet_puidsimple", ak5pfjet_puidsimple);
-	tree->SetBranchAddress("ak5pfjet_puidcutbased", ak5pfjet_puidcutbased);
-	tree->SetBranchAddress("ak5pfjet_btag", ak5pfjet_btag);
-	tree->SetBranchAddress("ak5pfjet_mcflavour", ak5pfjet_mcflavour);
+	tree->SetBranchAddress("ak4pfjet_count", &ak4pfjet_count);
+	tree->SetBranchAddress("ak4pfjet_e", ak4pfjet_e);
+	tree->SetBranchAddress("ak4pfjet_px", ak4pfjet_px);
+	tree->SetBranchAddress("ak4pfjet_py", ak4pfjet_py);
+	tree->SetBranchAddress("ak4pfjet_pz", ak4pfjet_pz);
+	tree->SetBranchAddress("ak4pfjet_area", ak4pfjet_area);
+	tree->SetBranchAddress("ak4pfjet_hadronicenergy", ak4pfjet_hadronicenergy);
+	tree->SetBranchAddress("ak4pfjet_chargedhadronicenergy", ak4pfjet_chargedhadronicenergy);
+	tree->SetBranchAddress("ak4pfjet_emenergy", ak4pfjet_emenergy);
+	tree->SetBranchAddress("ak4pfjet_chargedemenergy", ak4pfjet_chargedemenergy);
+	tree->SetBranchAddress("ak4pfjet_hfemenergy", ak4pfjet_hfemenergy);
+	tree->SetBranchAddress("ak4pfjet_hfhadronicenergy", ak4pfjet_hfhadronicenergy);
+	tree->SetBranchAddress("ak4pfjet_electronenergy", ak4pfjet_electronenergy);
+	tree->SetBranchAddress("ak4pfjet_muonenergy", ak4pfjet_muonenergy);
+	tree->SetBranchAddress("ak4pfjet_chargedmulti", ak4pfjet_chargedmulti);
+	tree->SetBranchAddress("ak4pfjet_neutralmulti", ak4pfjet_neutralmulti);
+	tree->SetBranchAddress("ak4pfjet_hfhadronicmulti", ak4pfjet_hfhadronicmulti);
+	tree->SetBranchAddress("ak4pfjet_hfemmulti", ak4pfjet_hfemmulti);
+	tree->SetBranchAddress("ak4pfjet_electronmulti", ak4pfjet_electronmulti);
+	tree->SetBranchAddress("ak4pfjet_muonmulti", ak4pfjet_muonmulti);
+	tree->SetBranchAddress("ak4pfjet_chargeda", ak4pfjet_chargeda);
+	tree->SetBranchAddress("ak4pfjet_chargedb", ak4pfjet_chargedb);
+	tree->SetBranchAddress("ak4pfjet_neutrala", ak4pfjet_neutrala);
+	tree->SetBranchAddress("ak4pfjet_neutralb", ak4pfjet_neutralb);
+	tree->SetBranchAddress("ak4pfjet_alla", ak4pfjet_alla);
+	tree->SetBranchAddress("ak4pfjet_allb", ak4pfjet_allb);
+	tree->SetBranchAddress("ak4pfjet_chargedfractionmv", ak4pfjet_chargedfractionmv);
+	tree->SetBranchAddress("ak4pfjet_energycorr", ak4pfjet_energycorr);
+	tree->SetBranchAddress("ak4pfjet_energycorrunc", ak4pfjet_energycorrunc);
+	tree->SetBranchAddress("ak4pfjet_energycorrl7uds", ak4pfjet_energycorrl7uds);
+	tree->SetBranchAddress("ak4pfjet_energycorrl7bottom", ak4pfjet_energycorrl7bottom);
+	tree->SetBranchAddress("ak4pfjet_puidfull", ak4pfjet_puidfull);
+	tree->SetBranchAddress("ak4pfjet_puidsimple", ak4pfjet_puidsimple);
+	tree->SetBranchAddress("ak4pfjet_puidcutbased", ak4pfjet_puidcutbased);
+	tree->SetBranchAddress("ak4pfjet_btag", ak4pfjet_btag);
+	tree->SetBranchAddress("ak4pfjet_mcflavour", ak4pfjet_mcflavour);
 
-	tree->SetBranchAddress("ak5pfchsjet_count", &ak5pfchsjet_count);
-	tree->SetBranchAddress("ak5pfchsjet_e", ak5pfchsjet_e);
-	tree->SetBranchAddress("ak5pfchsjet_px", ak5pfchsjet_px);
-	tree->SetBranchAddress("ak5pfchsjet_py", ak5pfchsjet_py);
-	tree->SetBranchAddress("ak5pfchsjet_pz", ak5pfchsjet_pz);
-	tree->SetBranchAddress("ak5pfchsjet_area", ak5pfchsjet_area);
-	tree->SetBranchAddress("ak5pfchsjet_hadronicenergy", ak5pfchsjet_hadronicenergy);
-	tree->SetBranchAddress("ak5pfchsjet_chargedhadronicenergy", ak5pfchsjet_chargedhadronicenergy);
-	tree->SetBranchAddress("ak5pfchsjet_emenergy", ak5pfchsjet_emenergy);
-	tree->SetBranchAddress("ak5pfchsjet_chargedemenergy", ak5pfchsjet_chargedemenergy);
-	tree->SetBranchAddress("ak5pfchsjet_hfemenergy", ak5pfchsjet_hfemenergy);
-	tree->SetBranchAddress("ak5pfchsjet_hfhadronicenergy", ak5pfchsjet_hfhadronicenergy);
-	tree->SetBranchAddress("ak5pfchsjet_electronenergy", ak5pfchsjet_electronenergy);
-	tree->SetBranchAddress("ak5pfchsjet_muonenergy", ak5pfchsjet_muonenergy);
-	tree->SetBranchAddress("ak5pfchsjet_chargedmulti", ak5pfchsjet_chargedmulti);
-	tree->SetBranchAddress("ak5pfchsjet_neutralmulti", ak5pfchsjet_neutralmulti);
-	tree->SetBranchAddress("ak5pfchsjet_hfhadronicmulti", ak5pfchsjet_hfhadronicmulti);
-	tree->SetBranchAddress("ak5pfchsjet_hfemmulti", ak5pfchsjet_hfemmulti);
-	tree->SetBranchAddress("ak5pfchsjet_electronmulti", ak5pfchsjet_electronmulti);
-	tree->SetBranchAddress("ak5pfchsjet_muonmulti", ak5pfchsjet_muonmulti);
-	tree->SetBranchAddress("ak5pfchsjet_chargeda", ak5pfchsjet_chargeda);
-	tree->SetBranchAddress("ak5pfchsjet_chargedb", ak5pfchsjet_chargedb);
-	tree->SetBranchAddress("ak5pfchsjet_neutrala", ak5pfchsjet_neutrala);
-	tree->SetBranchAddress("ak5pfchsjet_neutralb", ak5pfchsjet_neutralb);
-	tree->SetBranchAddress("ak5pfchsjet_alla", ak5pfchsjet_alla);
-	tree->SetBranchAddress("ak5pfchsjet_allb", ak5pfchsjet_allb);
-	tree->SetBranchAddress("ak5pfchsjet_chargedfractionmv", ak5pfchsjet_chargedfractionmv);
-	tree->SetBranchAddress("ak5pfchsjet_energycorr", ak5pfchsjet_energycorr);
-	tree->SetBranchAddress("ak5pfchsjet_energycorrunc", ak5pfchsjet_energycorrunc);
-	tree->SetBranchAddress("ak5pfchsjet_energycorrl7uds", ak5pfchsjet_energycorrl7uds);
-	tree->SetBranchAddress("ak5pfchsjet_energycorrl7bottom", ak5pfchsjet_energycorrl7bottom);
-	tree->SetBranchAddress("ak5pfchsjet_btag", ak5pfchsjet_btag);
-	tree->SetBranchAddress("ak5pfchsjet_mcflavour", ak5pfchsjet_mcflavour);
+	tree->SetBranchAddress("ak4pfchsjet_count", &ak4pfchsjet_count);
+	tree->SetBranchAddress("ak4pfchsjet_e", ak4pfchsjet_e);
+	tree->SetBranchAddress("ak4pfchsjet_px", ak4pfchsjet_px);
+	tree->SetBranchAddress("ak4pfchsjet_py", ak4pfchsjet_py);
+	tree->SetBranchAddress("ak4pfchsjet_pz", ak4pfchsjet_pz);
+	tree->SetBranchAddress("ak4pfchsjet_area", ak4pfchsjet_area);
+	tree->SetBranchAddress("ak4pfchsjet_hadronicenergy", ak4pfchsjet_hadronicenergy);
+	tree->SetBranchAddress("ak4pfchsjet_chargedhadronicenergy", ak4pfchsjet_chargedhadronicenergy);
+	tree->SetBranchAddress("ak4pfchsjet_emenergy", ak4pfchsjet_emenergy);
+	tree->SetBranchAddress("ak4pfchsjet_chargedemenergy", ak4pfchsjet_chargedemenergy);
+	tree->SetBranchAddress("ak4pfchsjet_hfemenergy", ak4pfchsjet_hfemenergy);
+	tree->SetBranchAddress("ak4pfchsjet_hfhadronicenergy", ak4pfchsjet_hfhadronicenergy);
+	tree->SetBranchAddress("ak4pfchsjet_electronenergy", ak4pfchsjet_electronenergy);
+	tree->SetBranchAddress("ak4pfchsjet_muonenergy", ak4pfchsjet_muonenergy);
+	tree->SetBranchAddress("ak4pfchsjet_chargedmulti", ak4pfchsjet_chargedmulti);
+	tree->SetBranchAddress("ak4pfchsjet_neutralmulti", ak4pfchsjet_neutralmulti);
+	tree->SetBranchAddress("ak4pfchsjet_hfhadronicmulti", ak4pfchsjet_hfhadronicmulti);
+	tree->SetBranchAddress("ak4pfchsjet_hfemmulti", ak4pfchsjet_hfemmulti);
+	tree->SetBranchAddress("ak4pfchsjet_electronmulti", ak4pfchsjet_electronmulti);
+	tree->SetBranchAddress("ak4pfchsjet_muonmulti", ak4pfchsjet_muonmulti);
+	tree->SetBranchAddress("ak4pfchsjet_chargeda", ak4pfchsjet_chargeda);
+	tree->SetBranchAddress("ak4pfchsjet_chargedb", ak4pfchsjet_chargedb);
+	tree->SetBranchAddress("ak4pfchsjet_neutrala", ak4pfchsjet_neutrala);
+	tree->SetBranchAddress("ak4pfchsjet_neutralb", ak4pfchsjet_neutralb);
+	tree->SetBranchAddress("ak4pfchsjet_alla", ak4pfchsjet_alla);
+	tree->SetBranchAddress("ak4pfchsjet_allb", ak4pfchsjet_allb);
+	tree->SetBranchAddress("ak4pfchsjet_chargedfractionmv", ak4pfchsjet_chargedfractionmv);
+	tree->SetBranchAddress("ak4pfchsjet_energycorr", ak4pfchsjet_energycorr);
+	tree->SetBranchAddress("ak4pfchsjet_energycorrunc", ak4pfchsjet_energycorrunc);
+	tree->SetBranchAddress("ak4pfchsjet_energycorrl7uds", ak4pfchsjet_energycorrl7uds);
+	tree->SetBranchAddress("ak4pfchsjet_energycorrl7bottom", ak4pfchsjet_energycorrl7bottom);
+	tree->SetBranchAddress("ak4pfchsjet_btag", ak4pfchsjet_btag);
+	tree->SetBranchAddress("ak4pfchsjet_mcflavour", ak4pfchsjet_mcflavour);
 
 	tree->SetBranchAddress("electron_count", &electron_count);
 	tree->SetBranchAddress("electron_vtx", electron_vtx);
@@ -983,16 +983,16 @@ void Analyse::Load()
 	tree->SetBranchAddress("tau_calocomp", tau_calocomp);
 	tree->SetBranchAddress("tau_segcomp", tau_segcomp);
 	tree->SetBranchAddress("tau_trigger", tau_trigger);
-	tree->SetBranchAddress("tau_ak5pfjet_e", tau_ak5pfjet_e);
-	tree->SetBranchAddress("tau_ak5pfjet_px", tau_ak5pfjet_px);
-	tree->SetBranchAddress("tau_ak5pfjet_py", tau_ak5pfjet_py);
-	tree->SetBranchAddress("tau_ak5pfjet_pz", tau_ak5pfjet_pz);
-	tree->SetBranchAddress("tau_ak5pfjet_hadronicenergy", tau_ak5pfjet_hadronicenergy);
-	tree->SetBranchAddress("tau_ak5pfjet_chargedhadronicenergy", tau_ak5pfjet_chargedhadronicenergy);
-	tree->SetBranchAddress("tau_ak5pfjet_emenergy", tau_ak5pfjet_emenergy);
-	tree->SetBranchAddress("tau_ak5pfjet_chargedemenergy", tau_ak5pfjet_chargedemenergy);
-	tree->SetBranchAddress("tau_ak5pfjet_chargedmulti", tau_ak5pfjet_chargedmulti);
-	tree->SetBranchAddress("tau_ak5pfjet_neutralmulti", tau_ak5pfjet_neutralmulti);
+	tree->SetBranchAddress("tau_ak4pfjet_e", tau_ak4pfjet_e);
+	tree->SetBranchAddress("tau_ak4pfjet_px", tau_ak4pfjet_px);
+	tree->SetBranchAddress("tau_ak4pfjet_py", tau_ak4pfjet_py);
+	tree->SetBranchAddress("tau_ak4pfjet_pz", tau_ak4pfjet_pz);
+	tree->SetBranchAddress("tau_ak4pfjet_hadronicenergy", tau_ak4pfjet_hadronicenergy);
+	tree->SetBranchAddress("tau_ak4pfjet_chargedhadronicenergy", tau_ak4pfjet_chargedhadronicenergy);
+	tree->SetBranchAddress("tau_ak4pfjet_emenergy", tau_ak4pfjet_emenergy);
+	tree->SetBranchAddress("tau_ak4pfjet_chargedemenergy", tau_ak4pfjet_chargedemenergy);
+	tree->SetBranchAddress("tau_ak4pfjet_chargedmulti", tau_ak4pfjet_chargedmulti);
+	tree->SetBranchAddress("tau_ak4pfjet_neutralmulti", tau_ak4pfjet_neutralmulti);
 	tree->SetBranchAddress("tau_chargedbegin", tau_chargedbegin);
 	tree->SetBranchAddress("tau_charged_count", &tau_charged_count);
 	tree->SetBranchAddress("tau_charged_px", tau_charged_px);
@@ -1018,8 +1018,8 @@ void Analyse::Load()
 	tree->SetBranchAddress("tau_charged_npixellayers", tau_charged_npixellayers);
 	tree->SetBranchAddress("tau_charged_nstriplayers", tau_charged_nstriplayers);
 
-	tree->SetBranchAddress("ak5pfjet_rho", &ak5pfjet_rho);
-	tree->SetBranchAddress("ak5pfjet_sigma", &ak5pfjet_sigma);
+	tree->SetBranchAddress("ak4pfjet_rho", &ak4pfjet_rho);
+	tree->SetBranchAddress("ak4pfjet_sigma", &ak4pfjet_sigma);
 
 	tree->SetBranchAddress("pfmet_ex", &pfmet_ex);
 	tree->SetBranchAddress("pfmet_ey", &pfmet_ey);
@@ -1104,14 +1104,14 @@ void Analyse::Load()
 	tree->SetBranchAddress("genmettrue_ex", &genmettrue_ex);
 	tree->SetBranchAddress("genmettrue_ey", &genmettrue_ey);
 
-	tree->SetBranchAddress("genak5jet_count", &genak5jet_count);
-	tree->SetBranchAddress("genak5jet_e", genak5jet_e);
-	tree->SetBranchAddress("genak5jet_px", genak5jet_px);
-	tree->SetBranchAddress("genak5jet_py", genak5jet_py);
-	tree->SetBranchAddress("genak5jet_pz", genak5jet_pz);
-	tree->SetBranchAddress("genak5jet_einvisible", genak5jet_einvisible);
-	tree->SetBranchAddress("genak5jet_flavour", genak5jet_flavour);
-	tree->SetBranchAddress("genak5jet_info", genak5jet_info);
+	tree->SetBranchAddress("genak4jet_count", &genak4jet_count);
+	tree->SetBranchAddress("genak4jet_e", genak4jet_e);
+	tree->SetBranchAddress("genak4jet_px", genak4jet_px);
+	tree->SetBranchAddress("genak4jet_py", genak4jet_py);
+	tree->SetBranchAddress("genak4jet_pz", genak4jet_pz);
+	tree->SetBranchAddress("genak4jet_einvisible", genak4jet_einvisible);
+	tree->SetBranchAddress("genak4jet_flavour", genak4jet_flavour);
+	tree->SetBranchAddress("genak4jet_info", genak4jet_info);
 
 }
 
@@ -1160,24 +1160,24 @@ void Analyse::LoadMET(bool select)
 if(select){loadmet = 1;}else{loadmet = 0;}
 }
 
-//void Analyse::LoadAK5CaloJets(bool select)
+//void Analyse::LoadAK4CaloJets(bool select)
 //{
-//if(select){loadak5calojets = 1;}else{loadak5calojets = 0;}
+//if(select){loadak4calojets = 1;}else{loadak4calojets = 0;}
 //}
 //
-//void Analyse::LoadAK5JPTJets(bool select)
+//void Analyse::LoadAK4JPTJets(bool select)
 //{
-//if(select){loadak5jptjets = 1;}else{loadak5jptjets = 0;}
+//if(select){loadak4jptjets = 1;}else{loadak4jptjets = 0;}
 //}
 
-void Analyse::LoadAK5PFCHSJets(bool select)
+void Analyse::LoadAK4PFCHSJets(bool select)
 {
-if(select){loadak5pfchsjets = 1;}else{loadak5pfchsjets = 0;}
+if(select){loadak4pfchsjets = 1;}else{loadak4pfchsjets = 0;}
 }
 
-void Analyse::LoadAK5PFJets(bool select)
+void Analyse::LoadAK4PFJets(bool select)
 {
-if(select){loadak5pfjets = 1;}else{loadak5pfjets = 0;}
+if(select){loadak4pfjets = 1;}else{loadak4pfjets = 0;}
 }
 
 void Analyse::LoadTracks(bool select)
@@ -1210,9 +1210,9 @@ void Analyse::LoadGenParticles(bool select)
 if(select){loadgenparticles = 1;}else{loadgenparticles = 0;}
 }
 
-void Analyse::LoadGenAK5Jets(bool select)
+void Analyse::LoadGenAK4Jets(bool select)
 {
-if(select){loadgenak5jets = 1;}else{loadgenak5jets = 0;}
+if(select){loadgenak4jets = 1;}else{loadgenak4jets = 0;}
 }
 
 void Analyse::LoadSuperClusters(bool select, bool usebasiccluster, bool usebasicclusterhit)
@@ -1361,24 +1361,24 @@ TLorentzVector Analyse::PFMETTYPE0TYPE1() const
 	return(TLorentzVector(pfmettype0type1_ex, pfmettype0type1_ey, 0., sqrt(pow(pfmettype0type1_ex, 2) + pow(pfmettype0type1_ey, 2))));
 }
 
-//Jet Analyse::AK5CaloJets(UInt_t n) const
+//Jet Analyse::AK4CaloJets(UInt_t n) const
 //{
-//	return(Jet(ak5calojet_e[n], ak5calojet_px[n], ak5calojet_py[n], ak5calojet_pz[n], ak5calojet_hadronicenergy[n], -1., ak5calojet_emenergy[n], -1., -1, -1, ak5calojet_energycorr[n], ak5calojet_energycorrl7uds[n], ak5calojet_energycorrl7bottom[n], ak5calojet_btag[n], ak5calojet_n90[n], ak5calojet_n60[n], ak5calojet_fhpd[n], ak5calojet_restrictedemf[n]));
+//	return(Jet(ak4calojet_e[n], ak4calojet_px[n], ak4calojet_py[n], ak4calojet_pz[n], ak4calojet_hadronicenergy[n], -1., ak4calojet_emenergy[n], -1., -1, -1, ak4calojet_energycorr[n], ak4calojet_energycorrl7uds[n], ak4calojet_energycorrl7bottom[n], ak4calojet_btag[n], ak4calojet_n90[n], ak4calojet_n60[n], ak4calojet_fhpd[n], ak4calojet_restrictedemf[n]));
 //}
 //
-//Jet Analyse::AK5JPTJets(UInt_t n) const
+//Jet Analyse::AK4JPTJets(UInt_t n) const
 //{
-//	return(Jet(ak5jptjet_e[n], ak5jptjet_px[n], ak5jptjet_py[n], ak5jptjet_pz[n], ak5jptjet_hadronicenergy[n], ak5jptjet_chargedhadronicenergy[n], ak5jptjet_emenergy[n], ak5jptjet_chargedemenergy[n], ak5jptjet_chargedmulti[n], -1, ak5jptjet_energycorr[n], ak5jptjet_energycorrl7uds[n], ak5jptjet_energycorrl7bottom[n], ak5jptjet_btag[n], ak5jptjet_n90[n], -1, ak5jptjet_fhpd[n], ak5jptjet_restrictedemf[n]));
+//	return(Jet(ak4jptjet_e[n], ak4jptjet_px[n], ak4jptjet_py[n], ak4jptjet_pz[n], ak4jptjet_hadronicenergy[n], ak4jptjet_chargedhadronicenergy[n], ak4jptjet_emenergy[n], ak4jptjet_chargedemenergy[n], ak4jptjet_chargedmulti[n], -1, ak4jptjet_energycorr[n], ak4jptjet_energycorrl7uds[n], ak4jptjet_energycorrl7bottom[n], ak4jptjet_btag[n], ak4jptjet_n90[n], -1, ak4jptjet_fhpd[n], ak4jptjet_restrictedemf[n]));
 //}
 
-Jet Analyse::AK5PFCHSJets(UInt_t n) const
+Jet Analyse::AK4PFCHSJets(UInt_t n) const
 {
-	return(Jet(ak5pfchsjet_e[n], ak5pfchsjet_px[n], ak5pfchsjet_py[n], ak5pfchsjet_pz[n], ak5pfchsjet_hadronicenergy[n], ak5pfchsjet_chargedhadronicenergy[n], ak5pfchsjet_emenergy[n], ak5pfchsjet_chargedemenergy[n], ak5pfchsjet_hfemenergy[n], ak5pfchsjet_hfhadronicenergy[n], ak5pfchsjet_electronenergy[n], ak5pfchsjet_muonenergy[n], ak5pfchsjet_chargedmulti[n], ak5pfchsjet_neutralmulti[n], ak5pfchsjet_hfhadronicmulti[n], ak5pfchsjet_hfemmulti[n], ak5pfchsjet_electronmulti[n], ak5pfchsjet_muonmulti[n], ak5pfchsjet_chargeda[n], ak5pfchsjet_chargedb[n], ak5pfchsjet_neutrala[n], ak5pfchsjet_neutralb[n], ak5pfchsjet_alla[n], ak5pfchsjet_allb[n], ak5pfchsjet_chargedfractionmv[n], ak5pfchsjet_energycorr[n], ak5pfchsjet_energycorrunc[n], ak5pfchsjet_energycorrl7uds[n], ak5pfchsjet_energycorrl7bottom[n], ak5pfchsjet_btag[n], ak5pfchsjet_mcflavour[n], 0., 0., 0.));
+	return(Jet(ak4pfchsjet_e[n], ak4pfchsjet_px[n], ak4pfchsjet_py[n], ak4pfchsjet_pz[n], ak4pfchsjet_hadronicenergy[n], ak4pfchsjet_chargedhadronicenergy[n], ak4pfchsjet_emenergy[n], ak4pfchsjet_chargedemenergy[n], ak4pfchsjet_hfemenergy[n], ak4pfchsjet_hfhadronicenergy[n], ak4pfchsjet_electronenergy[n], ak4pfchsjet_muonenergy[n], ak4pfchsjet_chargedmulti[n], ak4pfchsjet_neutralmulti[n], ak4pfchsjet_hfhadronicmulti[n], ak4pfchsjet_hfemmulti[n], ak4pfchsjet_electronmulti[n], ak4pfchsjet_muonmulti[n], ak4pfchsjet_chargeda[n], ak4pfchsjet_chargedb[n], ak4pfchsjet_neutrala[n], ak4pfchsjet_neutralb[n], ak4pfchsjet_alla[n], ak4pfchsjet_allb[n], ak4pfchsjet_chargedfractionmv[n], ak4pfchsjet_energycorr[n], ak4pfchsjet_energycorrunc[n], ak4pfchsjet_energycorrl7uds[n], ak4pfchsjet_energycorrl7bottom[n], ak4pfchsjet_btag[n], ak4pfchsjet_mcflavour[n], 0., 0., 0.));
 }
 
-Jet Analyse::AK5PFJets(UInt_t n) const
+Jet Analyse::AK4PFJets(UInt_t n) const
 {
-	return(Jet(ak5pfjet_e[n], ak5pfjet_px[n], ak5pfjet_py[n], ak5pfjet_pz[n], ak5pfjet_hadronicenergy[n], ak5pfjet_chargedhadronicenergy[n], ak5pfjet_emenergy[n], ak5pfjet_chargedemenergy[n], ak5pfjet_hfemenergy[n], ak5pfjet_hfhadronicenergy[n], ak5pfjet_electronenergy[n], ak5pfjet_muonenergy[n], ak5pfjet_chargedmulti[n], ak5pfjet_neutralmulti[n], ak5pfjet_hfhadronicmulti[n], ak5pfjet_hfemmulti[n], ak5pfjet_electronmulti[n], ak5pfjet_muonmulti[n], ak5pfjet_chargeda[n], ak5pfjet_chargedb[n], ak5pfjet_neutrala[n], ak5pfjet_neutralb[n], ak5pfjet_alla[n], ak5pfjet_allb[n], ak5pfjet_chargedfractionmv[n], ak5pfjet_energycorr[n], ak5pfjet_energycorrunc[n], ak5pfjet_energycorrl7uds[n], ak5pfjet_energycorrl7bottom[n], ak5pfjet_btag[n], ak5pfjet_mcflavour[n], ak5pfjet_puidfull[n], ak5pfjet_puidsimple[n], ak5pfjet_puidcutbased[n]));
+	return(Jet(ak4pfjet_e[n], ak4pfjet_px[n], ak4pfjet_py[n], ak4pfjet_pz[n], ak4pfjet_hadronicenergy[n], ak4pfjet_chargedhadronicenergy[n], ak4pfjet_emenergy[n], ak4pfjet_chargedemenergy[n], ak4pfjet_hfemenergy[n], ak4pfjet_hfhadronicenergy[n], ak4pfjet_electronenergy[n], ak4pfjet_muonenergy[n], ak4pfjet_chargedmulti[n], ak4pfjet_neutralmulti[n], ak4pfjet_hfhadronicmulti[n], ak4pfjet_hfemmulti[n], ak4pfjet_electronmulti[n], ak4pfjet_muonmulti[n], ak4pfjet_chargeda[n], ak4pfjet_chargedb[n], ak4pfjet_neutrala[n], ak4pfjet_neutralb[n], ak4pfjet_alla[n], ak4pfjet_allb[n], ak4pfjet_chargedfractionmv[n], ak4pfjet_energycorr[n], ak4pfjet_energycorrunc[n], ak4pfjet_energycorrl7uds[n], ak4pfjet_energycorrl7bottom[n], ak4pfjet_btag[n], ak4pfjet_mcflavour[n], ak4pfjet_puidfull[n], ak4pfjet_puidsimple[n], ak4pfjet_puidcutbased[n]));
 }
 
 Track Analyse::Tracks(UInt_t n) const
@@ -1457,9 +1457,9 @@ GenLightParticle Analyse::GenParticles(UInt_t n) const
 	return(GenLightParticle(genparticles_e[n], genparticles_px[n], genparticles_py[n], genparticles_pz[n], genparticles_vx[n], genparticles_vy[n], genparticles_vz[n], genparticles_status[n], genparticles_pdgid[n], genparticles_info[n], genparticles_indirectmother[n]));
 }
 
-GenJet Analyse::GenAK5Jets(UInt_t n) const
+GenJet Analyse::GenAK4Jets(UInt_t n) const
 {        
-	return(GenJet(genak5jet_e[n], genak5jet_px[n], genak5jet_py[n], genak5jet_pz[n], genak5jet_einvisible[n], genak5jet_flavour[n], genak5jet_info[n]));
+	return(GenJet(genak4jet_e[n], genak4jet_px[n], genak4jet_py[n], genak4jet_pz[n], genak4jet_einvisible[n], genak4jet_flavour[n], genak4jet_info[n]));
 }
 
 GenParticle Analyse::AllGenParticles(UInt_t n) const
@@ -2131,112 +2131,112 @@ Int_t Analyse::PrepareSkimming(string filename)
 	skimtree->Branch("muon_trigger", muon_trigger, "muon_trigger[muon_count]/i");
 	skimtree->Branch("muon_trackermuonquality", muon_trackermuonquality, "muon_trackermuonquality[muon_count]/i");
 
-	skimtree->Branch("ak5calojet_count", &ak5calojet_count, "ak5calojet_count/i");
-	skimtree->Branch("ak5calojet_e", ak5calojet_e, "ak5calojet_e[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_px", ak5calojet_px, "ak5calojet_px[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_py", ak5calojet_py, "ak5calojet_py[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_pz", ak5calojet_pz, "ak5calojet_pz[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_hadronicenergy", ak5calojet_hadronicenergy, "ak5calojet_hadronicenergy[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_emenergy", ak5calojet_emenergy, "ak5calojet_emenergy[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_energycorr", ak5calojet_energycorr, "ak5calojet_energycorr[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_energycorrl7uds", ak5calojet_energycorrl7uds, "ak5calojet_energycorrl7uds[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_energycorrl7bottom", ak5calojet_energycorrl7bottom, "ak5calojet_energycorrl7bottom[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_fhpd", ak5calojet_fhpd, "ak5calojet_fhpd[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_restrictedemf", ak5calojet_restrictedemf, "ak5calojet_restrictedemf[ak5calojet_count]/F");
-	skimtree->Branch("ak5calojet_btag", ak5calojet_btag, "ak5calojet_btag[ak5calojet_count][4]/F");
-	skimtree->Branch("ak5calojet_n90", ak5calojet_n90, "ak5calojet_n90[ak5calojet_count]/i");
-	skimtree->Branch("ak5calojet_n60", ak5calojet_n60, "ak5calojet_n60[ak5calojet_count]/i");
+	skimtree->Branch("ak4calojet_count", &ak4calojet_count, "ak4calojet_count/i");
+	skimtree->Branch("ak4calojet_e", ak4calojet_e, "ak4calojet_e[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_px", ak4calojet_px, "ak4calojet_px[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_py", ak4calojet_py, "ak4calojet_py[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_pz", ak4calojet_pz, "ak4calojet_pz[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_hadronicenergy", ak4calojet_hadronicenergy, "ak4calojet_hadronicenergy[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_emenergy", ak4calojet_emenergy, "ak4calojet_emenergy[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_energycorr", ak4calojet_energycorr, "ak4calojet_energycorr[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_energycorrl7uds", ak4calojet_energycorrl7uds, "ak4calojet_energycorrl7uds[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_energycorrl7bottom", ak4calojet_energycorrl7bottom, "ak4calojet_energycorrl7bottom[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_fhpd", ak4calojet_fhpd, "ak4calojet_fhpd[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_restrictedemf", ak4calojet_restrictedemf, "ak4calojet_restrictedemf[ak4calojet_count]/F");
+	skimtree->Branch("ak4calojet_btag", ak4calojet_btag, "ak4calojet_btag[ak4calojet_count][4]/F");
+	skimtree->Branch("ak4calojet_n90", ak4calojet_n90, "ak4calojet_n90[ak4calojet_count]/i");
+	skimtree->Branch("ak4calojet_n60", ak4calojet_n60, "ak4calojet_n60[ak4calojet_count]/i");
 
-	skimtree->Branch("ak5jptjet_count", &ak5jptjet_count, "ak5jptjet_count/i");
-	skimtree->Branch("ak5jptjet_e", ak5jptjet_e, "ak5jptjet_e[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_px", ak5jptjet_px, "ak5jptjet_px[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_py", ak5jptjet_py, "ak5jptjet_py[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_pz", ak5jptjet_pz, "ak5jptjet_pz[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_hadronicenergy", ak5jptjet_hadronicenergy, "ak5jptjet_hadronicenergy[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_chargedhadronicenergy", ak5jptjet_chargedhadronicenergy, "ak5jptjet_chargedhadronicenergy[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_emenergy", ak5jptjet_emenergy, "ak5jptjet_emenergy[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_chargedemenergy", ak5jptjet_chargedemenergy, "ak5jptjet_chargedemenergy[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_chargedmulti", ak5jptjet_chargedmulti, "ak5jptjet_chargedmulti[ak5jptjet_count]/i");	
-	skimtree->Branch("ak5jptjet_energycorr", ak5jptjet_energycorr, "ak5jptjet_energycorr[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_energycorrl7uds", ak5jptjet_energycorrl7uds, "ak5jptjet_energycorrl7uds[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_energycorrl7bottom", ak5jptjet_energycorrl7bottom, "ak5jptjet_energycorrl7bottom[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_fhpd", ak5jptjet_fhpd, "ak5jptjet_fhpd[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_restrictedemf", ak5jptjet_restrictedemf, "ak5jptjet_restrictedemf[ak5jptjet_count]/F");
-	skimtree->Branch("ak5jptjet_btag", ak5jptjet_btag, "ak5jptjet_btag[ak5jptjet_count][4]/F");
-	skimtree->Branch("ak5jptjet_n90", ak5jptjet_n90, "ak5jptjet_n90[ak5jptjet_count]/i");
+	skimtree->Branch("ak4jptjet_count", &ak4jptjet_count, "ak4jptjet_count/i");
+	skimtree->Branch("ak4jptjet_e", ak4jptjet_e, "ak4jptjet_e[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_px", ak4jptjet_px, "ak4jptjet_px[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_py", ak4jptjet_py, "ak4jptjet_py[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_pz", ak4jptjet_pz, "ak4jptjet_pz[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_hadronicenergy", ak4jptjet_hadronicenergy, "ak4jptjet_hadronicenergy[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_chargedhadronicenergy", ak4jptjet_chargedhadronicenergy, "ak4jptjet_chargedhadronicenergy[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_emenergy", ak4jptjet_emenergy, "ak4jptjet_emenergy[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_chargedemenergy", ak4jptjet_chargedemenergy, "ak4jptjet_chargedemenergy[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_chargedmulti", ak4jptjet_chargedmulti, "ak4jptjet_chargedmulti[ak4jptjet_count]/i");	
+	skimtree->Branch("ak4jptjet_energycorr", ak4jptjet_energycorr, "ak4jptjet_energycorr[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_energycorrl7uds", ak4jptjet_energycorrl7uds, "ak4jptjet_energycorrl7uds[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_energycorrl7bottom", ak4jptjet_energycorrl7bottom, "ak4jptjet_energycorrl7bottom[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_fhpd", ak4jptjet_fhpd, "ak4jptjet_fhpd[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_restrictedemf", ak4jptjet_restrictedemf, "ak4jptjet_restrictedemf[ak4jptjet_count]/F");
+	skimtree->Branch("ak4jptjet_btag", ak4jptjet_btag, "ak4jptjet_btag[ak4jptjet_count][4]/F");
+	skimtree->Branch("ak4jptjet_n90", ak4jptjet_n90, "ak4jptjet_n90[ak4jptjet_count]/i");
 
-	skimtree->Branch("ak5pfjet_count", &ak5pfjet_count, "ak5pfjet_count/i");
-	skimtree->Branch("ak5pfjet_e", ak5pfjet_e, "ak5pfjet_e[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_px", ak5pfjet_px, "ak5pfjet_px[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_py", ak5pfjet_py, "ak5pfjet_py[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_pz", ak5pfjet_pz, "ak5pfjet_pz[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_area", ak5pfjet_area, "ak5pfjet_area[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_hadronicenergy", ak5pfjet_hadronicenergy, "ak5pfjet_hadronicenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_chargedhadronicenergy", ak5pfjet_chargedhadronicenergy, "ak5pfjet_chargedhadronicenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_emenergy", ak5pfjet_emenergy, "ak5pfjet_emenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_chargedemenergy", ak5pfjet_chargedemenergy, "ak5pfjet_chargedemenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_hfhadronicenergy", ak5pfjet_hfhadronicenergy, "ak5pfjet_hfhadronicenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_hfemenergy", ak5pfjet_hfemenergy, "ak5pfjet_hfemenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_electronenergy", ak5pfjet_electronenergy, "ak5pfjet_electronenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_muonenergy", ak5pfjet_muonenergy, "ak5pfjet_muonenergy[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_chargedmulti", ak5pfjet_chargedmulti, "ak5pfjet_chargedmulti[ak5pfjet_count]/i");	
-	skimtree->Branch("ak5pfjet_neutralmulti", ak5pfjet_neutralmulti, "ak5pfjet_neutralmulti[ak5pfjet_count]/i");	
-	skimtree->Branch("ak5pfjet_hfhadronicmulti", ak5pfjet_hfhadronicmulti, "ak5pfjet_hfhadronicmulti[ak5pfjet_count]/i");	
-	skimtree->Branch("ak5pfjet_hfemmulti", ak5pfjet_hfemmulti, "ak5pfjet_hfemmulti[ak5pfjet_count]/i");	
-	skimtree->Branch("ak5pfjet_electronmulti", ak5pfjet_electronmulti, "ak5pfjet_electronmulti[ak5pfjet_count]/i");	
-	skimtree->Branch("ak5pfjet_muonmulti", ak5pfjet_muonmulti, "ak5pfjet_muonmulti[ak5pfjet_count]/i");	
-	skimtree->Branch("ak5pfjet_chargeda", ak5pfjet_chargeda, "ak5pfjet_chargeda[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_chargedb", ak5pfjet_chargedb, "ak5pfjet_chargedb[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_neutrala", ak5pfjet_neutrala, "ak5pfjet_neutrala[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_neutralb", ak5pfjet_neutralb, "ak5pfjet_neutralb[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_alla", ak5pfjet_alla, "ak5pfjet_alla[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_allb", ak5pfjet_allb, "ak5pfjet_allb[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_chargedfractionmv", ak5pfjet_chargedfractionmv, "ak5pfjet_chargedfractionmv[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_energycorr", ak5pfjet_energycorr, "ak5pfjet_energycorr[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_energycorrunc", ak5pfjet_energycorrunc, "ak5pfjet_energycorrunc[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_energycorrl7uds", ak5pfjet_energycorrl7uds, "ak5pfjet_energycorrl7uds[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_energycorrl7bottom", ak5pfjet_energycorrl7bottom, "ak5pfjet_energycorrl7bottom[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_btag", ak5pfjet_btag, "ak5pfjet_btag[ak5pfjet_count][6]/F");
-	skimtree->Branch("ak5pfjet_trigger", ak5pfjet_trigger, "ak5pfjet_trigger[ak5pfjet_count]/i");
-	skimtree->Branch("ak5pfjet_mcflavour", ak5pfjet_mcflavour, "ak5pfjet_mcflavour[ak5pfjet_count]/I");
-	skimtree->Branch("ak5pfjet_puidfull", ak5pfjet_puidfull, "ak5pfjet_puidfull[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_puidsimple", ak5pfjet_puidsimple, "ak5pfjet_puidsimple[ak5pfjet_count]/F");
-	skimtree->Branch("ak5pfjet_puidcutbased", ak5pfjet_puidcutbased, "ak5pfjet_puidcutbased[ak5pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_count", &ak4pfjet_count, "ak4pfjet_count/i");
+	skimtree->Branch("ak4pfjet_e", ak4pfjet_e, "ak4pfjet_e[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_px", ak4pfjet_px, "ak4pfjet_px[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_py", ak4pfjet_py, "ak4pfjet_py[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_pz", ak4pfjet_pz, "ak4pfjet_pz[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_area", ak4pfjet_area, "ak4pfjet_area[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_hadronicenergy", ak4pfjet_hadronicenergy, "ak4pfjet_hadronicenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_chargedhadronicenergy", ak4pfjet_chargedhadronicenergy, "ak4pfjet_chargedhadronicenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_emenergy", ak4pfjet_emenergy, "ak4pfjet_emenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_chargedemenergy", ak4pfjet_chargedemenergy, "ak4pfjet_chargedemenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_hfhadronicenergy", ak4pfjet_hfhadronicenergy, "ak4pfjet_hfhadronicenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_hfemenergy", ak4pfjet_hfemenergy, "ak4pfjet_hfemenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_electronenergy", ak4pfjet_electronenergy, "ak4pfjet_electronenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_muonenergy", ak4pfjet_muonenergy, "ak4pfjet_muonenergy[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_chargedmulti", ak4pfjet_chargedmulti, "ak4pfjet_chargedmulti[ak4pfjet_count]/i");	
+	skimtree->Branch("ak4pfjet_neutralmulti", ak4pfjet_neutralmulti, "ak4pfjet_neutralmulti[ak4pfjet_count]/i");	
+	skimtree->Branch("ak4pfjet_hfhadronicmulti", ak4pfjet_hfhadronicmulti, "ak4pfjet_hfhadronicmulti[ak4pfjet_count]/i");	
+	skimtree->Branch("ak4pfjet_hfemmulti", ak4pfjet_hfemmulti, "ak4pfjet_hfemmulti[ak4pfjet_count]/i");	
+	skimtree->Branch("ak4pfjet_electronmulti", ak4pfjet_electronmulti, "ak4pfjet_electronmulti[ak4pfjet_count]/i");	
+	skimtree->Branch("ak4pfjet_muonmulti", ak4pfjet_muonmulti, "ak4pfjet_muonmulti[ak4pfjet_count]/i");	
+	skimtree->Branch("ak4pfjet_chargeda", ak4pfjet_chargeda, "ak4pfjet_chargeda[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_chargedb", ak4pfjet_chargedb, "ak4pfjet_chargedb[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_neutrala", ak4pfjet_neutrala, "ak4pfjet_neutrala[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_neutralb", ak4pfjet_neutralb, "ak4pfjet_neutralb[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_alla", ak4pfjet_alla, "ak4pfjet_alla[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_allb", ak4pfjet_allb, "ak4pfjet_allb[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_chargedfractionmv", ak4pfjet_chargedfractionmv, "ak4pfjet_chargedfractionmv[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_energycorr", ak4pfjet_energycorr, "ak4pfjet_energycorr[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_energycorrunc", ak4pfjet_energycorrunc, "ak4pfjet_energycorrunc[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_energycorrl7uds", ak4pfjet_energycorrl7uds, "ak4pfjet_energycorrl7uds[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_energycorrl7bottom", ak4pfjet_energycorrl7bottom, "ak4pfjet_energycorrl7bottom[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_btag", ak4pfjet_btag, "ak4pfjet_btag[ak4pfjet_count][6]/F");
+	skimtree->Branch("ak4pfjet_trigger", ak4pfjet_trigger, "ak4pfjet_trigger[ak4pfjet_count]/i");
+	skimtree->Branch("ak4pfjet_mcflavour", ak4pfjet_mcflavour, "ak4pfjet_mcflavour[ak4pfjet_count]/I");
+	skimtree->Branch("ak4pfjet_puidfull", ak4pfjet_puidfull, "ak4pfjet_puidfull[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_puidsimple", ak4pfjet_puidsimple, "ak4pfjet_puidsimple[ak4pfjet_count]/F");
+	skimtree->Branch("ak4pfjet_puidcutbased", ak4pfjet_puidcutbased, "ak4pfjet_puidcutbased[ak4pfjet_count]/F");
 
-	skimtree->Branch("ak5pfchsjet_count", &ak5pfchsjet_count, "ak5pfchsjet_count/i");
-	skimtree->Branch("ak5pfchsjet_e", ak5pfchsjet_e, "ak5pfchsjet_e[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_px", ak5pfchsjet_px, "ak5pfchsjet_px[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_py", ak5pfchsjet_py, "ak5pfchsjet_py[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_pz", ak5pfchsjet_pz, "ak5pfchsjet_pz[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_area", ak5pfchsjet_area, "ak5pfchsjet_area[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_hadronicenergy", ak5pfchsjet_hadronicenergy, "ak5pfchsjet_hadronicenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_chargedhadronicenergy", ak5pfchsjet_chargedhadronicenergy, "ak5pfchsjet_chargedhadronicenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_emenergy", ak5pfchsjet_emenergy, "ak5pfchsjet_emenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_chargedemenergy", ak5pfchsjet_chargedemenergy, "ak5pfchsjet_chargedemenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_hfhadronicenergy", ak5pfchsjet_hfhadronicenergy, "ak5pfchsjet_hfhadronicenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_hfemenergy", ak5pfchsjet_hfemenergy, "ak5pfchsjet_hfemenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_electronenergy", ak5pfchsjet_electronenergy, "ak5pfchsjet_electronenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_muonenergy", ak5pfchsjet_muonenergy, "ak5pfchsjet_muonenergy[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_chargedmulti", ak5pfchsjet_chargedmulti, "ak5pfchsjet_chargedmulti[ak5pfchsjet_count]/i");	
-	skimtree->Branch("ak5pfchsjet_neutralmulti", ak5pfchsjet_neutralmulti, "ak5pfchsjet_neutralmulti[ak5pfchsjet_count]/i");	
-	skimtree->Branch("ak5pfchsjet_hfhadronicmulti", ak5pfchsjet_hfhadronicmulti, "ak5pfchsjet_hfhadronicmulti[ak5pfchsjet_count]/i");	
-	skimtree->Branch("ak5pfchsjet_hfemmulti", ak5pfchsjet_hfemmulti, "ak5pfchsjet_hfemmulti[ak5pfchsjet_count]/i");	
-	skimtree->Branch("ak5pfchsjet_electronmulti", ak5pfchsjet_electronmulti, "ak5pfchsjet_electronmulti[ak5pfchsjet_count]/i");	
-	skimtree->Branch("ak5pfchsjet_muonmulti", ak5pfchsjet_muonmulti, "ak5pfchsjet_muonmulti[ak5pfchsjet_count]/i");	
-	skimtree->Branch("ak5pfchsjet_energycorr", ak5pfchsjet_energycorr, "ak5pfchsjet_energycorr[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_chargeda", ak5pfchsjet_chargeda, "ak5pfchsjet_chargeda[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_chargedb", ak5pfchsjet_chargedb, "ak5pfchsjet_chargedb[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_neutrala", ak5pfchsjet_neutrala, "ak5pfchsjet_neutrala[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_neutralb", ak5pfchsjet_neutralb, "ak5pfchsjet_neutralb[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_alla", ak5pfchsjet_alla, "ak5pfchsjet_alla[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_allb", ak5pfchsjet_allb, "ak5pfchsjet_allb[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_chargedfractionmv", ak5pfchsjet_chargedfractionmv, "ak5pfchsjet_chargedfractionmv[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_energycorrunc", ak5pfchsjet_energycorrunc, "ak5pfchsjet_energycorrunc[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_energycorrl7uds", ak5pfchsjet_energycorrl7uds, "ak5pfchsjet_energycorrl7uds[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_energycorrl7bottom", ak5pfchsjet_energycorrl7bottom, "ak5pfchsjet_energycorrl7bottom[ak5pfchsjet_count]/F");
-	skimtree->Branch("ak5pfchsjet_btag", ak5pfchsjet_btag, "ak5pfchsjet_btag[ak5pfchsjet_count][6]/F");
-	skimtree->Branch("ak5pfchsjet_trigger", ak5pfchsjet_trigger, "ak5pfchsjet_trigger[ak5pfchsjet_count]/i");
-	skimtree->Branch("ak5pfchsjet_mcflavour", ak5pfchsjet_mcflavour, "ak5pfchsjet_mcflavour[ak5pfchsjet_count]/I");
+	skimtree->Branch("ak4pfchsjet_count", &ak4pfchsjet_count, "ak4pfchsjet_count/i");
+	skimtree->Branch("ak4pfchsjet_e", ak4pfchsjet_e, "ak4pfchsjet_e[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_px", ak4pfchsjet_px, "ak4pfchsjet_px[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_py", ak4pfchsjet_py, "ak4pfchsjet_py[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_pz", ak4pfchsjet_pz, "ak4pfchsjet_pz[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_area", ak4pfchsjet_area, "ak4pfchsjet_area[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_hadronicenergy", ak4pfchsjet_hadronicenergy, "ak4pfchsjet_hadronicenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_chargedhadronicenergy", ak4pfchsjet_chargedhadronicenergy, "ak4pfchsjet_chargedhadronicenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_emenergy", ak4pfchsjet_emenergy, "ak4pfchsjet_emenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_chargedemenergy", ak4pfchsjet_chargedemenergy, "ak4pfchsjet_chargedemenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_hfhadronicenergy", ak4pfchsjet_hfhadronicenergy, "ak4pfchsjet_hfhadronicenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_hfemenergy", ak4pfchsjet_hfemenergy, "ak4pfchsjet_hfemenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_electronenergy", ak4pfchsjet_electronenergy, "ak4pfchsjet_electronenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_muonenergy", ak4pfchsjet_muonenergy, "ak4pfchsjet_muonenergy[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_chargedmulti", ak4pfchsjet_chargedmulti, "ak4pfchsjet_chargedmulti[ak4pfchsjet_count]/i");	
+	skimtree->Branch("ak4pfchsjet_neutralmulti", ak4pfchsjet_neutralmulti, "ak4pfchsjet_neutralmulti[ak4pfchsjet_count]/i");	
+	skimtree->Branch("ak4pfchsjet_hfhadronicmulti", ak4pfchsjet_hfhadronicmulti, "ak4pfchsjet_hfhadronicmulti[ak4pfchsjet_count]/i");	
+	skimtree->Branch("ak4pfchsjet_hfemmulti", ak4pfchsjet_hfemmulti, "ak4pfchsjet_hfemmulti[ak4pfchsjet_count]/i");	
+	skimtree->Branch("ak4pfchsjet_electronmulti", ak4pfchsjet_electronmulti, "ak4pfchsjet_electronmulti[ak4pfchsjet_count]/i");	
+	skimtree->Branch("ak4pfchsjet_muonmulti", ak4pfchsjet_muonmulti, "ak4pfchsjet_muonmulti[ak4pfchsjet_count]/i");	
+	skimtree->Branch("ak4pfchsjet_energycorr", ak4pfchsjet_energycorr, "ak4pfchsjet_energycorr[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_chargeda", ak4pfchsjet_chargeda, "ak4pfchsjet_chargeda[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_chargedb", ak4pfchsjet_chargedb, "ak4pfchsjet_chargedb[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_neutrala", ak4pfchsjet_neutrala, "ak4pfchsjet_neutrala[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_neutralb", ak4pfchsjet_neutralb, "ak4pfchsjet_neutralb[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_alla", ak4pfchsjet_alla, "ak4pfchsjet_alla[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_allb", ak4pfchsjet_allb, "ak4pfchsjet_allb[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_chargedfractionmv", ak4pfchsjet_chargedfractionmv, "ak4pfchsjet_chargedfractionmv[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_energycorrunc", ak4pfchsjet_energycorrunc, "ak4pfchsjet_energycorrunc[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_energycorrl7uds", ak4pfchsjet_energycorrl7uds, "ak4pfchsjet_energycorrl7uds[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_energycorrl7bottom", ak4pfchsjet_energycorrl7bottom, "ak4pfchsjet_energycorrl7bottom[ak4pfchsjet_count]/F");
+	skimtree->Branch("ak4pfchsjet_btag", ak4pfchsjet_btag, "ak4pfchsjet_btag[ak4pfchsjet_count][6]/F");
+	skimtree->Branch("ak4pfchsjet_trigger", ak4pfchsjet_trigger, "ak4pfchsjet_trigger[ak4pfchsjet_count]/i");
+	skimtree->Branch("ak4pfchsjet_mcflavour", ak4pfchsjet_mcflavour, "ak4pfchsjet_mcflavour[ak4pfchsjet_count]/I");
 
 	skimtree->Branch("electron_count", &electron_count, "electron_count/i");
 	skimtree->Branch("electron_vtx", electron_vtx, "electron_vtx[electron_count]/I");
@@ -2439,17 +2439,17 @@ Int_t Analyse::PrepareSkimming(string filename)
 	skimtree->Branch("tau_dishps", tau_dishps, "tau_dishps[tau_count]/i");
 	skimtree->Branch("tau_trigger", tau_trigger, "tau_trigger[tau_count]/i");
 
-	skimtree->Branch("tau_ak5pfjet_e", tau_ak5pfjet_e, "tau_ak5pfjet_e[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_px", tau_ak5pfjet_px, "tau_ak5pfjet_px[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_py", tau_ak5pfjet_py, "tau_ak5pfjet_py[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_pz", tau_ak5pfjet_pz, "tau_ak5pfjet_pz[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_hadronicenergy", tau_ak5pfjet_hadronicenergy, "tau_ak5pfjet_hadronicenergy[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_chargedhadronicenergy", tau_ak5pfjet_chargedhadronicenergy, "tau_ak5pfjet_chargedhadronicenergy[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_emenergy", tau_ak5pfjet_emenergy, "tau_ak5pfjet_emenergy[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_chargedemenergy", tau_ak5pfjet_chargedemenergy, "tau_ak5pfjet_chargedemenergy[tau_count]/F");
-	skimtree->Branch("tau_ak5pfjet_chargedmulti", tau_ak5pfjet_chargedmulti, "tau_ak5pfjet_chargedmulti[tau_count]/i");	
-	skimtree->Branch("tau_ak5pfjet_neutralmulti", tau_ak5pfjet_neutralmulti, "tau_ak5pfjet_neutralmulti[tau_count]/i");	
-	skimtree->Branch("tau_ak5pfjet_trigger", tau_ak5pfjet_trigger, "tau_ak5pfjet_trigger[tau_count]/i");
+	skimtree->Branch("tau_ak4pfjet_e", tau_ak4pfjet_e, "tau_ak4pfjet_e[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_px", tau_ak4pfjet_px, "tau_ak4pfjet_px[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_py", tau_ak4pfjet_py, "tau_ak4pfjet_py[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_pz", tau_ak4pfjet_pz, "tau_ak4pfjet_pz[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_hadronicenergy", tau_ak4pfjet_hadronicenergy, "tau_ak4pfjet_hadronicenergy[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_chargedhadronicenergy", tau_ak4pfjet_chargedhadronicenergy, "tau_ak4pfjet_chargedhadronicenergy[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_emenergy", tau_ak4pfjet_emenergy, "tau_ak4pfjet_emenergy[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_chargedemenergy", tau_ak4pfjet_chargedemenergy, "tau_ak4pfjet_chargedemenergy[tau_count]/F");
+	skimtree->Branch("tau_ak4pfjet_chargedmulti", tau_ak4pfjet_chargedmulti, "tau_ak4pfjet_chargedmulti[tau_count]/i");	
+	skimtree->Branch("tau_ak4pfjet_neutralmulti", tau_ak4pfjet_neutralmulti, "tau_ak4pfjet_neutralmulti[tau_count]/i");	
+	skimtree->Branch("tau_ak4pfjet_trigger", tau_ak4pfjet_trigger, "tau_ak4pfjet_trigger[tau_count]/i");
 	skimtree->Branch("tau_chargedbegin", tau_chargedbegin, "tau_chargedbegin[tau_count]/i");
 	skimtree->Branch("tau_charged_count", &tau_charged_count, "tau_charged_count/i");
 	skimtree->Branch("tau_charged_px", tau_charged_px, "tau_charged_px[tau_charged_count]/F");
@@ -2475,8 +2475,8 @@ Int_t Analyse::PrepareSkimming(string filename)
 	skimtree->Branch("tau_charged_npixellayers", tau_charged_npixellayers, "tau_charged_npixellayers[tau_charged_count]/b");
 	skimtree->Branch("tau_charged_nstriplayers", tau_charged_nstriplayers, "tau_charged_nstriplayers[tau_charged_count]/b");
 
-	skimtree->Branch("ak5pfjet_rho", &ak5pfjet_rho, "ak5pfjet_rho/F");
-	skimtree->Branch("ak5pfjet_sigma", &ak5pfjet_sigma, "ak5pfjet_sigma/F");
+	skimtree->Branch("ak4pfjet_rho", &ak4pfjet_rho, "ak4pfjet_rho/F");
+	skimtree->Branch("ak4pfjet_sigma", &ak4pfjet_sigma, "ak4pfjet_sigma/F");
 
 	skimtree->Branch("pfmet_ex", &pfmet_ex, "pfmet_ex/F");
 	skimtree->Branch("pfmet_ey", &pfmet_ey, "pfmet_ey/F");
@@ -2588,14 +2588,14 @@ Int_t Analyse::PrepareSkimming(string filename)
 	skimtree->Branch("genmettrue_ex", &genmettrue_ex, "genmettrue_ex/F");
 	skimtree->Branch("genmettrue_ey", &genmettrue_ey, "genmettrue_ey/F");
 
-	skimtree->Branch("genak5jet_count", &genak5jet_count, "genak5jet_count/i");
-	skimtree->Branch("genak5jet_e", genak5jet_e, "genak5jet_e[genak5jet_count]/F");
-	skimtree->Branch("genak5jet_px", genak5jet_px, "genak5jet_px[genak5jet_count]/F");
-	skimtree->Branch("genak5jet_py", genak5jet_py, "genak5jet_py[genak5jet_count]/F");
-	skimtree->Branch("genak5jet_pz", genak5jet_pz, "genak5jet_pz[genak5jet_count]/F");
-	skimtree->Branch("genak5jet_einvisible", genak5jet_einvisible, "genak5jet_einvisible[genak5jet_count]/F");
-	skimtree->Branch("genak5jet_flavour", genak5jet_flavour, "genak5jet_flavour[genak5jet_count]/I");
-	skimtree->Branch("genak5jet_info", genak5jet_info, "genak5jet_info[genak5jet_count]/i");
+	skimtree->Branch("genak4jet_count", &genak4jet_count, "genak4jet_count/i");
+	skimtree->Branch("genak4jet_e", genak4jet_e, "genak4jet_e[genak4jet_count]/F");
+	skimtree->Branch("genak4jet_px", genak4jet_px, "genak4jet_px[genak4jet_count]/F");
+	skimtree->Branch("genak4jet_py", genak4jet_py, "genak4jet_py[genak4jet_count]/F");
+	skimtree->Branch("genak4jet_pz", genak4jet_pz, "genak4jet_pz[genak4jet_count]/F");
+	skimtree->Branch("genak4jet_einvisible", genak4jet_einvisible, "genak4jet_einvisible[genak4jet_count]/F");
+	skimtree->Branch("genak4jet_flavour", genak4jet_flavour, "genak4jet_flavour[genak4jet_count]/I");
+	skimtree->Branch("genak4jet_info", genak4jet_info, "genak4jet_info[genak4jet_count]/i");
 
 	return(1);
 }

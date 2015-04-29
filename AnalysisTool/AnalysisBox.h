@@ -23,8 +23,8 @@ class AnalysisBox
 		UInt_t LumiBlock() const {return(an->LumiBlock());}
 		UInt_t TimeUnix() const {return(an->TimeUnix());}
 		UInt_t TimeMicroSec() const {return(an->TimeMicroSec());}
-		Double_t AK5PFRho() const {return(an->AK5PFRho());}
-		Double_t AK5PFSigma() const {return(an->AK5PFSigma());}
+		Double_t AK4PFRho() const {return(an->AK4PFRho());}
+		Double_t AK4PFSigma() const {return(an->AK4PFSigma());}
 
 		//RECO-level information
 		BeamSpot GetBeamSpot() const {return(an->GetBeamSpot());}
@@ -48,17 +48,17 @@ class AnalysisBox
 		TLorentzVector PFMETTYPE1() const {return(an->PFMETTYPE1());}
 		TLorentzVector PFMETTYPE0TYPE1() const {return(an->PFMETTYPE0TYPE1());}
 
-		//Jet AK5CaloJets(UInt_t n) const {return(an->AK5CaloJets(n));}
-		//UInt_t NumAK5CaloJets() const {return(an->NumAK5CaloJets());}
+		//Jet AK4CaloJets(UInt_t n) const {return(an->AK4CaloJets(n));}
+		//UInt_t NumAK4CaloJets() const {return(an->NumAK4CaloJets());}
 
-		//Jet AK5JPTJets(UInt_t n) const {return(an->AK5JPTJets(n));}
-		//UInt_t NumAK5JPTJets() const {return(an->NumAK5JPTJets());}
+		//Jet AK4JPTJets(UInt_t n) const {return(an->AK4JPTJets(n));}
+		//UInt_t NumAK4JPTJets() const {return(an->NumAK4JPTJets());}
 
-		Jet AK5PFCHSJets(UInt_t n) const {return(an->AK5PFCHSJets(n));}
-		UInt_t NumAK5PFCHSJets() const {return(an->NumAK5PFCHSJets());}
+		Jet AK4PFCHSJets(UInt_t n) const {return(an->AK4PFCHSJets(n));}
+		UInt_t NumAK4PFCHSJets() const {return(an->NumAK4PFCHSJets());}
 
-		Jet AK5PFJets(UInt_t n) const {return(an->AK5PFJets(n));}
-		UInt_t NumAK5PFJets() const {return(an->NumAK5PFJets());}
+		Jet AK4PFJets(UInt_t n) const {return(an->AK4PFJets(n));}
+		UInt_t NumAK4PFJets() const {return(an->NumAK4PFJets());}
 
 		Track Tracks(UInt_t n) const {return(an->Tracks(n));}
 		UInt_t NumTracks() const {return(an->NumTracks());}
@@ -94,8 +94,8 @@ class AnalysisBox
 		GenLightParticle GenParticles(UInt_t n) const {return(an->GenParticles(n));}
 		UInt_t NumGenParticles() const {return(an->NumGenParticles());}
 
-		GenJet GenAK5Jets(UInt_t n) const {return(an->GenAK5Jets(n));}
-		UInt_t NumGenAK5Jets() const {return(an->NumGenAK5Jets());}
+		GenJet GenAK4Jets(UInt_t n) const {return(an->GenAK4Jets(n));}
+		UInt_t NumGenAK4Jets() const {return(an->NumGenAK4Jets());}
 
 		TLorentzVector GenMETCalo() const {return(an->GenMETCalo());}
 		TLorentzVector GenMETTrue() const {return(an->GenMETTrue());}

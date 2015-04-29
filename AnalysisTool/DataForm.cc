@@ -776,7 +776,7 @@ ecalstripsumeoverplead(ma->tau_ecalstripsumeoverplead[n]),
 bremsrecoveryeoverplead(ma->tau_bremsrecoveryeoverplead[n]),
 calocomp(ma->tau_calocomp[n]),
 segcomp(ma->tau_segcomp[n]),
-jet(ma->tau_ak5pfjet_e[n], ma->tau_ak5pfjet_px[n], ma->tau_ak5pfjet_py[n], ma->tau_ak5pfjet_pz[n], ma->tau_ak5pfjet_hadronicenergy[n], ma->tau_ak5pfjet_chargedhadronicenergy[n], ma->tau_ak5pfjet_emenergy[n], ma->tau_ak5pfjet_chargedemenergy[n], -1.,-1.,-1.,-1., ma->tau_ak5pfjet_chargedmulti[n], ma->tau_ak5pfjet_neutralmulti[n],-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0, 0., 0., 0.),
+jet(ma->tau_ak4pfjet_e[n], ma->tau_ak4pfjet_px[n], ma->tau_ak4pfjet_py[n], ma->tau_ak4pfjet_pz[n], ma->tau_ak4pfjet_hadronicenergy[n], ma->tau_ak4pfjet_chargedhadronicenergy[n], ma->tau_ak4pfjet_emenergy[n], ma->tau_ak4pfjet_chargedemenergy[n], -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti[n], ma->tau_ak4pfjet_neutralmulti[n],-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0, 0., 0., 0.),
 taudiscriminators(ma->runlist.find(ma->Run())->second.GetTauDiscriminators())
 {
         UInt_t begin = ma->tau_chargedbegin[n];
