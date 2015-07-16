@@ -137,9 +137,19 @@ private:
     // Baseline histos
     TH1D *hInvMass2Mu; // all combos
     TH1D *hInvMass2Mu_wo; // pick two
-    TH1D *hInvMass2Mu_cat1;
-    TH1D *hInvMass2Mu_cat2;
-    TH1D *hInvMass2Mu_cat3; 
+
+    TH1D *hInvMass2Mu_A_cat1;
+    TH1D *hInvMass2Mu_A_cat2;
+    TH1D *hInvMass2Mu_A_cat3; 
+
+    TH1D *hInvMass2Mu_B_cat1;
+    TH1D *hInvMass2Mu_B_cat2;
+    TH1D *hInvMass2Mu_B_cat3; 
+
+    TH1D *hInvMass2Mu_C_cat1;
+    TH1D *hInvMass2Mu_C_cat2;
+    TH1D *hInvMass2Mu_C_cat3; 
+
     TH1D *h2MuEta;
     TH1D *hInvMass4Mu;
 
@@ -182,6 +192,7 @@ private:
 
     // counters
     double nEv_Skim;
+    double nEv_GenZ2Mu;
     double nEv_TriggerSMu;
     double nEv_PV;
     double nEv_PVNdf;
@@ -211,6 +222,10 @@ private:
 //    double nEv_IsoPUE;
     double nEv_2SGMu;
     double nEv_4SGMu;
+    double nEv_1TMu;
+    double nEv_2TMu;
+    double nEv_3TMu;
+    double nEv_4TMu;
 //    double nEv_2SGE;
 //    double nEv_3rdMuVeto;
 //    double nEv_3rdEVeto;
@@ -248,7 +263,6 @@ public:
 };
 //Constructor:
 MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
-
     // don;t touch, these are changed with the output file name
     isData=false;
     isMC=false;
@@ -297,6 +311,7 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     LoadAK4PFJets();
     LoadMET();
     LoadGenParticles();
+    LoadAllGenParticles();
     UsePileUpInfo();
     //UsePrimVertexInfo();
 
@@ -499,30 +514,50 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
 
 
     // CATEGORIES
+    hInvMass2Mu_A_cat1    = new TH1D("hInvMass2Mu_A_cat1", "M mumu A cat 1", 4000, 0., 2000.);
+    hInvMass2Mu_A_cat1->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_A_cat1->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_A_cat2    = new TH1D("hInvMass2Mu_A_cat2", "M mumu A cat 2", 4000, 0., 2000.);
+    hInvMass2Mu_A_cat2->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_A_cat2->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_A_cat3    = new TH1D("hInvMass2Mu_A_cat3", "M mumu A cat 3", 4000, 0., 2000.);
+    hInvMass2Mu_A_cat3->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_A_cat3->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
     
-    hInvMass2Mu_cat1    = new TH1D("hInvMass2Mu_cat1", "M mumu cat 1", 4000, 0., 2000.);
-    hInvMass2Mu_cat1->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
-    hInvMass2Mu_cat1->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
-    hInvMass2Mu_cat2    = new TH1D("hInvMass2Mu_cat2", "M mumu cat 2", 4000, 0., 2000.);
-    hInvMass2Mu_cat2->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
-    hInvMass2Mu_cat2->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
-    hInvMass2Mu_cat3    = new TH1D("hInvMass2Mu_cat3", "M mumu cat 3", 4000, 0., 2000.);
-    hInvMass2Mu_cat3->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
-    hInvMass2Mu_cat3->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_B_cat1    = new TH1D("hInvMass2Mu_B_cat1", "M mumu B cat 1", 4000, 0., 2000.);
+    hInvMass2Mu_B_cat1->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GV/c^{2}]");
+    hInvMass2Mu_B_cat1->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_B_cat2    = new TH1D("hInvMass2Mu_B_cat2", "M mumu B cat 2", 4000, 0., 2000.);
+    hInvMass2Mu_B_cat2->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_B_cat2->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_B_cat3    = new TH1D("hInvMass2Mu_B_cat3", "M mumu B cat 3", 4000, 0., 2000.);
+    hInvMass2Mu_B_cat3->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_B_cat3->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    
+    hInvMass2Mu_C_cat1    = new TH1D("hInvMass2Mu_C_cat1", "M mumu C cat 1", 4000, 0., 2000.);
+    hInvMass2Mu_C_cat1->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_C_cat1->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_C_cat2    = new TH1D("hInvMass2Mu_C_cat2", "M mumu C cat 2", 4000, 0., 2000.);
+    hInvMass2Mu_C_cat2->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_C_cat2->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+    hInvMass2Mu_C_cat3    = new TH1D("hInvMass2Mu_C_cat3", "M mumu C cat 3", 4000, 0., 2000.);
+    hInvMass2Mu_C_cat3->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hInvMass2Mu_C_cat3->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
 
 
     // EFFICIENCIES
     eff_names.push_back("Skim");                                  eff_counters.push_back(&nEv_Skim);
+    eff_names.push_back("Gen Z->2#Mu");                           eff_counters.push_back(&nEv_GenZ2Mu);
     //eff_names.push_back("HLT_IsoMu24/30*");                       eff_counters.push_back(&nEv_TriggerSMu);
     eff_names.push_back("Trigger");                               eff_counters.push_back(&nEv_TriggerSMu);
     eff_names.push_back("Ndf_{PV}>4");                            eff_counters.push_back(&nEv_PVNdf);
     eff_names.push_back("|z_{PV}|<24cm");                         eff_counters.push_back(&nEv_PVZ);
     eff_names.push_back("PV");                                    eff_counters.push_back(&nEv_PV);
-    eff_names.push_back("Muon ID");                               eff_counters.push_back(&nEv_MuID);
-//    eff_names.push_back("G & Tr.");                               eff_counters.push_back(&nEv_GAndTr);
-    eff_names.push_back("p_{T#mu}>20 GeV/c");                     eff_counters.push_back(&nEv_Pt);
+    eff_names.push_back("G & Tr.");                               eff_counters.push_back(&nEv_GAndTr);
+    eff_names.push_back("p_{T#mu}>10 GeV/c");                     eff_counters.push_back(&nEv_Pt);
     eff_names.push_back("|#eta_{#mu}|< 2.4");                     eff_counters.push_back(&nEv_Eta);
     eff_names.push_back("p_{T#mu}>24 GeV/c & |#eta_{#mu}|< 2.1"); eff_counters.push_back(&nEv_PtEtaMax);
+    eff_names.push_back("Muon ID");                               eff_counters.push_back(&nEv_MuID);
 //    eff_names.push_back("#chi^{2}/ndf < 10");                     eff_counters.push_back(&nEv_Chi2Ndf);
 //    eff_names.push_back("N_{Muon Hits}>0");                       eff_counters.push_back(&nEv_MuonHits);
 //    eff_names.push_back("N_{Matched Stations}>1");                eff_counters.push_back(&nEv_MatchedStations);
@@ -532,7 +567,11 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
 //    eff_names.push_back("N_{Tracker Layers}>5");                  eff_counters.push_back(&nEv_TrackerLayers);
     eff_names.push_back("Iso^{PU}_{#mu} < 0.12");                 eff_counters.push_back(&nEv_IsoPU);
     eff_names.push_back("2#mu");                                  eff_counters.push_back(&nEv_2SGMu);
+    eff_names.push_back("1 tight #mu");                           eff_counters.push_back(&nEv_1TMu);
+    eff_names.push_back("2 tight #mu");                           eff_counters.push_back(&nEv_1TMu);
     eff_names.push_back("4#mu");                                  eff_counters.push_back(&nEv_4SGMu);
+    eff_names.push_back("3 tight #mu");                           eff_counters.push_back(&nEv_3TMu);
+    eff_names.push_back("4 tight #mu");                           eff_counters.push_back(&nEv_4TMu);
 //    eff_names.push_back("3^{rd}#mu-veto");                        eff_counters.push_back(&nEv_3rdMuVeto);
 //    eff_names.push_back("GSF 90%");                               eff_counters.push_back(&nEv_GSF);
 //    eff_names.push_back("p_{Te}>20 GeV/c");                       eff_counters.push_back(&nEv_PtE);
@@ -575,11 +614,11 @@ MyAnalysis::~MyAnalysis() {
     histfile->Close();
     //print out
     cout<<"====================================================================================="<<endl;
-    cout<<setw(40)<<"Selection"<<setw(15)<<setprecision(5)<<"Events"<<setw(15)<<"Eff. [%]"<<setw(15)<<"Rel.Eff. [%]"<<endl;
+    cout<<setw(40)<<"Selection"<<setw(15)<<setprecision(5)<<"Events"<<setw(15)<<"Eff.(Z2Mu) [%]"<<setw(15)<<"Rel.Eff. [%]"<<endl;
     cout<<"-------------------------------------------------------------------------------------"<<endl;
     cout<<setw(40)<<eff_names[0]<<setw(15)<<(*eff_counters[0])<<setw(15)<<" --- "<<setw(15)<<" --- "<<endl;
     for(unsigned int i = 1; i < eff_names.size(); i++) {
-        cout<<setw(40)<<eff_names[i]<<setw(15)<<(*eff_counters[i])<<setw(15)<<100.*(*eff_counters[i])/nEv_Skim<<setw(15)<<100.*(*eff_counters[i])/(*eff_counters[i-1])<<endl;
+        cout<<setw(40)<<eff_names[i]<<setw(15)<<(*eff_counters[i])<<setw(15)<<100.*(*eff_counters[i])/nEv_GenZ2Mu<<setw(15)<<100.*(*eff_counters[i])/(*eff_counters[i-1])<<endl;
     }
     cout<<"====================================================================================="<<endl;
 }
@@ -591,12 +630,30 @@ Int_t MyAnalysis::AnalyseEvent() {
     double pileupweight      = GetPileUpWeight(dataPileUp); //GetPrimVertexWeight(dataPrimVert);
     double pileupweight_up   = GetPileUpWeight(dataPileUp_Up);
     double pileupweight_down = GetPileUpWeight(dataPileUp_Down);
-    //if( isData) pileupweight = 1;
-    //if (!isData) pileupweight=this->GetMCWeight(PVs.size(), "myMC", "myData");
-
-    hPUweight->Fill(pileupweight);
     //if( Run() == 191057) cout<<"c0"<<" Run:"<<Run()<<" Event:"<<Number()<<endl;
     ++nEv_Skim;
+
+
+
+// require gen Z that goes to 2 muons
+
+
+    for(unsigned int i = 0; i < NumAllGenParticles(); ++i) {
+        //if (AllGenParticles(i).PDGId() == 25 || AllGenParticles(i).PDGId() == 23 || AllGenParticles(i).PDGId() == 24) {
+            cout<<AllGenParticles(i).PDGId()<<endl;
+          //  cout<<AllGenParticles(i).NumDaughters()<<endl;
+        //}
+    }
+    cout<<endl;        
+
+
+
+//++nEv_GenZ2Mu
+
+
+
+
+
     // get the trigger
     //////////////////////////////////////////////////////////////////////
     vector<string> triggernames;
@@ -709,6 +766,10 @@ Int_t MyAnalysis::AnalyseEvent() {
     }
     if(!(PVs.size() > 0)) return (1);
     hVtxN_u->Fill(PVs.size());
+    if( isData) pileupweight = 1;
+    if (!isData) pileupweight=this->GetMCWeight(PVs.size(), "myMC", "myData");
+
+    hPUweight->Fill(pileupweight);
 
     for(unsigned int v = 0; v < PVs.size(); ++v) {
         hVtxNdf->Fill(PVs[v].Ndof(), pileupweight);
@@ -738,18 +799,17 @@ Int_t MyAnalysis::AnalyseEvent() {
     bool isDzOK               = false;
     bool isNPixelHitsOK       = false;
     bool isNTrackerLayersOK   = false;
+    bool isMuIDOk = false;
     bool isIsoPUOK            = false;
+    int nLooseMus = 0;
+    int nTightMus = 0;
+    int nVetoMus = 0;
 
-    // loop over the muons
-cout<<"\n\n\n\nstart muID"<<endl;
     for(unsigned int i = 0; i < NumMuons(); ++i) {
-//cout<<"    muID = "<<Muons(i).MuID()<<endl;
-cout<<"    charge = "<<Muons(i).Charge()<<endl;
+cout<<"muon ["<<i<<"] id = "<<Muons(i).MuID()<<endl; cout<<endl; cout<<endl;
 }
-cout<<"end muID"<<endl;
+    // loop over the muons
     for(unsigned int i = 0; i < NumMuons(); ++i) {
-//        if (!(Muons(i).MuID() > 1 && Muons(i).MuID() < 5)) continue;
-//        nEv_MuID++;
         if(!(Muons(i).IsGlobal() && Muons(i).IsTracker())) continue;
         ////if( !Muons(i).isPFMuon())continue;
         isGAndTr = true;
@@ -772,6 +832,13 @@ cout<<"end muID"<<endl;
         //isNPixelHitsOK = true;
         //if(!((Muons(i).InnerTrack().NPixelLayers() + Muons(i).InnerTrack().NStripLayers())> cNTrackerLayersMu)) continue;
         //isNTrackerLayersOK = true;
+        if (!(Muons(i).MuID() > 1 && Muons(i).MuID() < 5)) {
+            nVetoMus++;
+            continue;
+        }
+        isMuIDOk = true;
+        if (Muons(i).MuID() == 4) nTightMus++;
+        if (Muons(i).MuID() == 2) nLooseMus++;
         if(!(this->getIsoPU(Muons(i), AK4PFRho()) < cIsoMuPU)) continue;
         isIsoPUOK = true;
         // save the good mus
@@ -790,42 +857,19 @@ cout<<"end muID"<<endl;
 //    if(isDzOK) ++nEv_Dz;
 //    if(isNPixelHitsOK) ++nEv_PixelHits;
 //    if(isNTrackerLayersOK) ++nEv_TrackerLayers;
+    if(isMuIDOk) ++nEv_MuID;
     if(isIsoPUOK) ++nEv_IsoPU;
 
-cout<<"muonsVec.size():"<<muonsVec.size()<<endl;
+    // select events with at least 2 good mus
     if(muonsVec.size() < 2) return(1);
     ++nEv_2SGMu;
+    if (nTightMus >= 1) ++nEv_1TMu; else return(1);
+    if (nTightMus >= 2) ++nEv_2TMu; else return(1);
     // select events with at least 4 good mus
     if( muonsVec.size() < 4) return(1);
     ++nEv_4SGMu;
-
-//    //eta gap jet veto
-//    std::vector< Jet > jetsVec;
-//    for(unsigned int jet = 0; jet < NumAK4PFJets(); ++jet) {
-//        if(!(this->hasJetIDLoose(AK4PFJets(jet)))) continue;
-//        if(!(AK4PFJets(jet).Pt() > cPtJet)) continue;
-//        if(!(TMath::Abs(AK4PFJets(jet).Eta()) <= cEtaJet)) continue;
-//        // store the jets
-//        jetsVec.push_back(AK4PFJets(jet));
-//    }
-//
-//    std::vector< TLorentzVector > diJetVec;
-//    // 1st loop over jets
-//    for(unsigned int i = 0; i < jetsVec.size(); ++i) {
-//
-//        // 2nd loop over jets
-//        for(unsigned int j = i+1; j < jetsVec.size(); ++j) {
-//            // check eta
-//            // check the invariant mass
-//            TLorentzVector diJet = jetsVec[i] + jetsVec[j];
-//            if(!(diJet.M() > cInvMass)) continue;
-//            h2JetM  ->Fill(diJet.M(), pileupweight);
-//            h2JetPt  ->Fill(diJet.Pt(), pileupweight);
-//
-//            if(jetsVec[i].Eta()*jetsVec[j].Eta() > 0) continue;
-//            diJetVec.push_back(diJet);
-//        }
-//    }
+    if (nTightMus >= 3) ++nEv_3TMu; else return(1);
+    if (nTightMus >= 4) ++nEv_4TMu; else return(1);
 
     //get the Z->mumu
     bool isChargeMuCutOK  = false;
@@ -900,7 +944,6 @@ cout<<"muonsVec.size():"<<muonsVec.size()<<endl;
         Hmu2_idx = Muon_idx2[d];
     }
 
-
     if(diMuonH_idx == -1 || diMuonZ_idx == -1) return(1);
 
     hInvMass2MuZ  ->Fill(diMuonVec[diMuonZ_idx].M(), pileupweight);
@@ -912,16 +955,6 @@ cout<<"muonsVec.size():"<<muonsVec.size()<<endl;
     h2MuEtaZ ->Fill(diMuonVec[diMuonZ_idx].Eta(), pileupweight);
     h2MuPhiZ ->Fill(diMuonVec[diMuonZ_idx].Phi(), pileupweight);
 
-
-    //int nJetsEtaGap   = 0;
-    //for(unsigned int jet = 0; jet < jetsVec.size(); ++jet) {
-    //    hJetPt ->Fill(jetsVec[jet].Pt() , pileupweight);
-    //    hJetEta->Fill(jetsVec[jet].Eta(), pileupweight);
-    //    hJetPhi->Fill(jetsVec[jet].Phi(), pileupweight);
-    //    hNJets->Fill(jetsVec.size(), pileupweight);
-    //}
-    //if(nJetsEtaGap > 0) return(1);
-    //hRho->Fill(AK4PFRho());
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // JETS ///////////////////////////////////////////////////////////////////////////////////////
@@ -956,11 +989,6 @@ cout<<"muonsVec.size():"<<muonsVec.size()<<endl;
     }
     hNJets->Fill(jetsVec.size(), weight);
 
-cout<<"eta jet gap veto:"<<endl;
-cout<<"    dMinEtaGap = "<<dMinEtaGap<<endl;
-cout<<"    dMaxEtaGap = "<<dMaxEtaGap<<endl;
-cout<<"    nJetsEtaGap = "<<nJetsEtaGap<<endl;
-
     if(nJetsEtaGap > 0) return(1);
     ++nEv_etaGapJetVeto;
     hRho->Fill(AK4PFRho());
@@ -986,71 +1014,36 @@ cout<<"    nJetsEtaGap = "<<nJetsEtaGap<<endl;
 
 
     if(diMuonH_idx == -1) return(1);
-        // Fill category plots
-        int barrelcntr = 0;
-        for (unsigned int muidx = 0; muidx < muonsVec.size(); muidx++) {
-            if (muonsVec.size() != 4 ) continue;
-            if (TMath::Abs(muonsVec[muidx].Eta()) <= 0.8 ) barrelcntr++;
-        }
-cout<<"barrelcntr = "<<barrelcntr<<endl;
-    if (barrelcntr == 4 || barrelcntr == 3) hInvMass2Mu_cat1->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
-    else if (barrelcntr == 2 || barrelcntr == 1) hInvMass2Mu_cat2->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
-    else if (barrelcntr == 0) hInvMass2Mu_cat3->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
-    else cout<<"something went wrong with cat logic"<<endl;
 
 
-    /*
-        int barrelcountH = 0;
-        int barrelcountZ = 0;
-        bool mBB = false;
-        bool mBO = false;
-        bool mBE = false;
-        bool mOO = false;
-        bool mOE = false;
-        bool mEE = false;
-        double etaH1 = TMath::Abs(muonsVec[Hmu1_idx].Eta());
-        double etaH2 = TMath::Abs(muonsVec[Hmu2_idx].Eta());
+    // how many muons are in the barrel?
+    int barrelcntr = 0;
+    for (unsigned int muidx = 0; muidx < muonsVec.size(); muidx++) {
+        if (muonsVec.size() != 4 ) continue;
+        if (TMath::Abs(muonsVec[muidx].Eta()) <= 0.8 ) barrelcntr++;
+    }
 
-        if(TMath::Abs(muonsVec[Hmu1_idx].Eta())<etaBarrel) { barrelcountH++; }
-        if(TMath::Abs(muonsVec[Hmu2_idx].Eta())<etaBarrel) { barrelcountH++; }
-        if(TMath::Abs(muonsVec[Zmu1_idx].Eta())<etaBarrel) { barrelcountZ++; }
-        if(TMath::Abs(muonsVec[Zmu2_idx].Eta())<etaBarrel) { barrelcountZ++; }
+    // Fill categorisation A plots
+    if (barrelcntr == 4) hInvMass2Mu_A_cat1->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else if (barrelcntr == 2 || barrelcntr == 3) hInvMass2Mu_A_cat2->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else if (barrelcntr == 0 || barrelcntr == 1) hInvMass2Mu_A_cat3->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else cout<<"something went wrong with cat A logic"<<endl;
 
-        // Baseline plots
-        if(barrelcountH == 2) 	{ hInvMass2Mu_H_cat1->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(barrelcountH == 1) 	{ hInvMass2Mu_H_cat2->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(barrelcountH == 0) 	{ hInvMass2Mu_H_cat3->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
+    // Fill categorisation B plots
+    if (barrelcntr == 4 || barrelcntr == 3) hInvMass2Mu_B_cat1->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else if (barrelcntr == 2 || barrelcntr == 1) hInvMass2Mu_B_cat2->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else if (barrelcntr == 0) hInvMass2Mu_B_cat3->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else cout<<"something went wrong with cat B logic"<<endl;
 
-        // Alternative 1 plots
-        if((etaH1 < etaB) && (etaH2 < etaB)) { mBB = true; }
-        if((etaH1 < etaB) && ((etaH2 > etaB) && (etaH2 < etaO))) { mBO = true; }
-        if((etaH2 < etaB) && ((etaH1 > etaB) && (etaH1 < etaO))) { mBO = true; }
-        if((etaH1 < etaB) && (etaH2 > etaO)) { mBE = true; }
-        if((etaH2 < etaB) && (etaH1 > etaO)) { mBE = true; }
-        if(((etaH1 < etaO) && (etaH1 > etaB)) && ((etaH2 < etaO) && (etaH2 > etaB))) { mOO = true; }
-        if(((etaH1 < etaO) && (etaH1 > etaB)) && (etaH2 > etaO)) { mOE = true; }
-        if(((etaH2 < etaO) && (etaH2 > etaB)) && (etaH1 > etaO)) { mOE = true; }
-        if((etaH1 > etaO) && (etaH2 > etaO)) { mEE = true; }
-        if(!(mBB||mBO||mBE||mOO||mOE||mEE)) { cout<<"something wrong with alt 1 cat logic"<<endl; }
+    // Fill categorisation C plots
+    double etaH1 = TMath::Abs(muonsVec[Hmu1_idx].Eta());
+    double etaH2 = TMath::Abs(muonsVec[Hmu2_idx].Eta());
+    if (etaH1 <= 0.8 && etaH2 <= 0.8) hInvMass2Mu_C_cat1->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else if (etaH1 <= 0.8 || etaH2 <= 0.8) hInvMass2Mu_C_cat2->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else if (!(etaH1 <= 0.8 || etaH2 <= 0.8)) hInvMass2Mu_C_cat3->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
+    else cout<<"something went wrong with cat C logic"<<endl;
 
-        if(mBB) { hInvMass2Mu_H_BB->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(mBO) { hInvMass2Mu_H_BO->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(mBE) { hInvMass2Mu_H_BE->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(mOO) { hInvMass2Mu_H_OO->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(mOE) { hInvMass2Mu_H_OE->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        else if(mEE) { hInvMass2Mu_H_EE->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
 
-        // Alternative 3 plots
-        hInvMass2Mu_dZH->Fill((diMuonVec[diMuonH_idx].M()) - (diMuonVec[diMuonZ_idx].M()), pileupweight);
-        double massdif=((diMuonVec[diMuonH_idx].M()) - (diMuonVec[diMuonZ_idx].M()));
-
-        // Baseline prime plots
-        if(massdif > 23.) {
-            if(barrelcountH == 2) 	{ hInvMass2Mu_Hp_cat1->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-            else if(barrelcountH == 1) 	{ hInvMass2Mu_Hp_cat2->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-            else if(barrelcountH == 0) 	{ hInvMass2Mu_Hp_cat3->Fill(diMuonVec[diMuonH_idx].M(), pileupweight); }
-        }
-    */
     if(isData && !(diMuonVec[diMuonH_idx].M() >= cInvMassB_low &&  diMuonVec[diMuonH_idx].M() <= cInvMassB_high)) {
         hInvMass2MuH  ->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
         hInvMass2Mu_wo->Fill(diMuonVec[diMuonH_idx].M(), pileupweight);
@@ -1206,48 +1199,20 @@ void MyAnalysis::AddPUWeightFile(string filename) {
 //________________________________
 double MyAnalysis::GetMCWeight(int nPVMC, string nameMC, string nameData) {
     double my_weight = 1.;
-    if(nameMC == "DYJetsToLL" && nameData == "Run2012") {
-        return w2012_DY[nPVMC];
-    }
-    if(nameMC == "TTJets" && nameData  == "Run2012") {
-        return w2012_TT[nPVMC];
-    }
-    if(nameMC == "QCD" && nameData     == "Run2012") {
-        return w2012_QCD[nPVMC];
-    }
-    if(nameMC == "Tbar_s" && nameData  == "Run2012") {
-        return w2012_Tbar_s[nPVMC];
-    }
-    if(nameMC == "Tbar_t" && nameData  == "Run2012") {
-        return w2012_Tbar_t[nPVMC];
-    }
-    if(nameMC == "Tbar_tW" && nameData == "Run2012") {
-        return w2012_Tbar_tW[nPVMC];
-    }
-    if(nameMC == "T_s" && nameData  == "Run2012") {
-        return w2012_T_s[nPVMC];
-    }
-    if(nameMC == "T_t" && nameData  == "Run2012") {
-        return w2012_T_t[nPVMC];
-    }
-    if(nameMC == "T_tW" && nameData == "Run2012") {
-        return w2012_T_tW[nPVMC];
-    }
-    if(nameMC == "WJetsToLNu" && nameData == "Run2012") {
-        return w2012_WJets[nPVMC];
-    }
-    if(nameMC == "WW" && nameData == "Run2012") {
-        return w2012_WW[nPVMC];
-    }
-    if(nameMC == "WZ" && nameData == "Run2012") {
-        return w2012_WZ[nPVMC];
-    }
-    if(nameMC == "ZZ" && nameData == "Run2012") {
-        return w2012_ZZ[nPVMC];
-    }
-    if(nameMC == "H" && nameData == "Run2012") {
-        return w2012_H[nPVMC];
-    }
+    if(nameMC == "DYJetsToLL" && nameData == "Run2012") return w2012_DY[nPVMC];
+    if(nameMC == "TTJets" && nameData  == "Run2012") return w2012_TT[nPVMC];
+    if(nameMC == "QCD" && nameData == "Run2012") return w2012_QCD[nPVMC];
+    if(nameMC == "Tbar_s" && nameData  == "Run2012") return w2012_Tbar_s[nPVMC];
+    if(nameMC == "Tbar_t" && nameData  == "Run2012") return w2012_Tbar_t[nPVMC];
+    if(nameMC == "Tbar_tW" && nameData == "Run2012") return w2012_Tbar_tW[nPVMC];
+    if(nameMC == "T_s" && nameData  == "Run2012") return w2012_T_s[nPVMC];
+    if(nameMC == "T_t" && nameData  == "Run2012") return w2012_T_t[nPVMC];
+    if(nameMC == "T_tW" && nameData == "Run2012") return w2012_T_tW[nPVMC];
+    if(nameMC == "WJetsToLNu" && nameData == "Run2012") return w2012_WJets[nPVMC];
+    if(nameMC == "WW" && nameData == "Run2012") return w2012_WW[nPVMC];
+    if(nameMC == "WZ" && nameData == "Run2012") return w2012_WZ[nPVMC];
+    if(nameMC == "ZZ" && nameData == "Run2012") return w2012_ZZ[nPVMC];
+    if(nameMC == "H" && nameData == "Run2012") return w2012_H[nPVMC];
     return my_weight;
 }
 //________________________________

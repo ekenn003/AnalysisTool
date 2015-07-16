@@ -1026,7 +1026,7 @@ public:
     bool IsMC() const {
         return(NumTruePileUpInteractions() != -1);
     }
-Int_t getMuID( Muon themu) const;
+//Int_t getMuID( Muon themu) const;
 
 };
 

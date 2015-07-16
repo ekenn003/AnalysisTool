@@ -1751,7 +1751,7 @@ Long64_t Analyse::Loop(Long64_t start, Long64_t end) {
                 timeremain = watch.RealTime()/processed*(end-start-processed);
                 watch.Continue();
                 if(Batch_MyId() != -1) cerr << "JOB " << Batch_MyId() << ": ";
-                cerr << "Processed: " << processed << "/" << end - start << ", Event: " << UInt_t(Number()) << ", Run: " << Run() << ", LumiBlock: " << LumiBlock() << ", Time: " << int(timeremain)/3600 << ":" << int(timeremain)%3600/60 << ":" << int(timeremain)%60 << endl;
+                cerr<<"Processed: "<<processed<<"/"<<end-start<<", Event: "<<UInt_t(Number())<<", Run: "<<Run()<<", LumiBlock: "<<LumiBlock()<<", Time: "<<int(timeremain)/3600<<":"<<int(timeremain)%3600/60<<":"<<int(timeremain)%60<<", "<<(100*processed/(end-start))<<"%"<<endl;
             }
 
             if(evres == -1) {
@@ -3134,40 +3134,40 @@ Long64_t mem_usage() {
     return(rss*sysconf(_SC_PAGE_SIZE));
 }
 
-Int_t Analyse::getMuID( Muon themu) const {
-    double looseChi2Ndf = -1.;
-    int    looseNMuonHits = -1;
-    int    looseNMatchedStations = 0;
-    double looseDxy = 0.3; // cm
-    double looseDz = 20.; // cm
-    int    looseNPixelHits = 0.;
-    int    looseNTrackerLayers = 5;
-    
-    double tightChi2Ndf = 10.;
-    int    tightNMuonHits = 0;
-    int    tightNMatchedStations = 1;
-    double tightDxy = 0.2; // cm
-    double tightDz = 0.5; // cm
-    int    tightNPixelHits = 0;
-    int    tightNTrackerLayers = 5;
-
-    if ( themu.IsGlobal() &&
-     themu.OuterTrack().NHits() > tightNMuonHits &&
-     themu.NumChambersWithSegments() > tightNMatchedStations &&
-     TMath::Abs(themu.InnerTrack().Dxy()) < tightDxy &&
-     TMath::Abs(themu.InnerTrack().Dz()) < tightDz &&
-     themu.InnerTrack().NPixelHits() > tightNPixelHits &&
-     (themu.InnerTrack().NPixelLayers() + themu.InnerTrack().NStripLayers()) > tightNTrackerLayers) {
-        return 4; // 4 means tight muon
-    } else if ( (themu.IsGlobal() || themu.IsTracker()) &&
-     themu.OuterTrack().NHits() > looseNMuonHits &&
-     themu.NumChambersWithSegments() > looseNMatchedStations &&
-     TMath::Abs(themu.InnerTrack().Dxy()) < looseDxy &&
-     TMath::Abs(themu.InnerTrack().Dz()) < looseDz &&
-     themu.InnerTrack().NPixelHits() > looseNPixelHits &&
-     (themu.InnerTrack().NPixelLayers() + themu.InnerTrack().NStripLayers()) > looseNTrackerLayers) {
-        return 2; // 2 means loose muon
-    }
-    return (-1);
-}
+//Int_t Analyse::getMuID( Muon themu) const {
+//    double looseChi2Ndf = -1.;
+//    int    looseNMuonHits = -1;
+//    int    looseNMatchedStations = 0;
+//    double looseDxy = 0.3; // cm
+//    double looseDz = 20.; // cm
+//    int    looseNPixelHits = 0.;
+//    int    looseNTrackerLayers = 5;
+//    
+//    double tightChi2Ndf = 10.;
+//    int    tightNMuonHits = 0;
+//    int    tightNMatchedStations = 1;
+//    double tightDxy = 0.2; // cm
+//    double tightDz = 0.5; // cm
+//    int    tightNPixelHits = 0;
+//    int    tightNTrackerLayers = 5;
+//
+//    if ( themu.IsGlobal() &&
+//     themu.OuterTrack().NHits() > tightNMuonHits &&
+//     themu.NumChambersWithSegments() > tightNMatchedStations &&
+//     TMath::Abs(themu.InnerTrack().Dxy()) < tightDxy &&
+//     TMath::Abs(themu.InnerTrack().Dz()) < tightDz &&
+//     themu.InnerTrack().NPixelHits() > tightNPixelHits &&
+//     (themu.InnerTrack().NPixelLayers() + themu.InnerTrack().NStripLayers()) > tightNTrackerLayers) {
+//        return 4; // 4 means tight muon
+//    } else if ( (themu.IsGlobal() || themu.IsTracker()) &&
+//     themu.OuterTrack().NHits() > looseNMuonHits &&
+//     themu.NumChambersWithSegments() > looseNMatchedStations &&
+//     TMath::Abs(themu.InnerTrack().Dxy()) < looseDxy &&
+//     TMath::Abs(themu.InnerTrack().Dz()) < looseDz &&
+//     themu.InnerTrack().NPixelHits() > looseNPixelHits &&
+//     (themu.InnerTrack().NPixelLayers() + themu.InnerTrack().NStripLayers()) > looseNTrackerLayers) {
+//        return 2; // 2 means loose muon
+//    }
+//    return (-1);
+//}
 
