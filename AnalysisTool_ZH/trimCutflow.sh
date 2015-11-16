@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-# this script needs to be run with "./" instead of "source" or else errors will close the ssh session
+# this script needs to be run with "./" instead of "source" or else errors will close the ssh session lol
 
 INFILE=$1
 CUTFLOWFILE=$INFILE\_cutflow.txt
@@ -24,11 +24,4 @@ while read line ; do
 done < $INFILE
 echo "100% done"
 
-#j=1
-#while read line ; do
-#    ((++j))
-#    if [[ "$j" -le "$k" ]]; then continue
-#    fi
-#    echo "$line" >> $CUTFLOWFILE
-#done < $INFILE
 echo "$INFILE" >> $CUTFLOWFILE
