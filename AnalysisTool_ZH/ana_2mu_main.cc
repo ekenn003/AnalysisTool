@@ -60,6 +60,7 @@ private:
     int    cNHitsPixelMu;
     int    cNTrackerLayersMu;
     double cIsoMuPU;
+    double cIsoMuTk;
 
     double cInvMassB_low;
     double cInvMassB_high;
@@ -101,9 +102,11 @@ private:
 
     // muons
     TH1D *hMuPt;
-    TH1D *hMuPt_noCuts;
-    TH1D *hMuPt_basicCuts;
+    TH1D *hMu1Pt;
+    TH1D *hMu2Pt;
     TH1D *hMuEta;
+    TH1D *hMuEta_mu1;
+    TH1D *hMuEta_mu2;
     TH1D *hMuPhi;
     TH1D *hMuIso;
     TH1D *hMuIsoPU;
@@ -125,7 +128,13 @@ private:
 
     TH1D *h2MuEta;
     TH1D *h2MuPt;
-    TH1D *hInvMass4Mu;
+
+    TH2D *hMu1PtVsMu1Eta;
+    TH2D *hMu2PtVsMu2Eta;
+    TH2D *hMu1PtVsInvMass2Mu;
+    TH2D *hMu2PtVsInvMass2Mu;
+    TH2D *hMu1PtVsMu2Pt;
+    TH2D *hMu1EtaVsMu2Eta;
 
     // jets
     TH1D *hJetPt;
@@ -167,9 +176,12 @@ private:
     double nEv_PixelHits;
     double nEv_TrackerLayers;
     double nEv_IsoPU;
+    double nEv_IsoTk;
     double nEv_2SGMu;
-    double nEv_1TMu;
-    double nEv_2TMu;
+    //double nEv_1TMu;
+    //double nEv_2TMu;
+    double nEv_1MMu;
+    double nEv_2MMu;
     double nEv_SamePVMu;
     double nEv_ChargeMu;
     double nEv_InvMassMu;
@@ -196,15 +208,18 @@ public:
     bool   isGoodJet(Jet j);
     bool   hasJetIDLoose(Jet j);
     bool   hasJetSamePV(Jet j, Muon mu1, Muon mu2, std::vector < Vertex > PVs);
+    double GetHLTEffScale();
+    double GetMuonEffScale(double muPt, double muEta);
     double GetMCWeight(int nPVMC, string nameMC, string nameData);
     string asString(double f);
 
+    double sumWeights;
 };
 //Constructor:
 MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     // don;t touch, these are changed with the output file name
     isData=false; isMC=false;
-
+    sumWeights = 0.0;
     // vertex
     cVtxNdf = 4;
     cVtxZ   = 24.;
@@ -221,7 +236,8 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     cDzMu             = 0.14; // cm
     cNHitsPixelMu     = 0;
     cNTrackerLayersMu = 5;
-    cIsoMuPU          = 0.15;//0.10; // corrected for pile-up
+    cIsoMuPU          = 0.15;
+    cIsoMuTk          = 0.10;
 
     cInvMassB_low     = 120.;
     cInvMassB_high    = 130.;
@@ -249,6 +265,7 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     LoadAK4PFJets();
     LoadMET();
     LoadGenParticles();
+    LoadGenInfo();
     LoadAllGenParticles();
     UsePileUpInfo();
     //UsePrimVertexInfo();
@@ -294,18 +311,26 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     hMuPt      = new TH1D("hMuPt", "mu Pt",    160, 0., 800.);
     hMuPt->GetXaxis()->SetTitle("p_{T #mu}[GeV/c]");
     hMuPt->GetYaxis()->SetTitle("Candidates/5.0GeV/c");
-    hMuPt_noCuts      = new TH1D("hMuPt_noCuts", "mu Pt trig only",    160, 0., 800.);
-    hMuPt_noCuts->GetXaxis()->SetTitle("p_{T #mu}[GeV/c]");
-    hMuPt_noCuts->GetYaxis()->SetTitle("Candidates/5.0GeV/c");
-    hMuPt_basicCuts      = new TH1D("hMuPt_basicCuts", "mu Pt kin. cuts only",    160, 0., 800.);
-    hMuPt_basicCuts->GetXaxis()->SetTitle("p_{T #mu}[GeV/c]");
-    hMuPt_basicCuts->GetYaxis()->SetTitle("Candidates/5.0GeV/c");
     hMuEta     = new TH1D("hMuEta", "mu Eta",  44, -2.2, 2.2);
     hMuEta->GetXaxis()->SetTitle("#eta_{#mu}");
     hMuEta->GetYaxis()->SetTitle("Candidates/0.1");
     hMuPhi     = new TH1D("hMuPhi", "mu Phi", 34, -3.4, 3.4);
     hMuPhi->GetXaxis()->SetTitle("#varphi_{#mu} [rad]");
     hMuPhi->GetYaxis()->SetTitle("Candidates/0.2[rad]");
+
+    hMu1Pt  = new TH1D("hMu1Pt", "leading #mu Pt",    160, 0., 800.);
+    hMu1Pt->GetXaxis()->SetTitle("p_{T #mu}[GeV/c]");
+    hMu1Pt->GetYaxis()->SetTitle("Candidates/5.0GeV/c");
+    hMuEta_mu1 = new TH1D("hMuEta_mu1", "leading #mu Eta",  44, -2.2, 2.2);
+    hMuEta_mu1->GetXaxis()->SetTitle("#eta_{#mu}");
+    hMuEta_mu1->GetYaxis()->SetTitle("Candidates/0.1");
+
+    hMu2Pt  = new TH1D("hMu2Pt", "subleading #mu Pt",    160, 0., 800.);
+    hMu2Pt->GetXaxis()->SetTitle("p_{T #mu}[GeV/c]");
+    hMu2Pt->GetYaxis()->SetTitle("Candidates/5.0GeV/c");
+    hMuEta_mu2 = new TH1D("hMuEta_mu2", "subleading #mu Eta",  44, -2.2, 2.2);
+    hMuEta_mu2->GetXaxis()->SetTitle("#eta_{#mu}");
+    hMuEta_mu2->GetYaxis()->SetTitle("Candidates/0.1");
 
     hMuIso       = new TH1D("hMuIso", "Mu IsoCombR", 150, 0., 0.15);
     hMuIso->GetXaxis()->SetTitle("Iso^{PU}_{#mu}");
@@ -366,6 +391,32 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     h2MuEta->GetXaxis()->SetTitle("p_{T}_{#mu^{+}#mu^{-}}");
     h2MuEta->GetYaxis()->SetTitle("Candidates/0.5 GeV");
 
+    // 2d plots
+
+    hMu1PtVsMu1Eta      = new TH2D("hMu1PtVsMu1Eta", "leading mu pT vs. eta",  2000, 0., 1000., 132, -6.6, 6.6);
+    hMu1PtVsMu1Eta->GetXaxis()->SetTitle("p_{T}_{leading #mu}");
+    hMu1PtVsMu1Eta->GetYaxis()->SetTitle("#eta_{leading #mu}");
+
+    hMu2PtVsMu2Eta      = new TH2D("hMu2PtVsMu2Eta", "subleading mu pT vs. eta",  2000, 0., 1000., 132, -6.6, 6.6);
+    hMu2PtVsMu2Eta->GetXaxis()->SetTitle("p_{T}_{subleading #mu}");
+    hMu2PtVsMu2Eta->GetYaxis()->SetTitle("#eta_{subleading #mu}");
+
+    hMu1PtVsInvMass2Mu  = new TH2D("hMu1PtVsInvMass2Mu", "leading mu pT vs. dimuon InvMass",  2000, 0., 1000., 4000, 0., 2000.);
+    hMu1PtVsInvMass2Mu->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hMu1PtVsInvMass2Mu->GetYaxis()->SetTitle("p_{T}_{leading #mu}");
+
+    hMu2PtVsInvMass2Mu  = new TH2D("hMu2PtVsInvMass2Mu", "subleading mu pT vs. dimuon InvMass",  2000, 0., 1000., 4000, 0., 2000.);
+    hMu2PtVsInvMass2Mu->GetXaxis()->SetTitle("M_{#mu^{+}#mu^{-}} [GeV/c^{2}]");
+    hMu2PtVsInvMass2Mu->GetYaxis()->SetTitle("p_{T}_{subleading #mu}");
+
+    hMu1PtVsMu2Pt       = new TH2D("hMu1PtVsMu2Pt", "leading mu pT vs. subleading",  2000, 0., 1000., 2000, 0., 1000.);
+    hMu1PtVsMu2Pt->GetXaxis()->SetTitle("p_{T}_{leading #mu}");
+    hMu1PtVsMu2Pt->GetYaxis()->SetTitle("p_{T}_{subleading #mu}");
+
+    hMu1EtaVsMu2Eta     = new TH2D("hMu1EtaVsMu2Eta", "leading mu eta vs. subleading",  132, -6.6, 6.6, 132, -6.6, 6.6);
+    hMu1EtaVsMu2Eta->GetXaxis()->SetTitle("#eta_{leading #mu}");
+    hMu1EtaVsMu2Eta->GetYaxis()->SetTitle("#eta_{subleading #mu}");
+
    // // jets
    // hJetPt         = new TH1D("hJetPt", "jet Pt",    160, 0., 800.);
    // hJetPt->GetXaxis()->SetTitle("p_{T HJet}[GeV/c]");
@@ -398,7 +449,7 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     // EFFICIENCIES
     eff_names.push_back("Skim");                                  eff_counters.push_back(&nEv_Skim);
     eff_names.push_back("Gen Z->2#Mu");                           eff_counters.push_back(&nEv_GenZ2Mu);
-    eff_names.push_back("Trigger");                               eff_counters.push_back(&nEv_TriggerMu);
+    eff_names.push_back("IsoTkMu18");                               eff_counters.push_back(&nEv_TriggerMu);
     eff_names.push_back("Ndf_{PV} > "+asString(cVtxNdf));         eff_counters.push_back(&nEv_PVNdf);
     eff_names.push_back("|z_{PV}| < "+asString(cVtxZ)+"cm");      eff_counters.push_back(&nEv_PVZ);
     eff_names.push_back("nPV > 0");                               eff_counters.push_back(&nEv_PV);
@@ -406,11 +457,14 @@ MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
     eff_names.push_back("p_{T#mu}> "+asString(cPtMu)+" GeV");     eff_counters.push_back(&nEv_Pt);
     eff_names.push_back("|#eta_{#mu}|< "+asString(cEtaMu));       eff_counters.push_back(&nEv_Eta);
     eff_names.push_back("Muon ID");                               eff_counters.push_back(&nEv_MuID);
-    eff_names.push_back("Iso #mu < "+asString(cIsoMuPU));         eff_counters.push_back(&nEv_IsoPU);
+    //eff_names.push_back("Iso #mu < "+asString(cIsoMuPU));         eff_counters.push_back(&nEv_IsoPU);
+    eff_names.push_back("TkIso #mu < "+asString(cIsoMuTk));         eff_counters.push_back(&nEv_IsoTk);
     eff_names.push_back("p_{T#mu} > "+asString(cPtMuMax) + " GeV & |#eta_{#mu}| < "+asString(cEtaMuMax)); eff_counters.push_back(&nEv_PtEtaMax);
     eff_names.push_back("2#mu");                                  eff_counters.push_back(&nEv_2SGMu);
-    eff_names.push_back("1 tight #mu");                           eff_counters.push_back(&nEv_1TMu);
-    eff_names.push_back("2 tight #mu");                           eff_counters.push_back(&nEv_2TMu);
+    //eff_names.push_back("1 tight #mu");                           eff_counters.push_back(&nEv_1TMu);
+    //eff_names.push_back("2 tight #mu");                           eff_counters.push_back(&nEv_2TMu);
+    eff_names.push_back("1 med #mu");                           eff_counters.push_back(&nEv_1MMu);
+    eff_names.push_back("2 med #mu");                           eff_counters.push_back(&nEv_2MMu);
     eff_names.push_back("#mu: |dz| < "+asString(cDzMu)+"cm");     eff_counters.push_back(&nEv_SamePVMu);
     eff_names.push_back("#mu: Q_{#mu1}*Q_{#mu2} < 0");            eff_counters.push_back(&nEv_ChargeMu);
     eff_names.push_back("#mu: M_{#mu^{+}#mu^{-} > "+asString(cInvMass)+"GeV");   eff_counters.push_back(&nEv_InvMassMu);
@@ -445,21 +499,23 @@ MyAnalysis::~MyAnalysis() {
         cout<<setw(40)<<eff_names[i]<<setw(15)<<setprecision(8)<<(*eff_counters[i])<<setw(15)<<setprecision(4)<<100.*(*eff_counters[i])/nEv_GenZ2Mu<<setw(15)<<100.*(*eff_counters[i])/(*eff_counters[i-1])<<endl;
     }
     cout<<"====================================================================================="<<endl;
+    cout<<setprecision(18)<<"******************** sumWeights     = "<<sumWeights<<endl;
+    cout<<setprecision(18)<<"******************** nEvents        = "<<*eff_counters[0]<<endl;
 }
 
 // Analysis
 Int_t MyAnalysis::AnalyseEvent() {
 
     //pileup
-    double pileupweight      = GetPileUpWeight(dataPileUp); //GetPrimVertexWeight(dataPrimVert);
+    double pileupweight = 1.;
+    if (isMC) pileupweight      = GetPileUpWeight(dataPileUp); //GetPrimVertexWeight(dataPrimVert);
     double pileupweight_up   = GetPileUpWeight(dataPileUp_Up);
     double pileupweight_down = GetPileUpWeight(dataPileUp_Down);
     //if( Run() == 191057) cout<<"c0"<<" Run:"<<Run()<<" Event:"<<Number()<<endl;
     ++nEv_Skim;
 
 
-
-// require gen Z that goes to 2 muons
+    // require gen Z that goes to 2 muons
     bool genZCheck = false;
     if (isMC) {
         for(unsigned int i = 0; i < NumAllGenParticles(); ++i) {
@@ -471,9 +527,9 @@ Int_t MyAnalysis::AnalyseEvent() {
                  }
             }
         }
-    } else { genZCheck = true; }
+    }
 
-    if (isMC && !genZCheck) return 1;
+    //if (isMC && !genZCheck) return 1;
     ++nEv_GenZ2Mu;
 
     // get the trigger
@@ -483,13 +539,14 @@ Int_t MyAnalysis::AnalyseEvent() {
     // Turn on triggers
 
     // Single muon triggers
-    bool useHLTIsoMu20 = true;
-//    bool useHLTIsoMu24 = false;
-//
-//    // Double muon triggers
-//    bool useHLTDoubleIsoMu17 = false;
-//    bool useHLTMu27TkMu8 = true;
-//    bool useHLTMu17Mu8 = false;
+    bool useHLTIsoMu20 = false;
+    bool useHLTIsoMu24 = false;
+    bool useHLTIsoTkMu20 = true;
+
+    // Double muon triggers
+    //bool useHLTDoubleIsoMu17 = false;
+    //bool useHLTMu27TkMu8 = true;
+    //bool useHLTMu17Mu8 = false;
 
     if (useHLTIsoMu20) {
         triggernames.push_back("HLT_IsoMu20");
@@ -499,33 +556,14 @@ Int_t MyAnalysis::AnalyseEvent() {
         triggernames.push_back("HLT_IsoMu20_v4");
         triggernames.push_back("HLT_IsoMu20_v5");
     }
-//    if (useHLTIsoMu24) {
-///////        triggernames.push_back("HLT_IsoMu24_eta2p1");
-///////        triggernames.push_back("HLT_IsoMu24_eta2p1_v1");
-///////        triggernames.push_back("HLT_IsoMu24_eta2p1_v2");
-///////        triggernames.push_back("HLT_IsoMu24_eta2p1_v3");
-///////        triggernames.push_back("HLT_IsoMu24_eta2p1_v4");
-///////        triggernames.push_back("HLT_IsoMu24_eta2p1_v5");
-//    }
-//    if (useHLTDoubleIsoMu17) {
-//        triggernames.push_back("HLT_DoubleIsoMu17_eta2p1");
-//        triggernames.push_back("HLT_DoubleIsoMu17_eta2p1_v1");
-//        triggernames.push_back("HLT_DoubleIsoMu17_eta2p1_v2");
-//        triggernames.push_back("HLT_DoubleIsoMu17_eta2p1_v3");
-//        triggernames.push_back("HLT_DoubleIsoMu17_eta2p1_v4");
-//    }
-//    if (useHLTMu27TkMu8) {
-        triggernames.push_back("HLT_Mu27_TkMu8");
-        triggernames.push_back("HLT_Mu27_TkMu8_v1");
-        triggernames.push_back("HLT_Mu27_TkMu8_v2");
-        triggernames.push_back("HLT_Mu27_TkMu8_v3");
-//    }
-//    if (useHLTMu17Mu8) {
-////////        triggernames.push_back("HLT_Mu17_Mu8");
-////////        triggernames.push_back("HLT_Mu17_Mu8_v1");
-////////        triggernames.push_back("HLT_Mu17_Mu8_v2");
-////////        triggernames.push_back("HLT_Mu17_Mu8_v3");
-//    }
+    if (useHLTIsoTkMu20) {
+        triggernames.push_back("HLT_IsoTkMu20");
+        triggernames.push_back("HLT_IsoTkMu20_v1");
+        triggernames.push_back("HLT_IsoTkMu20_v2");
+        triggernames.push_back("HLT_IsoTkMu20_v3");
+        triggernames.push_back("HLT_IsoTkMu20_v4");
+        triggernames.push_back("HLT_IsoTkMu20_v5");
+    }
 
     Int_t trigger = GetHLTrigger(triggernames);
         if (debug) {
@@ -569,7 +607,14 @@ Int_t MyAnalysis::AnalyseEvent() {
     if(!(PVs.size() > 0)) return (1);
     hVtxN_u->Fill(PVs.size());
     if( isData) pileupweight = 1.;
-    if (!isData) pileupweight=this->GetMCWeight(PVs.size(), "myMC", "myData");
+    //if (!isData) pileupweight=this->GetMCWeight(PVs.size(), "myMC", "myData");
+    if (!isData) {
+        // include pileup r.w. and account for negative events
+        pileupweight = GenWeight() * GetPileUpWeight(dataPileUp);
+        // include trigger efficiency scale in event weight
+        pileupweight *= GetHLTEffScale();
+        sumWeights += GenWeight();
+    }
 
     hPUweight->Fill(pileupweight);
 
@@ -601,14 +646,12 @@ Int_t MyAnalysis::AnalyseEvent() {
     bool isNTrackerLayersOK   = false;
     bool isMuIDOk = false;
     bool isIsoPUOK            = false;
+    bool isIsoTkOK            = false;
     int nLooseMus = 0;
     int nTightMus = 0;
     int nMedMus = 0;
     int nVetoMus = 0;
 
-    for(unsigned int i = 0; i < NumMuons(); ++i) {
-        hMuPt_noCuts->Fill(Muons(i).Pt(),  pileupweight);
-    }
     // loop over the muons
     for(unsigned int i = 0; i < NumMuons(); ++i) {
         // all muons pass these cuts:
@@ -619,13 +662,8 @@ Int_t MyAnalysis::AnalyseEvent() {
         isPtCutOK = true;
         if(!(TMath::Abs(Muons(i).Eta()) <= cEtaMu)) continue;
         isEtaCutOK = true;
-        hMuPt_basicCuts->Fill(Muons(i).Pt(),  pileupweight);
         // collect muon ID
-        if (Muons(i).MuID() > 4) {
-            cout<<"line something went very wrong with muID here"<<endl;
-            nVetoMus++;
-            continue;
-        } else if (Muons(i).MuID() <= 1) {
+        if (Muons(i).MuID() <= 1) {
             nVetoMus++;
             continue;
         }
@@ -633,9 +671,8 @@ Int_t MyAnalysis::AnalyseEvent() {
         if (Muons(i).MuID() == 4) nTightMus++;
         if (Muons(i).MuID() >= 3) nMedMus++;
         if (Muons(i).MuID() >= 2) nLooseMus++;
-        //if (!(this->getIsoPU(Muons(i), AK4PFRho()) < cIsoMuPU)) continue;
-        if (!(Muons(i).IsoR3TrackRel() < 0.1)) continue;
-        isIsoPUOK = true;
+        //if (!(this->getIsoPU(Muons(i), AK4PFRho()) < cIsoMuPU)) continue; isIsoPUOK = true;
+        if (!(Muons(i).IsoR3TrackRel() < cIsoMuTk)) continue; isIsoTkOK = true;
         // at least one muon in the event must ALSO pass this cut:
         if((Muons(i).Pt() > cPtMuMax && TMath::Abs(Muons(i).Eta()) <= cEtaMuMax)) ++nMuPtEtaMax;
         // save the good mus
@@ -646,17 +683,22 @@ Int_t MyAnalysis::AnalyseEvent() {
     if(isPtCutOK) ++nEv_Pt;
     if(isEtaCutOK) ++nEv_Eta;
     if(isMuIDOk) ++nEv_MuID;
-    if(isIsoPUOK) ++nEv_IsoPU;
+    //if(isIsoPUOK) ++nEv_IsoPU;
+    if(isIsoTkOK) ++nEv_IsoTk;
     if(nMuPtEtaMax > 0) ++nEv_PtEtaMax;
     if(nMuPtEtaMax < 1) return(1);
 
     // select events with at least 2 good mus
     if(muonsVec.size() < 2) return(1);
     ++nEv_2SGMu;
-    if (nTightMus >= 1) ++nEv_1TMu;
+    if (nMedMus >= 1) ++nEv_1MMu;
     else return (1);
-    if (nTightMus >= 2) ++nEv_2TMu;
+    if (nMedMus >= 2) ++nEv_2MMu;
     else return (1);
+
+    // include lepton efficiency scale factor in event weight
+    if (!isData) pileupweight *= GetMuonEffScale(muonsVec[0].Pt(), muonsVec[0].Eta()) * GetMuonEffScale(muonsVec[1].Pt(), muonsVec[1].Eta());
+
 
     bool isChargeMuCutOK  = false;
     bool isSamePVMuCutOK  = false;
@@ -756,7 +798,20 @@ Int_t MyAnalysis::AnalyseEvent() {
         hMuDz       ->Fill(muonsVec[i].InnerTrack().Dz(),  pileupweight);
     }
 
-
+    if (muonsVec.size() > 0) {
+        hMu1Pt->Fill(muonsVec[0].Pt(),  pileupweight);
+        hMuEta_mu1->Fill(muonsVec[0].Eta(),  pileupweight);
+        hMu1PtVsMu1Eta->Fill(muonsVec[0].Pt(), muonsVec[0].Eta(), pileupweight);
+    }
+    if (muonsVec.size() > 1) {
+        hMu2Pt->Fill(muonsVec[1].Pt(),  pileupweight);
+        hMuEta_mu2->Fill(muonsVec[1].Eta(),  pileupweight);
+        hMu2PtVsMu2Eta->Fill(muonsVec[1].Pt(), muonsVec[1].Eta(), pileupweight);
+        hMu1PtVsInvMass2Mu->Fill(muonsVec[0].Pt(), diMuonVec[0].M(), pileupweight);
+        hMu2PtVsInvMass2Mu->Fill(muonsVec[1].Pt(), diMuonVec[0].M(), pileupweight);
+        hMu1PtVsMu2Pt->Fill(muonsVec[0].Pt(), muonsVec[1].Pt(), pileupweight);
+        hMu1EtaVsMu2Eta->Fill(muonsVec[0].Eta(), muonsVec[1].Eta(), pileupweight);
+    }
 
     // how many muons are in the barrel?
     int barrelcntr = 0;
@@ -794,15 +849,15 @@ int main() {
                 filename = namebuf.substr(slashpos+1);
             }
             cout << filename << endl;
+// NOTE
             if(filename.find("LUMI_") == 0) {
                 ana.AddLumiFile(namebuf.c_str());
                 //}else if(filename.find("ReWeight1D") == 0){
-            } else if(filename.find("PileUp69400_22jan_2012") == 0) {
-                ana.AddPUWeightFile(namebuf.c_str());
             } else {
                 ana.AddFile(namebuf.c_str());
             }
         }
+        ana.AddPUWeightFile("/afs/cern.ch/work/e/ekennedy/work/fsanalysis/CMSSW_7_2_5/src/AnalysisTool/AnalysisTool_ZH/PileUpDistRun2015D.root");
     }
     // Loop will start to run the analysis on the specified range or on
     // all events if no range is given.
@@ -870,10 +925,12 @@ cout<<"AddPUWeightFile"<<endl;
     if(weightfile.IsZombie()) {
         cerr << "ERROR AddLumiFile: " << filename << " is not a valid file."<<endl;
     }
-
-    TH1D *Vertex      = (TH1D *)weightfile.Get("pileup69400");
-    TH1D *Vertex_Up   = (TH1D *)weightfile.Get("pileup72870");
-    TH1D *Vertex_Down = (TH1D *)weightfile.Get("pileup65930");
+    //TH1D *Vertex      = (TH1D *)weightfile.Get("pileup69400");
+    //TH1D *Vertex_Up   = (TH1D *)weightfile.Get("pileup72870");
+    //TH1D *Vertex_Down = (TH1D *)weightfile.Get("pileup65930");
+    TH1D *Vertex      = (TH1D *)weightfile.Get("pileup69000");
+    TH1D *Vertex_Up   = (TH1D *)weightfile.Get("pileup72450");
+    TH1D *Vertex_Down = (TH1D *)weightfile.Get("pileup65550");
 
     Double_t tot      = Vertex->Integral();
     Double_t tot_up   = Vertex_Up->Integral();
@@ -881,23 +938,42 @@ cout<<"AddPUWeightFile"<<endl;
 
     for(int i=0; i<Vertex->GetNbinsX(); i++) {
         dataPileUp.push_back(Vertex->GetBinContent(i+1)/tot);
-        cout<<dataPileUp[i]<<endl;
+        //cout<<dataPileUp[i]<<endl;
     }
 
     for(int i=0; i<Vertex_Up->GetNbinsX(); i++) {
         dataPileUp_Up.push_back(Vertex_Up->GetBinContent(i+1)/tot_up);
-        cout<<dataPileUp_Up[i]<<endl;
+        //cout<<dataPileUp_Up[i]<<endl;
     }
 
     for(int i=0; i<Vertex_Down->GetNbinsX(); i++) {
         dataPileUp_Down.push_back(Vertex_Down->GetBinContent(i+1)/tot_down);
-        cout<<dataPileUp_Down[i]<<endl;
+        //cout<<dataPileUp_Down[i]<<endl;
     }
 
     weightfile.Close();
 }
+
+//________________________________
+double MyAnalysis::GetHLTEffScale() {
+    double my_ratio = 1.;
+    return my_ratio;
+}
+
+//________________________________
+double MyAnalysis::GetMuonEffScale(double muPt, double muEta) {
+    double my_ratio = 1.;
+    double eff_data;
+    double eff_MC;
+
+
+
+
+    return my_ratio;
+}
 //________________________________
 double MyAnalysis::GetMCWeight(int nPVMC, string nameMC, string nameData) {
+    if (debug) cout<<"GetMCWeight"<<endl;
     double my_weight = 1.;
     if(nameMC == "DYJetsToLL" && nameData == "Run2012") return w2012_DY[nPVMC];
     if(nameMC == "TTJets" && nameData  == "Run2012") return w2012_TT[nPVMC];
