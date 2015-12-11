@@ -1069,22 +1069,19 @@ void Analyse::LoadMET(bool select) {
     }
 }
 
-//void Analyse::LoadAK4CaloJets(bool select)
-//{
-//if(select){loadak4calojets = 1;}else{loadak4calojets = 0;}
-//}
-//
-//void Analyse::LoadAK4JPTJets(bool select)
-//{
-//if(select){loadak4jptjets = 1;}else{loadak4jptjets = 0;}
-//}
+void Analyse::LoadAK4CaloJets(bool select) {
+    if(select) loadak4calojets = 1;
+    else loadak4calojets = 0;
+}
+
+void Analyse::LoadAK4JPTJets(bool select) {
+    if(select) loadak4jptjets = 1;
+    else loadak4jptjets = 0;
+}
 
 void Analyse::LoadAK4PFCHSJets(bool select) {
-    if(select) {
-        loadak4pfchsjets = 1;
-    } else {
-        loadak4pfchsjets = 0;
-    }
+    if(select) loadak4pfchsjets = 1;
+    else loadak4pfchsjets = 0;
 }
 
 void Analyse::LoadAK4PFJets(bool select) {

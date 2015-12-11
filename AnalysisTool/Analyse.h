@@ -849,13 +849,13 @@ public:
     TLorentzVector PFMETTYPE1() const;
     TLorentzVector PFMETTYPE0TYPE1() const;
 
-    //void LoadAK4CaloJets(bool select = true);
-    //Jet AK4CaloJets(UInt_t n) const;
-    //UInt_t NumAK4CaloJets() const {return(ak4calojet_count);}
+    void LoadAK4CaloJets(bool select = true);
+    Jet AK4CaloJets(UInt_t n) const;
+    UInt_t NumAK4CaloJets() const {return(ak4calojet_count);}
 
-    //void LoadAK4JPTJets(bool select = true);
-    //Jet AK4JPTJets(UInt_t n) const;
-    //UInt_t NumAK4JPTJets() const {return(ak4jptjet_count);}
+    void LoadAK4JPTJets(bool select = true);
+    Jet AK4JPTJets(UInt_t n) const;
+    UInt_t NumAK4JPTJets() const {return(ak4jptjet_count);}
 
     void LoadAK4PFCHSJets(bool select = true);
     Jet AK4PFCHSJets(UInt_t n) const;
