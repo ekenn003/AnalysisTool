@@ -911,6 +911,8 @@ void Analyse::Load() {
     tree->SetBranchAddress("ak4pfjet_rho", &ak4pfjet_rho);
     tree->SetBranchAddress("ak4pfjet_sigma", &ak4pfjet_sigma);
 
+    tree->SetBranchAddress("puppimet_ex", &puppimet_ex);
+    tree->SetBranchAddress("puppimet_ey", &puppimet_ey);
     tree->SetBranchAddress("pfmet_ex", &pfmet_ex);
     tree->SetBranchAddress("pfmet_ey", &pfmet_ey);
     tree->SetBranchAddress("pfmettype1_ex", &pfmettype1_ex);
@@ -1252,6 +1254,10 @@ Photon Analyse::Photons(UInt_t n) const {
 
 Tau Analyse::Taus(UInt_t n) const {
     return(Tau(this, n));
+}
+
+TLorentzVector Analyse::PuppiMET() const {
+    return(TLorentzVector(puppimet_ex, puppimet_ey, 0., sqrt(pow(puppimet_ex, 2) + pow(puppimet_ey, 2))));
 }
 
 TLorentzVector Analyse::PFMET() const {
@@ -2307,6 +2313,8 @@ Int_t Analyse::PrepareSkimming(string filename) {
     skimtree->Branch("ak4pfjet_rho", &ak4pfjet_rho, "ak4pfjet_rho/F");
     skimtree->Branch("ak4pfjet_sigma", &ak4pfjet_sigma, "ak4pfjet_sigma/F");
 
+    skimtree->Branch("puppimet_ex", &puppimet_ex, "puppimet_ex/F");
+    skimtree->Branch("puppimet_ey", &puppimet_ey, "puppimet_ey/F");
     skimtree->Branch("pfmet_ex", &pfmet_ex, "pfmet_ex/F");
     skimtree->Branch("pfmet_ey", &pfmet_ey, "pfmet_ey/F");
     skimtree->Branch("pfmettype1_ex", &pfmettype1_ex, "pfmettype1_ex/F");

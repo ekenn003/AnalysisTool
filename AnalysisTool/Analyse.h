@@ -644,6 +644,8 @@ private:
     Float_t ak4pfjet_rho;
     Float_t ak4pfjet_sigma;
 
+    Float_t puppimet_ex;
+    Float_t puppimet_ey;
     Float_t pfmet_ex;
     Float_t pfmet_ey;
     Float_t pfmettype1_ex;
@@ -845,6 +847,7 @@ public:
     }
 
     void LoadMET(bool select = true);
+    TLorentzVector PuppiMET() const;
     TLorentzVector PFMET() const;
     TLorentzVector PFMETTYPE1() const;
     TLorentzVector PFMETTYPE0TYPE1() const;
