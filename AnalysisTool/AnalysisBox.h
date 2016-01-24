@@ -87,14 +87,14 @@ public:
         return(an->NumPhotons());
     }
 
-    TLorentzVector PuppiMET() const {
-        return(an->PuppiMET());
-    }
     TLorentzVector PFMET() const {
         return(an->PFMET());
     }
     TLorentzVector PFMETTYPE1() const {
         return(an->PFMETTYPE1());
+    }
+    TLorentzVector PFMETPUPPITYPE1() const {
+        return(an->PFMETPUPPITYPE1());
     }
     TLorentzVector PFMETTYPE0TYPE1() const {
         return(an->PFMETTYPE0TYPE1());
