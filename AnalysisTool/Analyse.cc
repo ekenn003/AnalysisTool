@@ -915,8 +915,8 @@ void Analyse::Load() {
     tree->SetBranchAddress("pfmet_ey", &pfmet_ey);
     tree->SetBranchAddress("pfmettype1_ex", &pfmettype1_ex);
     tree->SetBranchAddress("pfmettype1_ey", &pfmettype1_ey);
-    tree->SetBranchAddress("pfmetpuppitype1_ex", &pfmettype1_ex);
-    tree->SetBranchAddress("pfmetpuppitype1_ey", &pfmettype1_ey);
+    tree->SetBranchAddress("pfmetpuppitype1_ex", &pfmetpuppitype1_ex);
+    tree->SetBranchAddress("pfmetpuppitype1_ey", &pfmetpippitype1_ey);
     tree->SetBranchAddress("pfmettype0type1_ex", &pfmettype0type1_ex);
     tree->SetBranchAddress("pfmettype0type1_ey", &pfmettype0type1_ey);
 
