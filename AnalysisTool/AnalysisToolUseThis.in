@@ -1,0 +1,9 @@
+#!/bin/sh
+ATINCLUDE=@prefix@/include
+ATLIB=@prefix@/lib
+PATH=@prefix@/bin:$PATH
+LD_LIBRARY_PATH=$ATLIB:$LD_LIBRARY_PATH
+export ATLIB
+export ATINCLUDE
+export LD_LIBRARY_PATH
+echo "Configured for AnalysisTool-"@VERSION@
