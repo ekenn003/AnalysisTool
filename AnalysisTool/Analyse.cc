@@ -47,7 +47,7 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     pileUpDistPlus(200, 0.),
     useprimvertexinfo(false),
     primVertexDist(200, 0.),
-    track_count(0),
+    //track_count(0),
     primvertex_count(0),
     //supercluster_count(0),
     //supercluster_basiccluster_count(0),
@@ -156,12 +156,12 @@ void Analyse::SetLoad() {
         tree->SetBranchStatus("ak4pfchsjet_*", false);
     }
 
+/*
     if(loadtracks == 1) {
         tree->SetBranchStatus("track_*", true);
     } else {
         tree->SetBranchStatus("track_*", false);
     }
-/*
     if(loadsuperclusters > 0) {
         tree->SetBranchStatus("supercluster*", true);
         if(loadsuperclusters != 3 && loadsuperclusters != 4) {
@@ -423,6 +423,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("beamspot_zsigma", &beamspot_zsigma);
     tree->SetBranchAddress("beamspot_cov", &beamspot_cov);
 
+/*
     tree->SetBranchAddress("track_count", &track_count);
     tree->SetBranchAddress("track_vtx", track_vtx);
     tree->SetBranchAddress("track_px", track_px);
@@ -447,17 +448,26 @@ void Analyse::Load() {
     tree->SetBranchAddress("track_nmissinghits", track_nmissinghits);
     tree->SetBranchAddress("track_npixellayers", track_npixellayers);
     tree->SetBranchAddress("track_nstriplayers", track_nstriplayers);
+*/
 
     tree->SetBranchAddress("primvertex_count", &primvertex_count);
-    tree->SetBranchAddress("primvertex_x", primvertex_x);
-    tree->SetBranchAddress("primvertex_y", primvertex_y);
-    tree->SetBranchAddress("primvertex_z", primvertex_z);
-    tree->SetBranchAddress("primvertex_info", primvertex_info);
-    tree->SetBranchAddress("primvertex_chi2", primvertex_chi2);
-    tree->SetBranchAddress("primvertex_ndof", primvertex_ndof);
-    tree->SetBranchAddress("primvertex_ptq", primvertex_ptq);
-    tree->SetBranchAddress("primvertex_ntracks", primvertex_ntracks);
-    tree->SetBranchAddress("primvertex_cov", primvertex_cov);
+    tree->SetBranchAddress("primvertex_x", &primvertex_x);
+    tree->SetBranchAddress("primvertex_y", &primvertex_y);
+    tree->SetBranchAddress("primvertex_z", &primvertex_z);
+    //tree->SetBranchAddress("primvertex_info", primvertex_info);
+    tree->SetBranchAddress("primvertex_isvalid", &primvertex_isvalid);
+    tree->SetBranchAddress("primvertex_isfake", &primvertex_isfake);
+    tree->SetBranchAddress("primvertex_chi2", &primvertex_chi2);
+    tree->SetBranchAddress("primvertex_ndof", &primvertex_ndof);
+    //tree->SetBranchAddress("primvertex_ptq", primvertex_ptq);
+    tree->SetBranchAddress("primvertex_ntracks", &primvertex_ntracks);
+    //tree->SetBranchAddress("primvertex_cov", primvertex_cov);
+    tree->SetBranchAddress("primvertex_cov0", &primvertex_cov0);
+    tree->SetBranchAddress("primvertex_cov1", &primvertex_cov1);
+    tree->SetBranchAddress("primvertex_cov2", &primvertex_cov2);
+    tree->SetBranchAddress("primvertex_cov3", &primvertex_cov3);
+    tree->SetBranchAddress("primvertex_cov4", &primvertex_cov4);
+    tree->SetBranchAddress("primvertex_cov5", &primvertex_cov5);
 /*
     tree->SetBranchAddress("supercluster_count", &supercluster_count);
     tree->SetBranchAddress("supercluster_e", supercluster_e);
@@ -903,7 +913,7 @@ void Analyse::LoadAK4PFCHSJets(bool select) {
     if(select) loadak4pfchsjets = 1;
     else loadak4pfchsjets = 0;
 }
-
+/*
 void Analyse::LoadTracks(bool select) {
     if(select) {
         loadtracks = 1;
@@ -911,7 +921,7 @@ void Analyse::LoadTracks(bool select) {
         loadtracks = 0;
     }
 }
-
+*/
 void Analyse::LoadPrimVertices(bool select) {
     if(select) {
         loadprimvertices = 1;
@@ -1075,13 +1085,16 @@ TLorentzVector Analyse::PFMETTYPE0TYPE1() const {
 Jet Analyse::AK4PFCHSJets(UInt_t n) const {
     return(Jet(ak4pfchsjet_e->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
 }
-
+/*
 Track Analyse::Tracks(UInt_t n) const {
     return(Track(sqrt(track_px[n]*track_px[n]+track_py[n]*track_py[n]+track_pz[n]*track_pz[n]), track_px[n], track_py[n], track_pz[n], track_outerx[n], track_outery[n], track_outerz[n], track_closestpointx[n], track_closestpointy[n], track_closestpointz[n], track_chi2[n], track_ndof[n], track_dxy[n], track_dxyerr[n], track_dz[n], track_dzerr[n], track_charge[n], track_nhits[n], track_nmissinghits[n], track_npixelhits[n], track_npixellayers[n], track_nstriplayers[n], track_vtx[n], track_dedxharmonic2[n]));
 }
-
+*/
+//Vertex Analyse::PrimVertices(UInt_t n) const {
+//    return(Vertex(primvertex_x[n], primvertex_y[n], primvertex_z[n], primvertex_info[n], primvertex_chi2[n], primvertex_ndof[n], primvertex_ptq[n], primvertex_ntracks[n], primvertex_cov[n]));
+//}
 Vertex Analyse::PrimVertices(UInt_t n) const {
-    return(Vertex(primvertex_x[n], primvertex_y[n], primvertex_z[n], primvertex_info[n], primvertex_chi2[n], primvertex_ndof[n], primvertex_ptq[n], primvertex_ntracks[n], primvertex_cov[n]));
+    return(Vertex(primvertex_x->at(n), primvertex_y->at(n), primvertex_z->at(n), primvertex_isfake->at(n), primvertex_isvalid->at(n), primvertex_chi2->at(n), primvertex_ndof->at(n), primvertex_ntracks->at(n), primvertex_cov0->at(n), primvertex_cov1->at(n), primvertex_cov2->at(n), primvertex_cov3->at(n), primvertex_cov4->at(n), primvertex_cov5->at(n)));
 }
 /*
 SuperCluster Analyse::SuperClusters(UInt_t n, TVector3 refpoint) const {

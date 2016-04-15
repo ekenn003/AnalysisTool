@@ -707,23 +707,23 @@ Int_t Tau::TauDiscriminator(string disname) const {
     return(0);
 }
 
-Vertex::Vertex(Double_t X, Double_t Y, Double_t Z, UInt_t Info, Double_t Chi2, Double_t Ndof, Double_t Ptq, Int_t Ntracks, const Float_t *Cov) :
+Vertex::Vertex(Double_t X, Double_t Y, Double_t Z, UInt_t Isvalid, UInt_t Isfake, Double_t Chi2, Double_t Ndof, Int_t Ntracks, Float_t Cov0, Float_t Cov1, Float_t Cov2, Float_t Cov3, Float_t Cov4, Float_t Cov5) :
     TVector3(X, Y, Z),
     chi2(Chi2),
     ndof(Ndof),
-    ptq(Ptq),
     ntracks(Ntracks),
-    info(Info),
+    isvalid(Isvalid),
+    isfake(Isfake),
     covmatrix(3) {
-    covmatrix(0,0) = Cov[0];
-    covmatrix(0,1) = Cov[1];
-    covmatrix(0,2) = Cov[2];
-    covmatrix(1,0) = Cov[1];
-    covmatrix(1,1) = Cov[3];
-    covmatrix(1,2) = Cov[4];
-    covmatrix(2,0) = Cov[2];
-    covmatrix(2,1) = Cov[4];
-    covmatrix(2,2) = Cov[5];
+    covmatrix(0,0) = Cov0;
+    covmatrix(0,1) = Cov1;
+    covmatrix(0,2) = Cov2;
+    covmatrix(1,0) = Cov1;
+    covmatrix(1,1) = Cov3;
+    covmatrix(1,2) = Cov4;
+    covmatrix(2,0) = Cov2;
+    covmatrix(2,1) = Cov4;
+    covmatrix(2,2) = Cov5;
 }
 
 BeamSpot::BeamSpot(Double_t X, Double_t Y, Double_t Z, const Float_t *Cov, Double_t Xwidth, Double_t Ywidth, Double_t Zsigma) :

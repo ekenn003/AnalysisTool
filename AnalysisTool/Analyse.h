@@ -148,6 +148,7 @@ private:
     Float_t beamspot_ywidth;
     Float_t beamspot_zsigma;
     Float_t beamspot_cov[6];
+/*
 
     UInt_t track_count;
     Int_t track_vtx[M_trackmaxcount];
@@ -173,17 +174,33 @@ private:
     UChar_t track_npixelhits[M_trackmaxcount];
     UChar_t track_npixellayers[M_trackmaxcount];
     UChar_t track_nstriplayers[M_trackmaxcount];
+*/
 
     UInt_t primvertex_count;
-    Float_t primvertex_x[M_primvertexmaxcount];
-    Float_t primvertex_y[M_primvertexmaxcount];
-    Float_t primvertex_z[M_primvertexmaxcount];
-    UInt_t primvertex_info[M_primvertexmaxcount];
-    Float_t primvertex_chi2[M_primvertexmaxcount];
-    Float_t primvertex_ndof[M_primvertexmaxcount];
-    Float_t primvertex_ptq[M_primvertexmaxcount];
-    Int_t primvertex_ntracks[M_primvertexmaxcount];
-    Float_t primvertex_cov[M_primvertexmaxcount][6];
+    vector<Float_t> *primvertex_x;
+    vector<Float_t> *primvertex_y;
+    vector<Float_t> *primvertex_z;
+    vector<UInt_t>  *primvertex_isvalid;
+    vector<UInt_t>  *primvertex_isfake;
+    vector<Float_t> *primvertex_chi2;
+    vector<Float_t> *primvertex_ndof;
+    vector<Int_t>   *primvertex_ntracks;
+    vector<Float_t> *primvertex_cov0;
+    vector<Float_t> *primvertex_cov1;
+    vector<Float_t> *primvertex_cov2;
+    vector<Float_t> *primvertex_cov3;
+    vector<Float_t> *primvertex_cov4;
+    vector<Float_t> *primvertex_cov5;
+
+    //Float_t primvertex_x[M_primvertexmaxcount];
+    //Float_t primvertex_y[M_primvertexmaxcount];
+    //Float_t primvertex_z[M_primvertexmaxcount];
+    //UInt_t primvertex_info[M_primvertexmaxcount];
+    //Float_t primvertex_chi2[M_primvertexmaxcount];
+    //Float_t primvertex_ndof[M_primvertexmaxcount];
+    //Float_t primvertex_ptq[M_primvertexmaxcount];
+    //Int_t primvertex_ntracks[M_primvertexmaxcount];
+    //Float_t primvertex_cov[M_primvertexmaxcount][6];
 /*
     UInt_t supercluster_count;
     Float_t supercluster_e[M_superclustermaxcount];
@@ -649,13 +666,13 @@ public:
     UInt_t NumAK4PFJets() const {
         return(0);
     }
-
+/*
     void LoadTracks(bool select = true);
     Track Tracks(UInt_t n) const;
     UInt_t NumTracks() const {
         return(track_count);
     }
-
+*/
     void LoadPrimVertices(bool select = true);
     Vertex PrimVertices(UInt_t n) const;
     UInt_t NumPrimVertices() const {
