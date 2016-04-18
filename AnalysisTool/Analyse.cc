@@ -516,7 +516,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_pterror", &muon_pterror);
     tree->SetBranchAddress("muon_chi2", &muon_chi2);
     tree->SetBranchAddress("muon_ndof", &muon_ndof);
-    tree->SetBranchAddress("muon_innertrack_vtx", &muon_innertrack_vtx);
+    //tree->SetBranchAddress("muon_innertrack_vtx", &muon_innertrack_vtx);
     tree->SetBranchAddress("muon_innertrack_px", &muon_innertrack_px);
     tree->SetBranchAddress("muon_innertrack_py", &muon_innertrack_py);
     tree->SetBranchAddress("muon_innertrack_pz", &muon_innertrack_pz);
@@ -567,17 +567,15 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_ecalenergy", &muon_ecalenergy);
     tree->SetBranchAddress("muon_hcalenergy", &muon_hcalenergy);
     tree->SetBranchAddress("muon_charge", &muon_charge);
-    tree->SetBranchAddress("muon_muID", &muon_muID);
     tree->SetBranchAddress("muon_numchambers", &muon_numchambers);
     tree->SetBranchAddress("muon_numchamberswithsegments", &muon_numchamberswithsegments);
     tree->SetBranchAddress("muon_numvalidmuonhits", &muon_numvalidmuonhits);
     tree->SetBranchAddress("muon_nummatchedstations", &muon_nummatchedstations);
-    tree->SetBranchAddress("muon_type", &muon_type);
     tree->SetBranchAddress("muon_trigger", &muon_trigger);
     tree->SetBranchAddress("muon_trackermuonquality", &muon_trackermuonquality);
 
     tree->SetBranchAddress("ak4pfchsjet_count", &ak4pfchsjet_count);
-    tree->SetBranchAddress("ak4pfchsjet_e", &ak4pfchsjet_e);
+    tree->SetBranchAddress("ak4pfchsjet_energy", &ak4pfchsjet_energy);
     tree->SetBranchAddress("ak4pfchsjet_px", &ak4pfchsjet_px);
     tree->SetBranchAddress("ak4pfchsjet_py", &ak4pfchsjet_py);
     tree->SetBranchAddress("ak4pfchsjet_pz", &ak4pfchsjet_pz);
@@ -611,19 +609,19 @@ void Analyse::Load() {
     tree->SetBranchAddress("ak4pfchsjet_mcflavour", &ak4pfchsjet_mcflavour);
 
     tree->SetBranchAddress("electron_count", &electron_count);
-    tree->SetBranchAddress("electron_vtx", &electron_vtx);
+    //tree->SetBranchAddress("electron_vtx", &electron_vtx);
     tree->SetBranchAddress("electron_px", &electron_px);
     tree->SetBranchAddress("electron_py", &electron_py);
     tree->SetBranchAddress("electron_pz", &electron_pz);
     tree->SetBranchAddress("electron_correctedecalenergy", &electron_correctedecalenergy);
     tree->SetBranchAddress("electron_trackchi2", &electron_trackchi2);
     tree->SetBranchAddress("electron_trackndof", &electron_trackndof);
-    tree->SetBranchAddress("electron_outerx", &electron_outerx);
-    tree->SetBranchAddress("electron_outery", &electron_outery);
-    tree->SetBranchAddress("electron_outerz", &electron_outerz);
-    tree->SetBranchAddress("electron_closestpointx", &electron_closestpointx);
-    tree->SetBranchAddress("electron_closestpointy", &electron_closestpointy);
-    tree->SetBranchAddress("electron_closestpointz", &electron_closestpointz);
+    //tree->SetBranchAddress("electron_outerx", &electron_outerx);
+    //tree->SetBranchAddress("electron_outery", &electron_outery);
+    //tree->SetBranchAddress("electron_outerz", &electron_outerz);
+    //tree->SetBranchAddress("electron_closestpointx", &electron_closestpointx);
+    //tree->SetBranchAddress("electron_closestpointy", &electron_closestpointy);
+    //tree->SetBranchAddress("electron_closestpointz", &electron_closestpointz);
     tree->SetBranchAddress("electron_esuperclusterovertrack", &electron_esuperclusterovertrack);
     tree->SetBranchAddress("electron_eseedclusterovertrack", &electron_eseedclusterovertrack);
     tree->SetBranchAddress("electron_deltaetasuperclustertrack", &electron_deltaetasuperclustertrack);
@@ -658,16 +656,15 @@ void Analyse::Load() {
     tree->SetBranchAddress("electron_dxyerr", &electron_dxyerr);
     tree->SetBranchAddress("electron_dz", &electron_dz);
     tree->SetBranchAddress("electron_dzerr", &electron_dzerr);
-    tree->SetBranchAddress("electron_convdist", &electron_convdist);
-    tree->SetBranchAddress("electron_convdcot", &electron_convdcot);
-    tree->SetBranchAddress("electron_convradius", &electron_convradius);
+    //tree->SetBranchAddress("electron_convdist", &electron_convdist);
+    //tree->SetBranchAddress("electron_convdcot", &electron_convdcot);
+    //tree->SetBranchAddress("electron_convradius", &electron_convradius);
     tree->SetBranchAddress("electron_gapinfo", &electron_gapinfo);
     tree->SetBranchAddress("electron_fbrems", &electron_fbrems);
     tree->SetBranchAddress("electron_numbrems", &electron_numbrems);
     tree->SetBranchAddress("electron_charge", &electron_charge);
-    tree->SetBranchAddress("electron_info", &electron_info);
+    //tree->SetBranchAddress("electron_info", &electron_info);
     tree->SetBranchAddress("electron_trigger", &electron_trigger);
-    tree->SetBranchAddress("electron_eID", &electron_eID);
     tree->SetBranchAddress("electron_supercluster_e", &electron_supercluster_e);
     tree->SetBranchAddress("electron_supercluster_x", &electron_supercluster_x);
     tree->SetBranchAddress("electron_supercluster_y", &electron_supercluster_y);
@@ -1023,8 +1020,9 @@ Muon Analyse::Muons(UInt_t n, int correction) const {
     Track Outertrack(sqrt(pow(muon_outertrack_px->at(n),2) + pow(muon_outertrack_py->at(n),2) + pow(muon_outertrack_pz->at(n),2)), muon_outertrack_px->at(n), muon_outertrack_py->at(n), muon_outertrack_pz->at(n), 10000., 10000., 10000., 1000., 1000., 1000., muon_outertrack_chi2->at(n), muon_outertrack_ndof->at(n), 0., 0., 0., 0., muon_charge->at(n), muon_outertrack_hits->at(n), muon_outertrack_missinghits->at(n), 0, 0, 0, -1, 0.);
     newmuon.SetOuterTrack(Outertrack);
 
-    Track Innertrack(sqrt(muon_innertrack_px->at(n)*muon_innertrack_px->at(n)+muon_innertrack_py->at(n)*muon_innertrack_py->at(n)+muon_innertrack_pz->at(n)*muon_innertrack_pz->at(n)), muon_innertrack_px->at(n), muon_innertrack_py->at(n), muon_innertrack_pz->at(n), muon_innertrack_outerx->at(n), muon_innertrack_outery->at(n), muon_innertrack_outerz->at(n), muon_innertrack_closestpointx->at(n), muon_innertrack_closestpointy->at(n), muon_innertrack_closestpointz->at(n), muon_innertrack_chi2->at(n), muon_innertrack_ndof->at(n), muon_innertrack_dxy->at(n), muon_innertrack_dxyerr->at(n), muon_innertrack_dz->at(n), muon_innertrack_dzerr->at(n), muon_innertrack_charge->at(n), muon_innertrack_nhits->at(n), muon_innertrack_nmissinghits->at(n), muon_innertrack_npixelhits->at(n), muon_innertrack_npixellayers->at(n), muon_innertrack_nstriplayers->at(n), muon_innertrack_vtx->at(n), muon_innertrack_dedxharmonic2->at(n));
-    newmuon.SetInnerTrack(Innertrack);
+   // removed pending the fix of muon_innertrack_vtx
+    //Track Innertrack(sqrt(muon_innertrack_px->at(n)*muon_innertrack_px->at(n)+muon_innertrack_py->at(n)*muon_innertrack_py->at(n)+muon_innertrack_pz->at(n)*muon_innertrack_pz->at(n)), muon_innertrack_px->at(n), muon_innertrack_py->at(n), muon_innertrack_pz->at(n), muon_innertrack_outerx->at(n), muon_innertrack_outery->at(n), muon_innertrack_outerz->at(n), muon_innertrack_closestpointx->at(n), muon_innertrack_closestpointy->at(n), muon_innertrack_closestpointz->at(n), muon_innertrack_chi2->at(n), muon_innertrack_ndof->at(n), muon_innertrack_dxy->at(n), muon_innertrack_dxyerr->at(n), muon_innertrack_dz->at(n), muon_innertrack_dzerr->at(n), muon_innertrack_charge->at(n), muon_innertrack_nhits->at(n), muon_innertrack_nmissinghits->at(n), muon_innertrack_npixelhits->at(n), muon_innertrack_npixellayers->at(n), muon_innertrack_nstriplayers->at(n), muon_innertrack_vtx->at(n), muon_innertrack_dedxharmonic2->at(n));
+    //newmuon.SetInnerTrack(Innertrack);
 
     return(newmuon);
 }
@@ -1083,7 +1081,7 @@ TLorentzVector Analyse::PFMETTYPE0TYPE1() const {
 }
 
 Jet Analyse::AK4PFCHSJets(UInt_t n) const {
-    return(Jet(ak4pfchsjet_e->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
+    return(Jet(ak4pfchsjet_energy->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
 }
 /*
 Track Analyse::Tracks(UInt_t n) const {

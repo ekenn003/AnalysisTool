@@ -76,10 +76,10 @@ class GenLightParticle : public GenBasicParticle {
     GenLightParticle(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t X, Float_t Y, Float_t Z, Int_t Status, Int_t Pdgid, UInt_t Info, Int_t Indirectmother);
     GenLightParticle() {}
     // methods
+    enum INFO {FromWp=1<<0, FromWm=1<<1, FromGamma=1<<2, FromZ=1<<3, Fromh=1<<4, FromH=1<<5, FromA=1<<6, FromHp=1<<7, FromHm=1<<8, Fromt=1<<9, Fromtbar=1<<10, Fromb=1<<11, Frombbar=1<<12, FromZprime=1<<13, Fromtprime=1<<14, Fromtprimebar=1<<15, Fromtaup=1<<16, Fromtaum=1<<17};
     UInt_t MoreInfo() const { return(info); }
     UInt_t MoreInfo(INFO test) const { return(info &test); }
     Int_t  IndirectMother() const { return(indirectmother); }
-    enum   INFO {FromWp=1<<0, FromWm=1<<1, FromGamma=1<<2, FromZ=1<<3, Fromh=1<<4, FromH=1<<5, FromA=1<<6, FromHp=1<<7, FromHm=1<<8, Fromt=1<<9, Fromtbar=1<<10, Fromb=1<<11, Frombbar=1<<12, FromZprime=1<<13, Fromtprime=1<<14, Fromtprimebar=1<<15, Fromtaup=1<<16, Fromtaum=1<<17};
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -283,7 +283,6 @@ class Muon : public TLorentzVector, public TriggerObject {
     Float_t ecalenergy;
     Float_t hcalenergy;
     Int_t   charge;
-    Int_t   muID;
     Int_t   numchambers;
     Int_t   numchamberswithsegments;
     Int_t   numvalidmuonhits;
@@ -293,6 +292,9 @@ class Muon : public TLorentzVector, public TriggerObject {
     Int_t   is_calo;
     Int_t   is_standalone;
     Int_t   is_pf_muon;
+    Int_t   hasinnertrack;
+    Int_t   hasoutertrack;
+    Int_t   hasglobaltrack;
     Int_t   trackermuonquality;
     void    SetInnerTrack(Track &Innertrack) { innertrack = Innertrack; }
     void    SetOuterTrack(Track &Outertrack) { outertrack = Outertrack; }

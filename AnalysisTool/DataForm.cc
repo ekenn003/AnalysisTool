@@ -195,12 +195,10 @@ Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     ecalenergy(ma->muon_ecalenergy->at(n)),
     hcalenergy(ma->muon_hcalenergy->at(n)),
     charge(ma->muon_charge->at(n)),
-    muID(ma->muon_muID->at(n)),
     numchambers(ma->muon_numchambers->at(n)),
     numchamberswithsegments(ma->muon_numchamberswithsegments->at(n)),
     numvalidmuonhits(ma->muon_numvalidmuonhits->at(n)),
     nummatchedstations(ma->muon_nummatchedstations->at(n)),
-    type(ma->muon_type->at(n)),
     trackermuonquality(ma->muon_trackermuonquality->at(n)) {
     //if(correction == 2012) {
     //    float dummy;
@@ -232,8 +230,8 @@ Int_t Muon::NumStations() const {
 Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     TLorentzVector(ma->electron_px->at(n), ma->electron_py->at(n), ma->electron_pz->at(n), sqrt(ma->electron_px->at(n)*ma->electron_px->at(n)+ma->electron_py->at(n)*ma->electron_py->at(n)+ma->electron_pz->at(n)*ma->electron_pz->at(n)+ElectronMassQ)),
     TriggerObject(ma, ma->runlist.find(ma->Run())->second.GetHLTElectronNames(), ma->electron_trigger->at(n)),
-    outerpoint(ma->electron_outerx->at(n), ma->electron_outery->at(n), ma->electron_outerz->at(n)),
-    closestpoint(ma->electron_closestpointx->at(n), ma->electron_closestpointy->at(n), ma->electron_closestpointz->at(n)),
+    //outerpoint(ma->electron_outerx->at(n), ma->electron_outery->at(n), ma->electron_outerz->at(n)),
+    //closestpoint(ma->electron_closestpointx->at(n), ma->electron_closestpointy->at(n), ma->electron_closestpointz->at(n)),
     dxy(ma->electron_dxy->at(n)),
     dxyerr(ma->electron_dxyerr->at(n)),
     dz(ma->electron_dz->at(n)),
@@ -271,16 +269,15 @@ Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     npixellayers(ma->electron_npixellayers->at(n)),
     nstriplayers(ma->electron_nstriplayers->at(n)),
     nhitsexpected(ma->electron_nhitsexpected->at(n)),
-    convdist(ma->electron_convdist->at(n)),
-    convdcot(ma->electron_convdcot->at(n)),
-    convradius(ma->electron_convradius->at(n)),
+    //convdist(ma->electron_convdist->at(n)),
+    //convdcot(ma->electron_convdcot->at(n)),
+    //convradius(ma->electron_convradius->at(n)),
     gapinfo(ma->electron_gapinfo->at(n)),
     fbrems(ma->electron_fbrems->at(n)),
     numbrems(ma->electron_numbrems->at(n)),
-    charge(ma->electron_charge->at(n)),
-    info(ma->electron_info->at(n)),
-    eID(ma->electron_eID->at(n)),
-    vtx(ma->electron_vtx->at(n)) {
+    charge(ma->electron_charge->at(n)) {
+    //info(ma->electron_info->at(n)) {
+    //vtx(ma->electron_vtx->at(n)) {
     //supercluster.push_back(SuperCluster(ma->electron_supercluster_e->at(n), ma->electron_supercluster_x->at(n), ma->electron_supercluster_y->at(n), ma->electron_supercluster_z->at(n), ma->electron_supercluster_rawe->at(n), ma->electron_supercluster_phiwidth->at(n), ma->electron_supercluster_etawidth->at(n)));
 
     if(correction == 2012) {
@@ -615,7 +612,7 @@ Track::Track(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Double_t Ox, Dou
     npixelhits(Npixelhits),
     npixellayers(Npixellayers),
     nstriplayers(Nstriplayers),
-    vtx(Vtx),
+    //vtx(Vtx),
     dedxharmonic2(Dedxharmonic2) {
 }
 
