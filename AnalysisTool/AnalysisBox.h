@@ -40,12 +40,12 @@ public:
     UInt_t TimeMicroSec() const {
         return(an->TimeMicroSec());
     }
-    Double_t AK4PFRho() const {
-        return(an->AK4PFRho());
+    Double_t Rho() const {
+        return(an->Rho());
     }
-    Double_t AK4PFSigma() const {
-        return(an->AK4PFSigma());
-    }
+    //Double_t AK4PFSigma() const {
+    //    return(an->AK4PFSigma());
+    //}
 
     //RECO-level information
     BeamSpot GetBeamSpot() const {
@@ -80,18 +80,18 @@ public:
         return(an->NumPhotons());
     }
 
-    TLorentzVector PFMET() const {
-        return(an->PFMET());
-    }
+    //TLorentzVector PFMET() const {
+    //    return(an->PFMET());
+    //}
     TLorentzVector PFMETTYPE1() const {
         return(an->PFMETTYPE1());
     }
-    TLorentzVector PFMETPUPPITYPE1() const {
-        return(an->PFMETPUPPITYPE1());
-    }
-    TLorentzVector PFMETTYPE0TYPE1() const {
-        return(an->PFMETTYPE0TYPE1());
-    }
+    //TLorentzVector PFMETPUPPITYPE1() const {
+    //    return(an->PFMETPUPPITYPE1());
+    //}
+    //TLorentzVector PFMETTYPE0TYPE1() const {
+    //    return(an->PFMETTYPE0TYPE1());
+    //}
 
     Jet AK4PFCHSJets(UInt_t n) const {
         return(an->AK4PFCHSJets(n));

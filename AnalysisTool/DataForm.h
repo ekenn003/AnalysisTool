@@ -417,18 +417,22 @@ class Electron : public TLorentzVector, public TriggerObject {
     Int_t    npixellayers;
     Int_t    nstriplayers;
     Int_t    nhitsexpected;
-    Float_t  convdist;
-    Float_t  convdcot;
-    Float_t  convradius;
+    //Float_t  convdist;
+    //Float_t  convdcot;
+    //Float_t  convradius;
     UInt_t   gapinfo;
     Float_t  fbrems;
     Int_t    numbrems;
     Int_t    charge;
-    Byte_t   info;
-    Byte_t   eID;
+    //Byte_t   info;
+    Int_t    iselectron;
+    Int_t    passconversionveto;
+    Int_t    ecaldrivenseed;
+    Int_t    trackerdrivenseed;
+    //Byte_t   eID;
     Int_t    vtx;
     //vector<SuperCluster> supercluster;
-    bool     WorkingPoint(Int_t Missinghits, Float_t Convdist, Float_t Convdcot, Float_t Sigmaietaieta, Float_t Deltaphisctrack, Float_t Deltaetasctrack, Float_t Ehcaloverecal) const;
+    //bool     WorkingPoint(Int_t Missinghits, Float_t Convdist, Float_t Convdcot, Float_t Sigmaietaieta, Float_t Deltaphisctrack, Float_t Deltaetasctrack, Float_t Ehcaloverecal) const;
 
   public:
     // constructors
@@ -478,14 +482,18 @@ class Electron : public TLorentzVector, public TriggerObject {
     Int_t    NPixelLayers() const { return(npixellayers); }
     Int_t    NStripLayers() const { return(nstriplayers); }
     Int_t    NHitsExpected() const { return(nhitsexpected); }
-    Float_t  ConversionDist() const { return(convdist); }
-    Float_t  ConversionDCot() const { return(convdcot); }
-    Float_t  ConversionRadius() const { return(convradius); }
+    //Float_t  ConversionDist() const { return(convdist); }
+    //Float_t  ConversionDCot() const { return(convdcot); }
+    //Float_t  ConversionRadius() const { return(convradius); }
     Float_t  FractionBrems() const { return(fbrems); }
     Int_t    NumBrems() const { return(numbrems); }
     Int_t    Charge() const { return(charge); }
     Int_t    VertexNumber() const { return(vtx); }
-    bool     HasMatchedConversion() const { return(info & 1<<1); }
+    //bool     HasMatchedConversion() const { return(info & 1<<1); }
+    bool     PassesConversionVeto() const { return(passconversionveto); }
+    bool     IsElectron() const { return(iselectron); }
+    bool     EcalDrivenSeed() const { return(ecaldrivenseed); }
+    bool     TrackerDrivenSeed() const { return(trackerdrivenseed); }
     Double_t Dxy() const { return(dxy); }
     Double_t DxyError() const { return(dxyerr); }
     Double_t Dz() const { return(dz); }
@@ -571,13 +579,18 @@ class Photon : public TLorentzVector, public TriggerObject {
     Float_t isolationpfr3charged;
     Float_t isolationpfr3photon;
     Float_t isolationpfr3neutral;
-    Float_t isolationpfr4charged;
-    Float_t isolationpfr4photon;
-    Float_t isolationpfr4neutral;
-    Float_t isolationpfr4noscfootprintcharged;
-    Float_t isolationpfr4noscfootprintphoton;
-    Float_t isolationpfr4noscfootprintneutral;
-    UChar_t info;
+    //Float_t isolationpfr4charged;
+    //Float_t isolationpfr4photon;
+    //Float_t isolationpfr4neutral;
+    //Float_t isolationpfr4noscfootprintcharged;
+    //Float_t isolationpfr4noscfootprintphoton;
+    //Float_t isolationpfr4noscfootprintneutral;
+    //UChar_t info;
+    Int_t   isphoton;
+    Int_t   hasconversiontracks;
+    Int_t   haspixelseed;
+    Int_t   passelectronveto;
+    Int_t   ispfphoton;
     UInt_t  gapinfo;
     //vector<SuperCluster> supercluster;
 
@@ -616,16 +629,18 @@ class Photon : public TLorentzVector, public TriggerObject {
     Float_t IsoPFR3Charged() const { return(isolationpfr3charged); }
     Float_t IsoPFR3Photon() const { return(isolationpfr3photon); }
     Float_t IsoPFR3Neutral() const { return(isolationpfr3neutral); }
-    Float_t IsoPFR4Charged() const { return(isolationpfr4charged); }
-    Float_t IsoPFR4Photon() const { return(isolationpfr4photon); }
-    Float_t IsoPFR4Neutral() const { return(isolationpfr4neutral); }
-    Float_t IsoPFR3NoFPCharged() const { return(isolationpfr4noscfootprintcharged); }
-    Float_t IsoPFR3NoFPPhoton() const { return(isolationpfr4noscfootprintphoton); }
-    Float_t IsoPFR3NoFPNeutral() const { return(isolationpfr4noscfootprintneutral); }
-    bool    isPhoton() const { return((info & 1) > 0); }
-    bool    HasConversionTracks() const { return((info & 1<<1) > 0); }
-    bool    HasPixelSeed() const { return((info & 1<<2) > 0); }
-    bool    HasPromptElectron() const { return((info & 1<<3) > 0); }
+    //Float_t IsoPFR4Charged() const { return(isolationpfr4charged); }
+    //Float_t IsoPFR4Photon() const { return(isolationpfr4photon); }
+    //Float_t IsoPFR4Neutral() const { return(isolationpfr4neutral); }
+    //Float_t IsoPFR3NoFPCharged() const { return(isolationpfr4noscfootprintcharged); }
+    //Float_t IsoPFR3NoFPPhoton() const { return(isolationpfr4noscfootprintphoton); }
+    //Float_t IsoPFR3NoFPNeutral() const { return(isolationpfr4noscfootprintneutral); }
+    bool    IsPhoton() const { return((bool)isphoton); }
+    bool    IsPFPhoton() const { return((bool)ispfphoton); }
+    bool    HasConversionTracks() const { return((bool)hasconversiontracks); }
+    bool    HasPixelSeed() const { return((bool)haspixelseed); }
+    bool    PassesElectronVeto() const { return((bool)passelectronveto); }
+
     bool    IsEB() const { return((gapinfo & 1<<0) > 0); }
     bool    IsEE() const { return((gapinfo & 1<<1) > 0); }
     bool    IsEBGap() const { return((gapinfo & 1<<2) > 0); }

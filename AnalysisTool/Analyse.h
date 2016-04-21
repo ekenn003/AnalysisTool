@@ -398,6 +398,10 @@ private:
     vector<Float_t> *electron_fbrems;
     vector<Int_t>   *electron_numbrems;
     //vector<UChar_t> *electron_info;
+    vector<Int_t>   *electron_iselectron;
+    vector<Int_t>   *electron_passconversionveto;
+    vector<Int_t>   *electron_ecaldrivenseed;
+    vector<Int_t>   *electron_trackerdrivenseed;
     vector<UInt_t>  *electron_trigger;
     vector<Float_t> *electron_supercluster_e;
     vector<Float_t> *electron_supercluster_x;
@@ -439,12 +443,12 @@ private:
     vector<Float_t> *photon_isolationpfr3charged;
     vector<Float_t> *photon_isolationpfr3photon;
     vector<Float_t> *photon_isolationpfr3neutral;
-    vector<Float_t> *photon_isolationpfr4charged;
-    vector<Float_t> *photon_isolationpfr4photon;
-    vector<Float_t> *photon_isolationpfr4neutral;
-    vector<Float_t> *photon_isolationpfr4noscfootprintcharged;
-    vector<Float_t> *photon_isolationpfr4noscfootprintphoton;
-    vector<Float_t> *photon_isolationpfr4noscfootprintneutral;
+    //vector<Float_t> *photon_isolationpfr4charged;
+    //vector<Float_t> *photon_isolationpfr4photon;
+    //vector<Float_t> *photon_isolationpfr4neutral;
+    //vector<Float_t> *photon_isolationpfr4noscfootprintcharged;
+    //vector<Float_t> *photon_isolationpfr4noscfootprintphoton;
+    //vector<Float_t> *photon_isolationpfr4noscfootprintneutral;
     vector<Float_t> *photon_supercluster_e;
     vector<Float_t> *photon_supercluster_x;
     vector<Float_t> *photon_supercluster_y;
@@ -453,10 +457,15 @@ private:
     vector<Float_t> *photon_supercluster_phiwidth;
     vector<Float_t> *photon_supercluster_etawidth;
     vector<Int_t>   *photon_supercluster_nbasiccluster;
-    vector<UChar_t> *photon_info;
+    //vector<UChar_t> *photon_info;
+    vector<Int_t>   *photon_isphoton;
+    vector<Int_t>   *photon_hasconversiontracks;
+    vector<Int_t>   *photon_haspixelseed;
+    vector<Int_t>   *photon_passelectronveto;
+    vector<Int_t>   *photon_ispfphoton;
     vector<UInt_t>  *photon_gapinfo;
     vector<UInt_t>  *photon_trigger;
-    vector<UInt_t>  *photon_conversionbegin;
+    //vector<UInt_t>  *photon_conversionbegin;
 
     UInt_t tau_count;
     UInt_t tau_charged_count;
@@ -514,17 +523,19 @@ private:
     vector<UChar_t> *tau_charged_npixellayers;
     vector<UChar_t> *tau_charged_nstriplayers;
 
-    Float_t ak4pfjet_rho;
-    Float_t ak4pfjet_sigma;
+    Float_t event_rho;
+    //Float_t ak4pfjet_sigma;
 
-    Float_t pfmet_ex;
-    Float_t pfmet_ey;
-    Float_t pfmettype1_ex;
-    Float_t pfmettype1_ey;
-    Float_t pfmetpuppitype1_ex;
-    Float_t pfmetpuppitype1_ey;
-    Float_t pfmettype0type1_ex;
-    Float_t pfmettype0type1_ey;
+    //Float_t pfmet_ex;
+    //Float_t pfmet_ey;
+    //Float_t pfmet_et;
+    vector<Float_t> *pfmettype1_ex;
+    vector<Float_t> *pfmettype1_ey;
+    vector<Float_t> *pfmettype1_et;
+    //Float_t pfmetpuppitype1_ex;
+    //Float_t pfmetpuppitype1_ey;
+    //Float_t pfmettype0type1_ex;
+    //Float_t pfmettype0type1_ey;
 
     //Generator Information
     Float_t genweight;
@@ -615,8 +626,8 @@ public:
     UInt_t LumiBlock() const { return(event_luminosityblock); }
     UInt_t TimeUnix() const { return(event_timeunix); }
     UInt_t TimeMicroSec() const { return(event_timemicrosec); }
-    Double_t AK4PFRho() const { return(ak4pfjet_rho); }
-    Double_t AK4PFSigma() const { return(ak4pfjet_sigma); }
+    Double_t Rho() const { return(event_rho); }
+    //Double_t Sigma() const { return(ak4pfjet_sigma); }
 
     //RECO-level information
     void LoadBeamSpot(bool select = true);
@@ -639,11 +650,18 @@ public:
     UInt_t NumTaus() const { return(tau_count); }
 
     void LoadMET(bool select = true);
-    TLorentzVector PFMET() const;
+    //TLorentzVector PFMET() const;
     TLorentzVector PFMETTYPE1() const;
-    TLorentzVector PFMETPUPPITYPE1() const;
-    TLorentzVector PFMETTYPE0TYPE1() const;
+    //TLorentzVector PFMETPUPPITYPE1() const;
+    //TLorentzVector PFMETTYPE0TYPE1() const;
 
+    void LoadAK4PFCHSJets(bool select = true);
+    Jet AK4PFCHSJets(UInt_t n) const;
+    UInt_t NumAK4PFCHSJets() const {
+        return(ak4pfchsjet_count);
+    }
+
+/*
     void LoadAK4CaloJets(bool select = true);
     Jet AK4CaloJets(UInt_t n) const;
     UInt_t NumAK4CaloJets() const {return(0);}
@@ -652,18 +670,11 @@ public:
     Jet AK4JPTJets(UInt_t n) const;
     UInt_t NumAK4JPTJets() const {return(0);}
 
-    void LoadAK4PFCHSJets(bool select = true);
-    Jet AK4PFCHSJets(UInt_t n) const;
-    UInt_t NumAK4PFCHSJets() const {
-        return(ak4pfchsjet_count);
-    }
-
     void LoadAK4PFJets(bool select = true);
     Jet AK4PFJets(UInt_t n) const;
     UInt_t NumAK4PFJets() const {
         return(0);
     }
-/*
     void LoadTracks(bool select = true);
     Track Tracks(UInt_t n) const;
     UInt_t NumTracks() const {

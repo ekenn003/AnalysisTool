@@ -111,8 +111,8 @@ void Analyse::SetLoad() {
     tree->SetBranchStatus("event_*", true);
     tree->SetBranchStatus("numpileupinteractions*", true);
     tree->SetBranchStatus("numtruepileupinteractions", true);
-    tree->SetBranchStatus("ak4pfjet_rho", true);
-    tree->SetBranchStatus("ak4pfjet_sigma", true);
+    tree->SetBranchStatus("event_rho", true);
+    //tree->SetBranchStatus("ak4pfjet_sigma", true);
 
     if(loadbeamspot == 1) {
         tree->SetBranchStatus("beamspot_*", true);
@@ -664,6 +664,10 @@ void Analyse::Load() {
     tree->SetBranchAddress("electron_numbrems", &electron_numbrems);
     tree->SetBranchAddress("electron_charge", &electron_charge);
     //tree->SetBranchAddress("electron_info", &electron_info);
+    tree->SetBranchAddress("electron_iselectron", &electron_iselectron);
+    tree->SetBranchAddress("electron_passconversionveto", &electron_passconversionveto);
+    tree->SetBranchAddress("electron_ecaldrivenseed", &electron_ecaldrivenseed);
+    tree->SetBranchAddress("electron_trackerdrivenseed", &electron_trackerdrivenseed);
     tree->SetBranchAddress("electron_trigger", &electron_trigger);
     tree->SetBranchAddress("electron_supercluster_e", &electron_supercluster_e);
     tree->SetBranchAddress("electron_supercluster_x", &electron_supercluster_x);
@@ -705,12 +709,12 @@ void Analyse::Load() {
     tree->SetBranchAddress("photon_isolationpfr3charged", &photon_isolationpfr3charged);
     tree->SetBranchAddress("photon_isolationpfr3photon", &photon_isolationpfr3photon);
     tree->SetBranchAddress("photon_isolationpfr3neutral", &photon_isolationpfr3neutral);
-    tree->SetBranchAddress("photon_isolationpfr4charged", &photon_isolationpfr4charged);
-    tree->SetBranchAddress("photon_isolationpfr4photon", &photon_isolationpfr4photon);
-    tree->SetBranchAddress("photon_isolationpfr4neutral", &photon_isolationpfr4neutral);
-    tree->SetBranchAddress("photon_isolationpfr4noscfootprintcharged", &photon_isolationpfr4noscfootprintcharged);
-    tree->SetBranchAddress("photon_isolationpfr4noscfootprintphoton", &photon_isolationpfr4noscfootprintphoton);
-    tree->SetBranchAddress("photon_isolationpfr4noscfootprintneutral", &photon_isolationpfr4noscfootprintneutral);
+    //tree->SetBranchAddress("photon_isolationpfr4charged", &photon_isolationpfr4charged);
+    //tree->SetBranchAddress("photon_isolationpfr4photon", &photon_isolationpfr4photon);
+    //tree->SetBranchAddress("photon_isolationpfr4neutral", &photon_isolationpfr4neutral);
+    //tree->SetBranchAddress("photon_isolationpfr4noscfootprintcharged", &photon_isolationpfr4noscfootprintcharged);
+    //tree->SetBranchAddress("photon_isolationpfr4noscfootprintphoton", &photon_isolationpfr4noscfootprintphoton);
+    //tree->SetBranchAddress("photon_isolationpfr4noscfootprintneutral", &photon_isolationpfr4noscfootprintneutral);
     tree->SetBranchAddress("photon_supercluster_e", &photon_supercluster_e);
     tree->SetBranchAddress("photon_supercluster_x", &photon_supercluster_x);
     tree->SetBranchAddress("photon_supercluster_y", &photon_supercluster_y);
@@ -719,9 +723,14 @@ void Analyse::Load() {
     tree->SetBranchAddress("photon_supercluster_phiwidth", &photon_supercluster_phiwidth);
     tree->SetBranchAddress("photon_supercluster_etawidth", &photon_supercluster_etawidth);
     tree->SetBranchAddress("photon_supercluster_nbasiccluster", &photon_supercluster_nbasiccluster);
-    tree->SetBranchAddress("photon_info", &photon_info);
+    //tree->SetBranchAddress("photon_info", &photon_info);
+    tree->SetBranchAddress("photon_isphoton", &photon_isphoton);
+    tree->SetBranchAddress("photon_hasconversiontracks", &photon_hasconversiontracks);
+    tree->SetBranchAddress("photon_haspixelseed", &photon_haspixelseed);
+    tree->SetBranchAddress("photon_passelectronveto", &photon_passelectronveto);
+    tree->SetBranchAddress("photon_ispfphoton", &photon_ispfphoton);
     tree->SetBranchAddress("photon_gapinfo", &photon_gapinfo);
-    tree->SetBranchAddress("photon_conversionbegin", &photon_conversionbegin);
+    //tree->SetBranchAddress("photon_conversionbegin", &photon_conversionbegin);
 
     tree->SetBranchAddress("tau_count", &tau_count);
     tree->SetBranchAddress("tau_charged_count", &tau_charged_count);
@@ -778,17 +787,18 @@ void Analyse::Load() {
     tree->SetBranchAddress("tau_charged_npixellayers", &tau_charged_npixellayers);
     tree->SetBranchAddress("tau_charged_nstriplayers", &tau_charged_nstriplayers);
 
-    tree->SetBranchAddress("ak4pfjet_rho", &ak4pfjet_rho);
-    tree->SetBranchAddress("ak4pfjet_sigma", &ak4pfjet_sigma);
+    tree->SetBranchAddress("event_rho", &event_rho);
+    //tree->SetBranchAddress("ak4pfjet_sigma", &ak4pfjet_sigma);
 
-    tree->SetBranchAddress("pfmet_ex", &pfmet_ex);
-    tree->SetBranchAddress("pfmet_ey", &pfmet_ey);
+    //tree->SetBranchAddress("pfmet_ex", &pfmet_ex);
+    //tree->SetBranchAddress("pfmet_ey", &pfmet_ey);
     tree->SetBranchAddress("pfmettype1_ex", &pfmettype1_ex);
     tree->SetBranchAddress("pfmettype1_ey", &pfmettype1_ey);
-    tree->SetBranchAddress("pfmetpuppitype1_ex", &pfmetpuppitype1_ex);
-    tree->SetBranchAddress("pfmetpuppitype1_ey", &pfmetpuppitype1_ey);
-    tree->SetBranchAddress("pfmettype0type1_ex", &pfmettype0type1_ex);
-    tree->SetBranchAddress("pfmettype0type1_ey", &pfmettype0type1_ey);
+    tree->SetBranchAddress("pfmettype1_et", &pfmettype1_et);
+    //tree->SetBranchAddress("pfmetpuppitype1_ex", &pfmetpuppitype1_ex);
+    //tree->SetBranchAddress("pfmetpuppitype1_ey", &pfmetpuppitype1_ey);
+    //tree->SetBranchAddress("pfmettype0type1_ex", &pfmettype0type1_ex);
+    //tree->SetBranchAddress("pfmettype0type1_ey", &pfmettype0type1_ey);
 
     tree->SetBranchAddress("genweight", &genweight);
     tree->SetBranchAddress("genx1", &genx1);
@@ -1065,20 +1075,21 @@ Tau Analyse::Taus(UInt_t n) const {
 }
 
 
-TLorentzVector Analyse::PFMET() const {
-    return(TLorentzVector(pfmet_ex, pfmet_ey, 0., sqrt(pow(pfmet_ex, 2) + pow(pfmet_ey, 2))));
-}
+//TLorentzVector Analyse::PFMET() const {
+//    return(TLorentzVector(pfmet_ex, pfmet_ey, 0., sqrt(pow(pfmet_ex, 2) + pow(pfmet_ey, 2))));
+//}
 
+// because of how RootMaker works, met is always a vector<Float_t> with only one entry
 TLorentzVector Analyse::PFMETTYPE1() const {
-    return(TLorentzVector(pfmettype1_ex, pfmettype1_ey, 0., sqrt(pow(pfmettype1_ex, 2) + pow(pfmettype1_ey, 2))));
+    return(TLorentzVector(pfmettype1_ex->at(0), pfmettype1_ey->at(0), 0., sqrt(pow(pfmettype1_ex->at(0), 2) + pow(pfmettype1_ey->at(0), 2))));
 }
-TLorentzVector Analyse::PFMETPUPPITYPE1() const {
-    return(TLorentzVector(pfmetpuppitype1_ex, pfmetpuppitype1_ey, 0., sqrt(pow(pfmetpuppitype1_ex, 2) + pow(pfmetpuppitype1_ey, 2))));
-}
-
-TLorentzVector Analyse::PFMETTYPE0TYPE1() const {
-    return(TLorentzVector(pfmettype0type1_ex, pfmettype0type1_ey, 0., sqrt(pow(pfmettype0type1_ex, 2) + pow(pfmettype0type1_ey, 2))));
-}
+//TLorentzVector Analyse::PFMETPUPPITYPE1() const {
+//    return(TLorentzVector(pfmetpuppitype1_ex, pfmetpuppitype1_ey, 0., sqrt(pow(pfmetpuppitype1_ex, 2) + pow(pfmetpuppitype1_ey, 2))));
+//}
+//
+//TLorentzVector Analyse::PFMETTYPE0TYPE1() const {
+//    return(TLorentzVector(pfmettype0type1_ex, pfmettype0type1_ey, 0., sqrt(pow(pfmettype0type1_ex, 2) + pow(pfmettype0type1_ey, 2))));
+//}
 
 Jet Analyse::AK4PFCHSJets(UInt_t n) const {
     return(Jet(ak4pfchsjet_energy->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));

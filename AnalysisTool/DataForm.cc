@@ -272,6 +272,10 @@ Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     //convdist(ma->electron_convdist->at(n)),
     //convdcot(ma->electron_convdcot->at(n)),
     //convradius(ma->electron_convradius->at(n)),
+    iselectron(ma->electron_iselectron->at(n)),
+    passconversionveto(ma->electron_passconversionveto->at(n)),
+    ecaldrivenseed(ma->electron_ecaldrivenseed->at(n)),
+    trackerdrivenseed(ma->electron_trackerdrivenseed->at(n)),
     gapinfo(ma->electron_gapinfo->at(n)),
     fbrems(ma->electron_fbrems->at(n)),
     numbrems(ma->electron_numbrems->at(n)),
@@ -355,6 +359,7 @@ Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     }
 }
 
+/*
 bool Electron::WorkingPoint(Int_t Missinghits, Float_t Convdist, Float_t Convdcot, Float_t Sigmaietaieta, Float_t Deltaphisctrack, Float_t Deltaetasctrack, Float_t Ehcaloverecal) const {
     return(NMissingHits() <= Missinghits && !(Abs(ConversionDist()) < Convdist && Abs(ConversionDCot()) < Convdcot) && SigmaIEtaIEta() < Sigmaietaieta && DeltaEtaSuperClusterTrack() < Deltaetasctrack && DeltaPhiSuperClusterTrack() < Deltaphisctrack && EHcalOverECal() < Ehcaloverecal);
 }
@@ -460,7 +465,7 @@ bool Electron::WP60_v1(Int_t combined) const {
     }
     return(false);
 }
-
+*/
 //bool Electron::Loose2012v1()
 //{
 //	if(IsEE())
@@ -509,13 +514,18 @@ Photon::Photon(const Analyse *ma, UInt_t n) :
     isolationpfr3charged(ma->photon_isolationpfr3charged->at(n)),
     isolationpfr3photon(ma->photon_isolationpfr3photon->at(n)),
     isolationpfr3neutral(ma->photon_isolationpfr3neutral->at(n)),
-    isolationpfr4charged(ma->photon_isolationpfr4charged->at(n)),
-    isolationpfr4photon(ma->photon_isolationpfr4photon->at(n)),
-    isolationpfr4neutral(ma->photon_isolationpfr4neutral->at(n)),
-    isolationpfr4noscfootprintcharged(ma->photon_isolationpfr4noscfootprintcharged->at(n)),
-    isolationpfr4noscfootprintphoton(ma->photon_isolationpfr4noscfootprintphoton->at(n)),
-    isolationpfr4noscfootprintneutral(ma->photon_isolationpfr4noscfootprintneutral->at(n)),
-    info(ma->photon_info->at(n)),
+    //isolationpfr4charged(ma->photon_isolationpfr4charged->at(n)),
+    //isolationpfr4photon(ma->photon_isolationpfr4photon->at(n)),
+    //isolationpfr4neutral(ma->photon_isolationpfr4neutral->at(n)),
+    //isolationpfr4noscfootprintcharged(ma->photon_isolationpfr4noscfootprintcharged->at(n)),
+    //isolationpfr4noscfootprintphoton(ma->photon_isolationpfr4noscfootprintphoton->at(n)),
+    //isolationpfr4noscfootprintneutral(ma->photon_isolationpfr4noscfootprintneutral->at(n)),
+    //info(ma->photon_info->at(n)),
+    isphoton(ma->photon_isphoton->at(n)),
+    hasconversiontracks(ma->photon_hasconversiontracks->at(n)),
+    haspixelseed(ma->photon_haspixelseed->at(n)),
+    passelectronveto(ma->photon_passelectronveto->at(n)),
+    ispfphoton(ma->photon_ispfphoton->at(n)),
     gapinfo(ma->photon_gapinfo->at(n)) {
     //supercluster.push_back(SuperCluster(ma->photon_supercluster_e->at(n), ma->photon_supercluster_x->at(n), ma->photon_supercluster_y->at(n), ma->photon_supercluster_z->at(n), ma->photon_supercluster_rawe->at(n), ma->photon_supercluster_phiwidth->at(n), ma->photon_supercluster_etawidth->at(n)));
 }
