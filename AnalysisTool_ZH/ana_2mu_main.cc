@@ -19,22 +19,44 @@ using namespace std;
 //You should derive your own class from Analyse.
 class MyAnalysis : public Analyse {
 private:
+    // pile-up
+    std::vector < double > dataPileUp;
+    std::vector < double > dataPileUp_Up;
+    std::vector < double > dataPileUp_Down;
 
     UInt_t currun;
     UInt_t curlumi;
 
-    // define outputfile
+    double sumWeights;
+
+    // define output file
     TFile *histfile;
 
+    // event histograms
     TH1D *hVtxN;
     TH1D *hVtxN_u;
-    TH1D *hMuPt;
+    TH1D *hPUweight;
+
+    // muon histograms
     TH1D *hNMuons;
+    TH1D *hMuPt;
+
+    // electron histograms
+
+    // MET histograms
+    TH1D *hPFMETType1;
+
+    // jet histograms
+    TH1D *hJetPt;
+    TH1D *hJetEta;
+
+    // counters
+    double nEv_Skim;
+    double nEv_PV;
+    double nEv_HLT;
 
     // debug
     bool debug;
-    bool isMC;
-
 
 public:
     MyAnalysis();
@@ -54,10 +76,43 @@ public:
 };
 //Constructor:
 MyAnalysis::MyAnalysis() : Analyse(), currun(0), curlumi(0) {
-    // don't touch, these are changed with the output file name // // //
-gROOT->ProcessLine("#include <vector>");
-    isMC=false;
-    // // // //
+    gROOT->ProcessLine("#include <vector>");
+    sumWeights = 0.0;
+
+    debug = true;
+    //debug = false;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // CUTS ///////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // vertex cuts
+    cVtxNdf = 4;
+    cVtxZ   = 24.;
+
+    // muon cuts
+    cPtMu     = 10.0; // GeV;
+    cPtMuMax  = 20.0; // cut on trigger-matched mu
+    cEtaMu    = 2.4; // depends on HLT
+    cEtaMuMax = 2.4; // cut on trigger-matched mu
+
+    cDxyMu    = 0.02; // cm
+    cDzMu     = 0.14; // cm
+
+    // isolation cuts
+    // https://twiki.cern.ch/twiki/bin/view/CMS/SWGuideMuonIdRun2#Muon_Isolation
+    cIsoMu = 0.15; // PF combined w/dB correction Tight
+    //cIsoMu = 0.25; // PF combined w/dB correction Loose
+    //cIsoMu = 0.05; // Tracker-based Tight
+    //cIsoMu = 0.10; // Tracker-based Loose
+
+    // dimuon pair cuts
+    cInvMass  = 60.; // GeV
+    c2MuPtCut = 38.; // GeV
+
+
+    // jet cuts
+    cPtJet = 30.;  // GeV;
+    cEtaJet = 4.7;
 
 
     // load needed informations
@@ -66,7 +121,6 @@ gROOT->ProcessLine("#include <vector>");
     LoadPrimVertices();
     LoadMuons();
     LoadElectrons();
-    LoadTracks();
     LoadAK4PFCHSJets();
     LoadMET();
     LoadGenParticles();
@@ -74,20 +128,17 @@ gROOT->ProcessLine("#include <vector>");
     LoadAllGenParticles();
     UsePileUpInfo();
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    // IS IT DATA OR MONTE CARLO? /////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    //isMC=true;
-    isMC=false;
+    TVector3 zDir(0,0,1);
 
     // output file
-    if (!isMC)    histfile = new TFile("2mu_data_ana_out.root", "RECREATE");
-    else if (isMC) histfile = new TFile("2mu_MC_ana_out.root", "RECREATE");
-    else histfile = new TFile("2mu_noinfo_ana_out.root", "RECREATE");
+    if (IsData()) histfile = new TFile("2mu_data_ana_out.root", "RECREATE");
+    else histfile = new TFile("2mu_MC_ana_out.root", "RECREATE");
     histfile->cd();
 
-    TVector3 zDir(0,0,1);
-    // root tree:
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // BOOK HISTOGRAMS ////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     // vertex
     hVtxN       = new TH1D("hVtxN", "N Vtx", 100, 0., 100.);
     hVtxN->GetXaxis()->SetTitle("N_{PV}");
@@ -105,16 +156,15 @@ gROOT->ProcessLine("#include <vector>");
     hNMuons->GetXaxis()->SetTitle("N_{#mu}");
     hNMuons->GetYaxis()->SetTitle("Events");
 
-    //debug = true;
-    debug = false;
+    hPUweight   = new TH1D("hPUweight", "PU weight", 100, 0., 10.);
+    hPUweight->GetXaxis()->SetTitle("PU weight");
+    hPUweight->GetYaxis()->SetTitle("Candidates");
 
-    if (debug) { 
-        cerr<<"*\n*\n*\n*\n*\n*\n*\n*\n*\n*\n*\n*"<<endl;
-        cerr<<"Warning: debug is true. outfile will be giant"<<endl;
-        cerr<<"*\n*\n*\n*\n*\n*\n*\n*\n*\n*\n*\n*\n"<<endl;
-    }
+    hPFMETType1         = new TH1D("hPFMETType1", "PFMETType1", 4000, 0., 2000.);
+    hPFMETType1->GetXaxis()->SetTitle("MET [GeV/c^{2}]");
+    hPFMETType1->GetYaxis()->SetTitle("Candidates/0.5[GeV/c^{2}]");
+
 }
-// Destructor:
 MyAnalysis::~MyAnalysis() {
     histfile->Write();
     histfile->Close();
@@ -122,13 +172,39 @@ MyAnalysis::~MyAnalysis() {
 
 // Analysis
 Int_t MyAnalysis::AnalyseEvent() {
-    hNMuons->Fill(NumMuons(), 1.);
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // PILEUP WEIGHTING ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    double pileupweight = 0.;
+    if (IsData()) {
+        pileupweight = 1.;
+    } else {
+        pileupweight =  GenWeight() * GetPileUpWeight(dataPileUp);
+        sumWeights += GenWeight();
+    }
+    ++nEv_Skim;
 
-    double pileupweight = 1.;
+    hPUweight->Fill(pileupweight);
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // TRIGGER ////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // vector of HLT paths to check - event will pass if any of these triggers fired
+    std::vector<string> HLTs;
+
+    HLTs.push_back("IsoMu20");
+    HLTs.push_back("IsoTkMu20");
+
+    if (not (EventPassesHLT(HLTs)) ) return (1);
+    ++nEv_HLT;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // PRIMARY VERTEX /////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // select event with a valid PV
     // loop over prim vertices
     std::vector < Vertex > PVs;
-    for(unsigned int v = 0; v < NumPrimVertices(); ++v) {
+    for(size_t v = 0; v < NumPrimVertices(); ++v) {
         PVs.push_back(PrimVertices(v));
     }
     hVtxN_u->Fill(PVs.size());
@@ -142,12 +218,108 @@ Int_t MyAnalysis::AnalyseEvent() {
     // select event with 2 good muons
     // get the muons
     std::vector< Muon > muonsVec;
-    for(unsigned int i = 0; i < NumMuons(); ++i) {
+    // things we will check for each muon
+    // isChi2NdfOK, isNMuonHitsOK, isNMatchedStationsOK, isNPixelHitsOK, isNTrackerLayersOK, all taken 
+    // care of by Tight Muon ID isDxyOK and isDzOK are also considered in the Tight ID, btu are not 
+    // identical to the cuts used previously, we can consider removing them too
+    bool isGAndTr   = false;
+    bool isPtCutOK  = false;
+    bool isEtaCutOK = false;
+    bool isDxyOK    = false;
+    bool isDzOK     = false;
+    bool isMuIDOk   = false;
+    bool isIsoPUOK  = false;
+    bool isIsoTkOK  = false;
+    // event counters
+    int nMuPtEtaMax = 0;
+    int nLooseMus   = 0;
+    int nTightMus   = 0;
+    int nMedMus     = 0;
+
+    // loop over muons
+    for(size_t i = 0; i < NumMuons(); ++i) {
+        // kinematic cuts
+        if( not(Muons(i).IsGlobal()) && Muons(i).IsTracker() ) continue;
+        if( not(Muons(i).IsTracker()) ) continue;
+        isGAndTr = true;
+        if( not(Muons(i).Pt() >= cPtMu) ) continue;
+        isPtCutOK = true;
+        if( not(TMath::Abs(Muons(i).Eta()) <= cEtaMu) ) continue;
+        isEtaCutOK = true;
+
+        // check muon ID
+        if( not(Muons(i).IsTightMuon()) ) continue;
+        isMuIDOk = true;
+        // collect muon ID
+        if(Muons(i).IsTightMuon()) nTightMus++;
+        if(Muons(i).IsMediumMuon()) nMedMus++;
+        if(Muons(i).IsLooseMuon()) nLooseMus++;
+
+        // muon isolation
+        if( not(Muons(i).IsoPFR4dBCombRel() < cIsoMu) ) continue;
+        isMuIsoOK = true;
+
+        // at least one trigger-matched muon in the event must ALSO pass this cut:
+        if( Muons(i).PassesHLT(HLTs) && (Muons(i).Pt() > cPtMuMax && TMath::Abs(Muons(i).Eta()) <= cEtaMuMax)) ++nMuPtEtaMax;
+
+        // save the good mus
         muonsVec.push_back(Muons(i));
     }
 
+    if(isPtCutOK) ++nEv_Pt;
+    if(isEtaCutOK) ++nEv_Eta;
+    if(isMuIDOk) ++nEv_MuID;
+    if(isIsoOK) ++nEv_Iso;
+
+    if(nMuPtEtaMax > 0) ++nEv_PtEtaMax;
+    else return(1);
+
+    // keep events with at least two good muons
     if(muonsVec.size() < 2) return(1);
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // JETS ///////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // jet cleaning is done in RootMaker against electrons, taus, and muons with dR of 0.3
+    // tighter cleaning can be done here if desired
+    std::vector< Jet > jetsVec;
+    for (size_t j = 0; j < NumAK4PFCHSJets(); ++j) {
+        // kinematic cuts
+        if (!(AK4PFCHSJets(j).Pt() > 25.)) continue;
+        if (!(TMath::Abs(AK4PFCHSJets(j).Eta()) <= 4.7)) continue;
+
+        // tighter cleaning against muons and electrons we selected:
+        //bool isdROK = true;
+        //for (size_t i = 0; i < muonsVec.size(); ++i) {
+        //    double dR = AK4PFCHSJets(j).DeltaR(muonsVec[i]);
+        //    if(dR < cDR) isdROK = false;
+        //}
+        //if (!isdROK) continue;
+        //for (size_t i = 0; i < electronsVec.size(); ++i) {
+        //    double dR = AK4PFCHSJets(j).DeltaR(electronsVec[i]);
+        //    if(dR < cDR) isdROK = false;
+        //}
+        //if (!isdROK) continue;
+
+        // jet ID
+        if( not(AK4PFCHSJets(j).IsLooseJet()) ) continue;
+        isJetIDOK = true;
+
+        // store the jets
+        jetsVec.push_back(AK4PFCHSJets(j));
+    }
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // MET ////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    hPFMETType1->Fill(PFMETTYPE1().Pt(), pileupweight);
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // PAIRS //////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
     // DIMUON PAIRS ///////////////////////////////////////////////////////////////////////////////
     bool isChargeMuCutOK  = false;
@@ -158,10 +330,11 @@ Int_t MyAnalysis::AnalyseEvent() {
     std::vector< int > Muon_idx2;
 
     // 1st loop over muons
-    for (unsigned int i = 0; i < muonsVec.size(); ++i) {
+    for (size_t i = 0; i < muonsVec.size(); ++i) {
         // 2nd loop over muons
-        for (unsigned int j = i+1; j < muonsVec.size(); ++j) {
+        for (size_t j = i+1; j < muonsVec.size(); ++j) {
             // check muon charge
+            if (muonsVec[i].Charge()*muonsVec[j].Charge() > 0) continue;
             if (muonsVec[i].Charge()*muonsVec[j].Charge() > 0) continue;
             isChargeMuCutOK = true;     
             // dz cut
@@ -184,14 +357,9 @@ Int_t MyAnalysis::AnalyseEvent() {
     if (!isInvMassMuCutOK) return(1);
 
 
-
-
-
-
-
     // fill muon plots
-    for (unsigned int i = 0; i < muonsVec.size(); ++i) {
-        hMuPt       ->Fill(muonsVec[i].Pt(),  pileupweight);
+    for (size_t i = 0; i < muonsVec.size(); ++i) {
+        hMuPt->Fill(muonsVec[i].Pt(),  pileupweight);
     }
     return(1);
 }
@@ -201,8 +369,7 @@ int main() {
     MyAnalysis ana;
     string namebuf;
     string filename;
-    cout<<"Enter one filename and press enter. To stop this enter END exactly."
-        << endl;
+    cout<<"Enter one filename and press enter. To stop this enter END exactly."<<endl;
     while(true) {
         cin >> namebuf;
         if(namebuf == "END") {
@@ -214,7 +381,7 @@ int main() {
             } else {
                 filename = namebuf.substr(slashpos+1);
             }
-            cout << filename << endl;
+            cout<<filename<<endl;
 // NOTE
             if(filename.find("LUMI_") == 0) {
                 ana.AddLumiFile(namebuf.c_str());
@@ -234,8 +401,9 @@ int main() {
     //ana.Loop(0,5000);
     ana.Loop();
     ana.PrintLumiOfRuns();
-    cout << "Lumi: " << ana.GetLumi() << endl;
+    cout<<"Lumi: "<<ana.GetLumi()<<endl;
 }
+
 //________________________________
 bool MyAnalysis::isGoodJet(Jet j) {
     bool isOk = false;
