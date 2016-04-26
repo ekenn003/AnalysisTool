@@ -30,6 +30,3 @@ Example of simple Makefile:
   9 
  10 %.o: %.cc
  11         $(CC) $(CFLAGS) $(INCLUDES) -c $<
-
-Version 1.2.1
-Added Muon: NumChambers, NumChambersWithSegments
