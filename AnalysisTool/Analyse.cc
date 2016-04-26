@@ -7,6 +7,7 @@ MPI_Status mpistatus;
 Analyse *GLAN = 0;
 
 
+//____________________________________________________________________________________
 Analyse::Analyse(int argc, char **argv, bool batchmode) :
     currentfile(0),
     currentloadtype(-1),
@@ -20,7 +21,6 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     loadmet(0),
     loadak4pfchsjets(0),
     loadtracks(0),
-    //loadsuperclusters(0),
     loadprimvertices(0),
     loadtrigger(0),
     loadgeninfo(0),
@@ -47,13 +47,7 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     pileUpDistPlus(200, 0.),
     useprimvertexinfo(false),
     primVertexDist(200, 0.),
-    //track_count(0),
     primvertex_count(0),
-    //supercluster_count(0),
-    //supercluster_basiccluster_count(0),
-    //supercluster_basiccluster_hit_count(0),
-    //supercluster_escluster_count(0),
-    //supercluster_escluster_hit_count(0),
     muon_count(0),
     electron_count(0),
     photon_count(0),
@@ -75,6 +69,7 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     analysisrandom = new TRandom3;
 }
 
+//____________________________________________________________________________________
 Analyse::~Analyse() {
     if(skimfilename != string("None")) {
         TFile *file = skimtree->GetCurrentFile();
@@ -105,6 +100,7 @@ Analyse::~Analyse() {
 #endif
 }
 
+//____________________________________________________________________________________
 void Analyse::SetLoad() {
     tree->SetBranchStatus("*", false);
     tree->SetBranchStatus("errors", true);
@@ -112,6 +108,8 @@ void Analyse::SetLoad() {
     tree->SetBranchStatus("numpileupinteractions*", true);
     tree->SetBranchStatus("numtruepileupinteractions", true);
     tree->SetBranchStatus("event_rho", true);
+    tree->SetBranchStatus("isdata", true);
+    tree->SetBranchStatus("*Pass", true);
     //tree->SetBranchStatus("ak4pfjet_sigma", true);
 
     if(loadbeamspot == 1) {
@@ -225,6 +223,7 @@ void Analyse::SetLoad() {
     }
 }
 
+//____________________________________________________________________________________
 bool sortac1b(string a, string b) {
     vector<string> strs;
     boost::split(strs, a, boost::is_any_of("_"));
@@ -234,6 +233,7 @@ bool sortac1b(string a, string b) {
     return(na < nb);
 }
 
+//____________________________________________________________________________________
 bool sortroot(string a, string b) {
     vector<string> strs;
     boost::split(strs, a, boost::is_any_of("_."));
@@ -243,6 +243,7 @@ bool sortroot(string a, string b) {
     return(na < nb);
 }
 
+//____________________________________________________________________________________
 bool sortfiles(string a, string b) {
     if(a.find("AC1B") != string::npos) {
         vector<string> strs;
@@ -261,7 +262,7 @@ bool sortfiles(string a, string b) {
     }
 }
 
-
+//____________________________________________________________________________________
 Int_t Analyse::AddDir(string path) {
     if(Batch_MyId() == 0 || Batch_MyId() == -1) {
         DIR *dir = opendir(path.c_str());
@@ -307,6 +308,7 @@ Int_t Analyse::AddDir(string path) {
     return(-1);
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::AddFile(string filename) {
     TTree *test = 0;
     TFile *file = new TFile(filename.c_str(), "READ");
@@ -348,6 +350,7 @@ Int_t Analyse::AddFile(string filename) {
 
 }
 
+//____________________________________________________________________________________
 void Analyse::GetEvent(Long64_t num, Int_t loadtype) {
     bool changed = false;
     if(!(num >= currentmin && num < currentmax)) {
@@ -404,7 +407,9 @@ void Analyse::GetEvent(Long64_t num, Int_t loadtype) {
     tree->GetEntry(num - currentmin);
 }
 
+//____________________________________________________________________________________
 void Analyse::Load() {
+    tree->SetBranchAddress("isdata", &isdata);
     tree->SetBranchAddress("errors", &errors);
     tree->SetBranchAddress("event_nr", &event_nr);
     tree->SetBranchAddress("event_luminosityblock", &event_luminosityblock);
@@ -415,6 +420,9 @@ void Analyse::Load() {
     tree->SetBranchAddress("trigger_level1", trigger_level1);
     tree->SetBranchAddress("trigger_HLT", trigger_HLT);
 
+    tree->SetBranchAddress("IsoMu20Pass", &IsoMu20Pass);
+    tree->SetBranchAddress("IsoTkMu20Pass", &IsoTkMu20Pass);
+
     tree->SetBranchAddress("beamspot_x", &beamspot_x);
     tree->SetBranchAddress("beamspot_y", &beamspot_y);
     tree->SetBranchAddress("beamspot_z", &beamspot_z);
@@ -422,33 +430,6 @@ void Analyse::Load() {
     tree->SetBranchAddress("beamspot_ywidth", &beamspot_ywidth);
     tree->SetBranchAddress("beamspot_zsigma", &beamspot_zsigma);
     tree->SetBranchAddress("beamspot_cov", &beamspot_cov);
-
-/*
-    tree->SetBranchAddress("track_count", &track_count);
-    tree->SetBranchAddress("track_vtx", track_vtx);
-    tree->SetBranchAddress("track_px", track_px);
-    tree->SetBranchAddress("track_py", track_py);
-    tree->SetBranchAddress("track_pz", track_pz);
-    tree->SetBranchAddress("track_outerx", track_outerx);
-    tree->SetBranchAddress("track_outery", track_outery);
-    tree->SetBranchAddress("track_outerz", track_outerz);
-    tree->SetBranchAddress("track_closestpointx", track_closestpointx);
-    tree->SetBranchAddress("track_closestpointy", track_closestpointy);
-    tree->SetBranchAddress("track_closestpointz", track_closestpointz);
-    tree->SetBranchAddress("track_chi2", track_chi2);
-    tree->SetBranchAddress("track_ndof", track_ndof);
-    tree->SetBranchAddress("track_dxy", track_dxy);
-    tree->SetBranchAddress("track_dxyerr", track_dxyerr);
-    tree->SetBranchAddress("track_dz", track_dz);
-    tree->SetBranchAddress("track_dzerr", track_dzerr);
-    tree->SetBranchAddress("track_dedxharmonic2", track_dedxharmonic2);
-    tree->SetBranchAddress("track_charge", track_charge);
-    tree->SetBranchAddress("track_nhits", track_nhits);
-    tree->SetBranchAddress("track_npixelhits", track_npixelhits);
-    tree->SetBranchAddress("track_nmissinghits", track_nmissinghits);
-    tree->SetBranchAddress("track_npixellayers", track_npixellayers);
-    tree->SetBranchAddress("track_nstriplayers", track_nstriplayers);
-*/
 
     tree->SetBranchAddress("primvertex_count", &primvertex_count);
     tree->SetBranchAddress("primvertex_x", &primvertex_x);
@@ -468,47 +449,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("primvertex_cov3", &primvertex_cov3);
     tree->SetBranchAddress("primvertex_cov4", &primvertex_cov4);
     tree->SetBranchAddress("primvertex_cov5", &primvertex_cov5);
-/*
-    tree->SetBranchAddress("supercluster_count", &supercluster_count);
-    tree->SetBranchAddress("supercluster_e", supercluster_e);
-    tree->SetBranchAddress("supercluster_x", supercluster_x);
-    tree->SetBranchAddress("supercluster_y", supercluster_y);
-    tree->SetBranchAddress("supercluster_z", supercluster_z);
-    tree->SetBranchAddress("supercluster_rawe", supercluster_rawe);
-    tree->SetBranchAddress("supercluster_phiwidth", supercluster_phiwidth);
-    tree->SetBranchAddress("supercluster_etawidth", supercluster_etawidth);
-    tree->SetBranchAddress("supercluster_nbasiccluster", supercluster_nbasiccluster);
-    tree->SetBranchAddress("supercluster_basicclusterbegin", supercluster_basicclusterbegin);
-    tree->SetBranchAddress("supercluster_esclusterbegin", supercluster_esclusterbegin);
 
-    tree->SetBranchAddress("supercluster_basiccluster_count", &supercluster_basiccluster_count);
-    tree->SetBranchAddress("supercluster_basiccluster_e", supercluster_basiccluster_e);
-    tree->SetBranchAddress("supercluster_basiccluster_x", supercluster_basiccluster_x);
-    tree->SetBranchAddress("supercluster_basiccluster_y", supercluster_basiccluster_y);
-    tree->SetBranchAddress("supercluster_basiccluster_z", supercluster_basiccluster_z);
-    tree->SetBranchAddress("supercluster_basiccluster_nhit", supercluster_basiccluster_nhit);
-    tree->SetBranchAddress("supercluster_basiccluster_hitbegin", supercluster_basiccluster_hitbegin);
-
-    tree->SetBranchAddress("supercluster_basiccluster_hit_count", &supercluster_basiccluster_hit_count);
-    tree->SetBranchAddress("supercluster_basiccluster_hit_e", supercluster_basiccluster_hit_e);
-    tree->SetBranchAddress("supercluster_basiccluster_hit_x", supercluster_basiccluster_hit_x);
-    tree->SetBranchAddress("supercluster_basiccluster_hit_y", supercluster_basiccluster_hit_y);
-    tree->SetBranchAddress("supercluster_basiccluster_hit_z", supercluster_basiccluster_hit_z);
-
-    tree->SetBranchAddress("supercluster_escluster_count", &supercluster_escluster_count);
-    tree->SetBranchAddress("supercluster_escluster_e", supercluster_escluster_e);
-    tree->SetBranchAddress("supercluster_escluster_x", supercluster_escluster_x);
-    tree->SetBranchAddress("supercluster_escluster_y", supercluster_escluster_y);
-    tree->SetBranchAddress("supercluster_escluster_z", supercluster_escluster_z);
-    tree->SetBranchAddress("supercluster_escluster_nhit", supercluster_escluster_nhit);
-    tree->SetBranchAddress("supercluster_escluster_hitbegin", supercluster_escluster_hitbegin);
-
-    tree->SetBranchAddress("supercluster_escluster_hit_count", &supercluster_escluster_hit_count);
-    tree->SetBranchAddress("supercluster_escluster_hit_e", supercluster_escluster_hit_e);
-    tree->SetBranchAddress("supercluster_escluster_hit_x", supercluster_escluster_hit_x);
-    tree->SetBranchAddress("supercluster_escluster_hit_y", supercluster_escluster_hit_y);
-    tree->SetBranchAddress("supercluster_escluster_hit_z", supercluster_escluster_hit_z);
-*/
     tree->SetBranchAddress("muon_count", &muon_count);
     tree->SetBranchAddress("muon_px", &muon_px);
     tree->SetBranchAddress("muon_py", &muon_py);
@@ -516,6 +457,13 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_pterror", &muon_pterror);
     tree->SetBranchAddress("muon_chi2", &muon_chi2);
     tree->SetBranchAddress("muon_ndof", &muon_ndof);
+    tree->SetBranchAddress("muon_is_global", &muon_is_global);
+    tree->SetBranchAddress("muon_is_tracker", &muon_is_tracker);
+    tree->SetBranchAddress("muon_is_standalone", &muon_is_standalone);
+    tree->SetBranchAddress("muon_is_pf_muon", &muon_is_pf_muon);
+    tree->SetBranchAddress("muon_is_tight_muon", &muon_is_tight_muon);
+    tree->SetBranchAddress("muon_is_medium_muon", &muon_is_medium_muon);
+    tree->SetBranchAddress("muon_is_loose_muon", &muon_is_loose_muon);
     //tree->SetBranchAddress("muon_innertrack_vtx", &muon_innertrack_vtx);
     tree->SetBranchAddress("muon_innertrack_px", &muon_innertrack_px);
     tree->SetBranchAddress("muon_innertrack_py", &muon_innertrack_py);
@@ -573,6 +521,8 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_nummatchedstations", &muon_nummatchedstations);
     tree->SetBranchAddress("muon_trigger", &muon_trigger);
     tree->SetBranchAddress("muon_trackermuonquality", &muon_trackermuonquality);
+    tree->SetBranchAddress("muon_matches_IsoMu20", &muon_matches_IsoMu20);
+    tree->SetBranchAddress("muon_matches_IsoTkMu20", &muon_matches_IsoTkMu20);
 
     tree->SetBranchAddress("ak4pfchsjet_count", &ak4pfchsjet_count);
     tree->SetBranchAddress("ak4pfchsjet_energy", &ak4pfchsjet_energy);
@@ -860,14 +810,17 @@ void Analyse::Load() {
 
 }
 
+//____________________________________________________________________________________
 void Analyse::UsePileUpInfo() {
     usepileupinfo = true;
 }
 
+//____________________________________________________________________________________
 void Analyse::UsePrimVertexInfo() {
     useprimvertexinfo = true;
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadBeamSpot(bool select) {
     if(select) {
         loadbeamspot = 1;
@@ -876,6 +829,7 @@ void Analyse::LoadBeamSpot(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadMuons(bool select) {
     if(select) {
         loadmuons = 1;
@@ -884,6 +838,7 @@ void Analyse::LoadMuons(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadElectrons(bool select) {
     if(select) {
         loadelectrons = 1;
@@ -892,6 +847,7 @@ void Analyse::LoadElectrons(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadPhotons(bool select) {
     if(select) {
         loadphotons = 1;
@@ -900,6 +856,7 @@ void Analyse::LoadPhotons(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadTaus(bool select) {
     if(select) {
         loadtaus = 1;
@@ -908,6 +865,7 @@ void Analyse::LoadTaus(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadMET(bool select) {
     if(select) {
         loadmet = 1;
@@ -916,19 +874,13 @@ void Analyse::LoadMET(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadAK4PFCHSJets(bool select) {
     if(select) loadak4pfchsjets = 1;
     else loadak4pfchsjets = 0;
 }
-/*
-void Analyse::LoadTracks(bool select) {
-    if(select) {
-        loadtracks = 1;
-    } else {
-        loadtracks = 0;
-    }
-}
-*/
+
+//____________________________________________________________________________________
 void Analyse::LoadPrimVertices(bool select) {
     if(select) {
         loadprimvertices = 1;
@@ -937,6 +889,7 @@ void Analyse::LoadPrimVertices(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadTrigger(bool select) {
     if(select) {
         loadtrigger = 1;
@@ -945,6 +898,7 @@ void Analyse::LoadTrigger(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadGenInfo(bool select) {
     if(select) {
         loadgeninfo = 1;
@@ -953,6 +907,7 @@ void Analyse::LoadGenInfo(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadAllGenParticles(bool select) {
     if(select) {
         loadallgenparticles = 1;
@@ -961,6 +916,7 @@ void Analyse::LoadAllGenParticles(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadGenParticles(bool select) {
     if(select) {
         loadgenparticles = 1;
@@ -969,6 +925,7 @@ void Analyse::LoadGenParticles(bool select) {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::LoadGenAK4Jets(bool select) {
     if(select) {
         loadgenak4jets = 1;
@@ -976,25 +933,8 @@ void Analyse::LoadGenAK4Jets(bool select) {
         loadgenak4jets = 0;
     }
 }
-/*
-void Analyse::LoadSuperClusters(bool select, bool usebasiccluster, bool usebasicclusterhit) {
-    if(!select) {
-        loadsuperclusters = 1;
-        return;
-    }
-    loadsuperclusters = 1;
-    if(usebasicclusterhit) {
-        loadsuperclusters = 3;
-    }
-    if(usebasiccluster) {
-        loadsuperclusters = 2;
-    }
-    if(usebasicclusterhit && usebasiccluster) {
-        loadsuperclusters = 4;
-    }
-}
-*/
 
+//____________________________________________________________________________________
 bool Analyse::GetL1Trigger(UInt_t bit) const {
     if((trigger_level1[bit/8] & 1<<(bit % 8)) > 0) {
         return(true);
@@ -1003,6 +943,7 @@ bool Analyse::GetL1Trigger(UInt_t bit) const {
     }
 }
 
+//____________________________________________________________________________________
 bool Analyse::GetL1TriggerBits(UInt_t bit) const {
     if((trigger_level1bits[bit/8] & 1<<(bit % 8)) > 0) {
         return(true);
@@ -1011,6 +952,7 @@ bool Analyse::GetL1TriggerBits(UInt_t bit) const {
     }
 }
 
+//____________________________________________________________________________________
 bool Analyse::GetHLTrigger(UInt_t index) const {
     if((trigger_HLT[index/8] & 1<<(index % 8)) > 0) {
         return(true);
@@ -1019,10 +961,12 @@ bool Analyse::GetHLTrigger(UInt_t index) const {
     }
 }
 
+//____________________________________________________________________________________
 BeamSpot Analyse::GetBeamSpot() const {
     return(BeamSpot(beamspot_x, beamspot_y, beamspot_z, beamspot_cov, beamspot_xwidth, beamspot_ywidth, beamspot_zsigma));
 }
 
+//____________________________________________________________________________________
 Muon Analyse::Muons(UInt_t n, int correction) const {
     //vector<string> a = runlist.find(Run())->second.GetHLTMuonNames();
     Muon newmuon(this, n, correction);
@@ -1037,10 +981,12 @@ Muon Analyse::Muons(UInt_t n, int correction) const {
     return(newmuon);
 }
 
+//____________________________________________________________________________________
 Electron Analyse::Electrons(UInt_t n, int correction) const {
     return(Electron(this, n, correction));
 }
 
+//____________________________________________________________________________________
 Photon Analyse::Photons(UInt_t n) const {
     Photon newphoton(this, n);
 //
@@ -1070,6 +1016,7 @@ Photon Analyse::Photons(UInt_t n) const {
     return(newphoton);
 }
 
+//____________________________________________________________________________________
 Tau Analyse::Taus(UInt_t n) const {
     return(Tau(this, n));
 }
@@ -1079,89 +1026,33 @@ Tau Analyse::Taus(UInt_t n) const {
 //    return(TLorentzVector(pfmet_ex, pfmet_ey, 0., sqrt(pow(pfmet_ex, 2) + pow(pfmet_ey, 2))));
 //}
 
-// because of how RootMaker works, met is always a vector<Float_t> with only one entry
+//____________________________________________________________________________________
 TLorentzVector Analyse::PFMETTYPE1() const {
+    // because of how RootMaker works, met is always a vector<Float_t> with only one entry
     return(TLorentzVector(pfmettype1_ex->at(0), pfmettype1_ey->at(0), 0., sqrt(pow(pfmettype1_ex->at(0), 2) + pow(pfmettype1_ey->at(0), 2))));
 }
-//TLorentzVector Analyse::PFMETPUPPITYPE1() const {
-//    return(TLorentzVector(pfmetpuppitype1_ex, pfmetpuppitype1_ey, 0., sqrt(pow(pfmetpuppitype1_ex, 2) + pow(pfmetpuppitype1_ey, 2))));
-//}
-//
-//TLorentzVector Analyse::PFMETTYPE0TYPE1() const {
-//    return(TLorentzVector(pfmettype0type1_ex, pfmettype0type1_ey, 0., sqrt(pow(pfmettype0type1_ex, 2) + pow(pfmettype0type1_ey, 2))));
-//}
 
+//____________________________________________________________________________________
 Jet Analyse::AK4PFCHSJets(UInt_t n) const {
     return(Jet(ak4pfchsjet_energy->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
 }
-/*
-Track Analyse::Tracks(UInt_t n) const {
-    return(Track(sqrt(track_px[n]*track_px[n]+track_py[n]*track_py[n]+track_pz[n]*track_pz[n]), track_px[n], track_py[n], track_pz[n], track_outerx[n], track_outery[n], track_outerz[n], track_closestpointx[n], track_closestpointy[n], track_closestpointz[n], track_chi2[n], track_ndof[n], track_dxy[n], track_dxyerr[n], track_dz[n], track_dzerr[n], track_charge[n], track_nhits[n], track_nmissinghits[n], track_npixelhits[n], track_npixellayers[n], track_nstriplayers[n], track_vtx[n], track_dedxharmonic2[n]));
-}
-*/
-//Vertex Analyse::PrimVertices(UInt_t n) const {
-//    return(Vertex(primvertex_x[n], primvertex_y[n], primvertex_z[n], primvertex_info[n], primvertex_chi2[n], primvertex_ndof[n], primvertex_ptq[n], primvertex_ntracks[n], primvertex_cov[n]));
-//}
+
+//____________________________________________________________________________________
 Vertex Analyse::PrimVertices(UInt_t n) const {
     return(Vertex(primvertex_x->at(n), primvertex_y->at(n), primvertex_z->at(n), primvertex_isfake->at(n), primvertex_isvalid->at(n), primvertex_chi2->at(n), primvertex_ndof->at(n), primvertex_ntracks->at(n), primvertex_cov0->at(n), primvertex_cov1->at(n), primvertex_cov2->at(n), primvertex_cov3->at(n), primvertex_cov4->at(n), primvertex_cov5->at(n)));
 }
-/*
-SuperCluster Analyse::SuperClusters(UInt_t n, TVector3 refpoint) const {
-    SuperCluster newsupercluster(supercluster_e[n], supercluster_x[n] - refpoint.X(), supercluster_y[n] - refpoint.Y(), supercluster_z[n] - refpoint.Z(), supercluster_rawe[n], supercluster_phiwidth[n], supercluster_etawidth[n]);
 
-    if(loadsuperclusters == 2 || loadsuperclusters == 4) {
-        UInt_t endcluster = supercluster_basiccluster_count;
-        if(n != supercluster_count) endcluster = supercluster_basicclusterbegin[n+1];
-        for(UInt_t i = supercluster_basicclusterbegin[n] ; i < endcluster ; i++) {
-            Cluster newcluster(supercluster_basiccluster_e[i], supercluster_basiccluster_x[i] - refpoint.X(), supercluster_basiccluster_y[i] - refpoint.Y(), supercluster_basiccluster_z[i] - refpoint.Z(), supercluster_basiccluster_nhit[i]);
-            if(loadsuperclusters == 3 || loadsuperclusters == 4) {
-                UInt_t endhits = supercluster_basiccluster_hit_count;
-                if(i != supercluster_basiccluster_count) endhits = supercluster_basiccluster_hitbegin[i+1];
-                for(UInt_t u = supercluster_basiccluster_hitbegin[i] ; u < endhits ; u++) {
-                    EcalHit newhit(supercluster_basiccluster_hit_e[u],supercluster_basiccluster_hit_x[u],supercluster_basiccluster_hit_y[u],supercluster_basiccluster_hit_z[u]);
-                    newcluster.AddHit(newhit);
-                }
-
-            }
-            newsupercluster.AddCluster(newcluster);
-        }
-        if(false) {
-            endcluster = supercluster_escluster_count;
-            if(n != supercluster_count) endcluster = supercluster_esclusterbegin[n+1];
-            for(UInt_t i = supercluster_esclusterbegin[n] ; i < endcluster ; i++) {
-                Cluster newcluster(supercluster_escluster_e[i], supercluster_escluster_x[i] - refpoint.X(), supercluster_escluster_y[i] - refpoint.Y(), supercluster_escluster_z[i] - refpoint.Z(), supercluster_escluster_nhit[i]);
-                if(loadsuperclusters == 3 || loadsuperclusters == 4) {
-                    UInt_t endhits = supercluster_escluster_hit_count;
-                    if(i != supercluster_escluster_count) endhits = supercluster_escluster_hitbegin[i+1];
-                    for(UInt_t u = supercluster_escluster_hitbegin[i] ; u < endhits ; u++) {
-                        EcalHit newhit(supercluster_escluster_hit_e[u],supercluster_escluster_hit_x[u],supercluster_escluster_hit_y[u],supercluster_escluster_hit_z[u]);
-                        newcluster.AddHit(newhit);
-                    }
-
-                }
-                newsupercluster.AddESCluster(newcluster);
-            }
-        }
-    }
-    return(newsupercluster);
-}
-
-SuperCluster Analyse::SuperClusters(UInt_t n) const {
-    if(NumPrimVertices() > 0) {
-        return(SuperClusters(n, PrimVertices(0)));
-    } else {
-        return(SuperClusters(n, TVector3(0., 0., 0.)));
-    }
-}
-*/
+//____________________________________________________________________________________
 GenLightParticle Analyse::GenParticles(UInt_t n) const {
     return(GenLightParticle(genparticles_e[n], genparticles_px[n], genparticles_py[n], genparticles_pz[n], genparticles_vx[n], genparticles_vy[n], genparticles_vz[n], genparticles_status[n], genparticles_pdgid[n], genparticles_info[n], genparticles_indirectmother[n]));
 }
 
+//____________________________________________________________________________________
 GenJet Analyse::GenAK4Jets(UInt_t n) const {
     return(GenJet(genak4jet_e[n], genak4jet_px[n], genak4jet_py[n], genak4jet_pz[n], genak4jet_einvisible[n], genak4jet_flavour[n], genak4jet_info[n]));
 }
 
+//____________________________________________________________________________________
 GenParticle Analyse::AllGenParticles(UInt_t n) const {
     UInt_t motherend(n == genallparticles_count-1 ? genallparticlesmother_count : genallparticles_motherbeg[n+1]);
     UInt_t daughterend(n == genallparticles_count-1 ? genallparticlesdaughter_count : genallparticles_daughterbeg[n+1]);
@@ -1171,10 +1062,12 @@ GenParticle Analyse::AllGenParticles(UInt_t n) const {
     return(newpart);
 }
 
+//____________________________________________________________________________________
 TLorentzVector Analyse::GenMETTrue() const {
     return(TLorentzVector(genmettrue_ex, genmettrue_ey, 0., sqrt(pow(genmettrue_ex, 2) + pow(genmettrue_ey, 2))));
 }
 
+//____________________________________________________________________________________
 bool Analyse::IsBatchSelected(UInt_t run, UInt_t lumiblock) {
 
     if(Batch_MyId() <= 0) return(true);
@@ -1184,6 +1077,7 @@ bool Analyse::IsBatchSelected(UInt_t run, UInt_t lumiblock) {
     return(false);
 }
 
+//____________________________________________________________________________________
 void Analyse::Batch_Prepare(bool simple) {
 #ifdef USE_MPI
     cout << "START Batch_Prepare " << Batch_MyId() << endl;
@@ -1363,6 +1257,7 @@ void Analyse::Batch_Prepare(bool simple) {
 #endif
 }
 
+//____________________________________________________________________________________
 Long64_t Analyse::Loop(Long64_t start, Long64_t end) {
     if(end == -1 || end > GetNumAddedEvents()) {
         end = GetNumAddedEvents();
@@ -1600,6 +1495,7 @@ Long64_t Analyse::Loop(Long64_t start, Long64_t end) {
     return(processed);
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::PrepareSkimming(string filename) {
 //    skimfilename = filename;
 //    if(skimfile != 0) {
@@ -1608,6 +1504,7 @@ Int_t Analyse::PrepareSkimming(string filename) {
 //    }
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::SkimEvent() {
     if(skimtree == 0) {
         cerr << "use PrepareSkimming() before SkimEvent()" << endl;
@@ -1618,6 +1515,7 @@ Int_t Analyse::SkimEvent() {
     return(1);
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::SetLumi(UInt_t run, UInt_t block, Float_t lumival, Float_t avgpu) {
     if(lumilist.find(run) != lumilist.end() && lumilist.find(run)->second.find(block) != lumilist.find(run)->second.end()) {
         lumilist[run][block].Value(lumival);
@@ -1627,6 +1525,7 @@ Int_t Analyse::SetLumi(UInt_t run, UInt_t block, Float_t lumival, Float_t avgpu)
     return(0);
 }
 
+//____________________________________________________________________________________
 void Analyse::WriteLumiFile(string filename) {
     TFile *file = new TFile(filename.c_str(), "recreate");
 
@@ -1765,6 +1664,7 @@ void Analyse::WriteLumiFile(string filename) {
     file->Close();
 }
 
+//____________________________________________________________________________________
 void Analyse::AddLumiFile(string filename, string dir) {
 
     TFile *lumifile = new TFile(filename.c_str());
@@ -1889,6 +1789,7 @@ void Analyse::AddLumiFile(string filename, string dir) {
     lumifile->Close();
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::IsLumiAvailable() const {
     if(lumilist.find(Run()) != lumilist.end() && lumilist.find(Run())->second.find(LumiBlock()) != lumilist.find(Run())->second.end()) {
         if(lumilist.at(Run()).at(LumiBlock()).LumiValue() != -1) { //We have lumi value or it is MC.
@@ -1899,6 +1800,7 @@ Int_t Analyse::IsLumiAvailable() const {
     return(0);
 }
 
+//____________________________________________________________________________________
 void Analyse::ResetLumiValues() {
     for(map< UInt_t, map< UInt_t, Luminosity > >::iterator a = lumilist.begin() ; a != lumilist.end() ; a++) {
         for(map<UInt_t, Luminosity>::iterator b = (a->second).begin() ; b != (a->second).end() ; b++) {
@@ -1907,6 +1809,7 @@ void Analyse::ResetLumiValues() {
     }
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::GetNumHLTriggers() const {
     if(runlist.find(Run()) != runlist.end()) {
         return(runlist.at(Run()).NumHLT());
@@ -1914,6 +1817,7 @@ Int_t Analyse::GetNumHLTriggers() const {
     return(-1);
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::GetHLTriggerIndex(string triggername) const {
     if(runlist.find(Run()) != runlist.end()) {
         return(runlist.at(Run()).HLTIndex(triggername));
@@ -1923,16 +1827,19 @@ Int_t Analyse::GetHLTriggerIndex(string triggername) const {
     }
 }
 
+//____________________________________________________________________________________
 TriggerSelection *Analyse::AddTriggerSelection(string id, vector<string> triggernames, bool useprescaled) {
     TriggerSelection *triggerselection = new TriggerSelection(this, triggernames, useprescaled);
     triggerselections[id] = triggerselection;
     return(triggerselection);
 }
 
+//____________________________________________________________________________________
 TriggerSelection *Analyse::GetTriggerSelection(string id) {
     return(triggerselections[id]);
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::GetHLTrigger(vector<string> triggernames) const {
     Int_t result = -1;
     for(UInt_t i = 0 ; i < triggernames.size() ; i++) {
@@ -1946,6 +1853,7 @@ Int_t Analyse::GetHLTrigger(vector<string> triggernames) const {
     return(result);
 }
 
+//____________________________________________________________________________________
 string Analyse::GetHLTriggerName(UInt_t index) const {
     if(runlist.find(Run()) != runlist.end()) {
         return(runlist.at(Run()).HLTName(index));
@@ -1955,6 +1863,7 @@ string Analyse::GetHLTriggerName(UInt_t index) const {
     }
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::GetHLTPrescale(UInt_t triggerindex) const {
     if(IsLumiAvailable()) {
         Int_t triggertable = lumilist.at(Run()).at(LumiBlock()).HLTTable();
@@ -1964,6 +1873,22 @@ Int_t Analyse::GetHLTPrescale(UInt_t triggerindex) const {
     }
 }
 
+
+//____________________________________________________________________________________
+bool Analyse::EventPassesHLT(std::vector<string> hltnames) const {
+    bool matchedAny = false;
+    //for (auto &path : hltnames) {// range-based 'for' loops are not allowed in C++98 mode :(
+    for (size_t i = 0; i < hltnames.size(); i++) {
+        if (hltnames[i] == "IsoMu20")        matchedAny = matchedAny || (bool(IsoMu20Pass));
+        else if (hltnames[i] == "IsoTkMu20") matchedAny = matchedAny || (bool(IsoTkMu20Pass));
+
+        else { cerr<<"HLT name "<<hltnames[i]<<" not recognized."<<endl; throw; }
+    }
+
+    return(matchedAny);
+}
+
+//____________________________________________________________________________________
 void Analyse::PrintPrescaleInfo(string triggername) {
     for(map< UInt_t , RunInfo>::iterator a = runlist.begin() ; a != runlist.end() ; ++a) {
         Int_t index = a->second.HLTIndex(triggername);
@@ -1988,6 +1913,7 @@ void Analyse::PrintPrescaleInfo(string triggername) {
 }
 
 
+//____________________________________________________________________________________
 void Analyse::PrintPrescaleInfoB(string triggername) {
     triggername += string("_v.*");
     boost::cmatch what;
@@ -2063,6 +1989,7 @@ Double_t Analyse::GetAvgPU() const {
     return(b->second.AvgPU());
 }
 
+//____________________________________________________________________________________
 Double_t Analyse::GetLumi(Int_t format) {
     Double_t lumi = 0.;
     Double_t alllumi = 0.;
@@ -2122,6 +2049,7 @@ Double_t Analyse::GetLumi(Int_t format) {
     return(lumi+zerolumi);
 }
 
+//____________________________________________________________________________________
 bool Analyse::IsInRange(UInt_t theRun, UInt_t theLumiBlock) {
     if(theRun < maxRun && theRun > minRun) {
         return(true);
@@ -2140,6 +2068,7 @@ bool Analyse::IsInRange(UInt_t theRun, UInt_t theLumiBlock) {
 //{
 //}
 
+//____________________________________________________________________________________
 void Analyse::PrintLumiOfRuns() {
     Double_t totlumi = 0.;
     Double_t filteredevents = 0;
@@ -2164,6 +2093,7 @@ void Analyse::PrintLumiOfRuns() {
     }
 }
 
+//____________________________________________________________________________________
 void Analyse::PrintLumiOfLumiSectionsInRun(UInt_t runnumber) {
     Double_t runlumi = 0.;
     Double_t runfilteredevents = 0.;
@@ -2182,6 +2112,7 @@ void Analyse::PrintLumiOfLumiSectionsInRun(UInt_t runnumber) {
 
 }
 
+//____________________________________________________________________________________
 bool Analyse::LoadJSON(string filename) {
     jsonfilter = true;
     char buf[100];
@@ -2235,6 +2166,7 @@ bool Analyse::LoadJSON(string filename) {
     return(result);
 }
 
+//____________________________________________________________________________________
 Double_t Analyse::GetPileUpMaxWeight(vector<Double_t> &datadist) const {
     double maxweight = -1.;
     for(size_t nv = 1 ; nv < datadist.size() ; nv++) {
@@ -2246,6 +2178,7 @@ Double_t Analyse::GetPileUpMaxWeight(vector<Double_t> &datadist) const {
     return(maxweight);
 }
 
+//____________________________________________________________________________________
 Double_t Analyse::GetPileUpWeight(vector<Double_t> &datadist) const {
     if(!usepileupinfo) return(1.);
     unsigned numtrueinteractions = unsigned(2*NumTruePileUpInteractions());
@@ -2257,6 +2190,7 @@ Double_t Analyse::GetPileUpWeight(vector<Double_t> &datadist) const {
 }
 
 
+//____________________________________________________________________________________
 Double_t Analyse::GetPrimVertexMaxWeight(vector<Double_t> &datadist) const {
     double maxweight = -1.;
     for(size_t nv = 1 ; nv < datadist.size() ; nv++) {
@@ -2268,6 +2202,7 @@ Double_t Analyse::GetPrimVertexMaxWeight(vector<Double_t> &datadist) const {
     return(maxweight);
 }
 
+//____________________________________________________________________________________
 Double_t Analyse::GetPrimVertexWeight(vector<Double_t> &datadist) const {
     if(!useprimvertexinfo) return(1.);
     UInt_t numgoodprimvertices = NumGoodPrimVertices();
@@ -2278,6 +2213,7 @@ Double_t Analyse::GetPrimVertexWeight(vector<Double_t> &datadist) const {
     return(dataval/primVertexDist[numgoodprimvertices]);
 }
 
+//____________________________________________________________________________________
 Int_t Analyse::NumGoodPrimVertices() const {
     Int_t numgoodprimvertices = 0;
     for(UInt_t i = 0 ; i < NumPrimVertices() ; i++) {

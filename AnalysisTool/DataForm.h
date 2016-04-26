@@ -260,6 +260,9 @@ class Muon : public TLorentzVector, public TriggerObject {
     Float_t pterror;
     Float_t chi2;
     Float_t ndof;
+    Int_t   is_tight_muon;
+    Int_t   is_medium_muon;
+    Int_t   is_loose_muon;
     Track   innertrack;
     Track   outertrack;
     Float_t isolationr3track;
@@ -280,6 +283,7 @@ class Muon : public TLorentzVector, public TriggerObject {
     Float_t pfisolationr4_sumneutralhadronethighthreshold;
     Float_t pfisolationr4_sumphotonethighthreshold;
     Float_t pfisolationr4_sumpupt;
+    Float_t pfisolationr4_dBrel;
     Float_t ecalenergy;
     Float_t hcalenergy;
     Int_t   charge;
@@ -296,6 +300,8 @@ class Muon : public TLorentzVector, public TriggerObject {
     Int_t   hasoutertrack;
     Int_t   hasglobaltrack;
     Int_t   trackermuonquality;
+    Int_t   matches_IsoMu20;
+    Int_t   matches_IsoTkMu20;
     void    SetInnerTrack(Track &Innertrack) { innertrack = Innertrack; }
     void    SetOuterTrack(Track &Outertrack) { outertrack = Outertrack; }
   public:
@@ -316,6 +322,7 @@ class Muon : public TLorentzVector, public TriggerObject {
     Float_t IsoPFR4NeutralHadrons() const { return(pfisolationr4_sumneutralhadronet); }
     Float_t IsoPFR4Photons() const { return(pfisolationr4_sumphotonet); }
     Float_t IsoPFR4SumPUPt() const { return(pfisolationr4_sumpupt); }
+    Float_t IsoPFR4dBCombRel() const { return(pfisolationr4_dBrel); }
     Int_t   IsoR3NTrack() const { return(isolationr3ntrack); }
     Float_t IsoR3ECal() const { return(isolationr3ecal); }
     Float_t IsoR3HCal() const { return(isolationr3hcal); }
@@ -337,6 +344,12 @@ class Muon : public TLorentzVector, public TriggerObject {
     bool    InOut() const { return((trackermuonquality & 1<<30) > 0); }
     bool    OutIn() const { return((trackermuonquality & 1<<31) > 0); }
     bool    IsPFMuon() const { return(is_pf_muon); }
+    bool    IsTightMuon() const { return(bool(is_tight_muon)); }
+    bool    IsMediumMuon() const { return(bool(is_medium_muon)); }
+    bool    IsLooseMuon() const { return(bool(is_loose_muon)); }
+
+    bool    MatchesHLT(std::vector<string> hltnames) const;
+
     Float_t Dxy() const { return(innertrack.Dxy()); }
     Float_t DxyError() const { return(innertrack.DxyError()); }
     Float_t Dz() const { return(innertrack.Dz()); }
@@ -689,13 +702,16 @@ class Jet : public TLorentzVector {
     Float_t puidsimple;
     Float_t puidcutbased;
     bool    mymvonly;
-    vector<Float_t> btag;
+    Int_t   btag;
+    Int_t   idLoose;
+    Int_t   idTight;
+    Int_t   idTightLepVeto;
 
   public:
-    // contsructors
+    // constructors
     Jet() {}
-    //Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, const Float_t *Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
-    Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, const vector<Float_t> Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
+    //Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, const vector<Float_t> Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
+    Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, Int_t btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
     // methods
     Float_t HadEnergyFraction() const { return(hadronicenergy/E()/energycorr); }
     Float_t HadEnergy() const { return(hadronicenergy); }
@@ -723,17 +739,24 @@ class Jet : public TLorentzVector {
     Float_t PrincipalAxisB() const { return(allb); }
     Float_t ChargedMomentumFractionFromMV() const { return(chargedfractionmv); }
     void    ScaleMV(bool mvonly);
-    Float_t BTag(Int_t n) const;
+    bool    BTag(string disc) const;
     Float_t JECRaw() const { return(energycorr); }
     Float_t JECUncertainty() const { return(energycorrunc); }
     Float_t JECL7UDSCorretion() const { return(energycorrl7uds); }
     Float_t JECL7BottomCorretion() const { return(energycorrl7bottom); }
-    Float_t trackCountingHighPurBJetTags() const { return(btag.at(0)); }
-    Float_t trackCountingHighEffBJetTags() const { return(btag.at(1)); }
-    Float_t simpleSecondaryVertexHighPurBJetTags() const { return(btag.at(2)); }
-    Float_t simpleSecondaryVertexHighEffBJetTags() const { return(btag.at(3)); }
-    Float_t combinedSecondaryVertexBJetTags() const { return(btag.at(4)); }
-    Float_t combinedSecondaryVertexMVABJetTags() const { return(btag.at(5)); }
+
+// WIP
+    //Float_t trackCountingHighPurBJetTags() const { return(btag); }
+    //Float_t trackCountingHighEffBJetTags() const { return(btag); }
+    //Float_t simpleSecondaryVertexHighPurBJetTags() const { return(btag); }
+    //Float_t simpleSecondaryVertexHighEffBJetTags() const { return(btag); }
+    //Float_t combinedSecondaryVertexBJetTags() const { return(btag); }
+    //Float_t combinedSecondaryVertexMVABJetTags() const { return(btag); }
+
+    bool    IsLooseJet() const { return(bool(idLoose)); }
+    bool    IsTightJet() const { return(bool(idTight)); }
+    bool    IsTightLepVetoJet() const { return(bool(idTightLepVeto)); }
+
     Float_t puIdFull() const { return(puidfull); }
     Float_t puIdSimple() const { return(puidsimple); }
     Float_t puIdCutBased() const { return(puidcutbased); }
@@ -939,7 +962,7 @@ class Luminosity {
 };
 
 //////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+// CLASS: RUNINFO ////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 class RunInfo {
 private:

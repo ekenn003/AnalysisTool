@@ -28,6 +28,15 @@ public:
     Double_t Number() const {
         return(an->Number());
     }
+
+// very hack pls fix
+    Bool_t passesisomu20() const {
+        return(an->passesisomu20());
+    }
+    Bool_t passesisotkmu20() const {
+        return(an->passesisotkmu20());
+    }
+
     UInt_t Run() const {
         return(an->Run());
     }

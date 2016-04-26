@@ -131,15 +131,19 @@ private:
     TRandom3 *analysisrandom;
 
     //Data
-    UInt_t errors;
+    Int_t    isdata;
+    UInt_t   errors;
     Double_t event_nr;
-    UInt_t event_luminosityblock;
-    UInt_t event_run;
-    UInt_t event_timeunix;
-    UInt_t event_timemicrosec;
-    UChar_t trigger_level1bits[8];
-    UChar_t trigger_level1[128];
-    UChar_t trigger_HLT[128];
+    UInt_t   event_luminosityblock;
+    UInt_t   event_run;
+    UInt_t   event_timeunix;
+    UInt_t   event_timemicrosec;
+    UChar_t  trigger_level1bits[8];
+    UChar_t  trigger_level1[128];
+    UChar_t  trigger_HLT[128];
+
+    Int_t   IsoMu20Pass;
+    Int_t   IsoTkMu20Pass;
 
     Float_t beamspot_x;
     Float_t beamspot_y;
@@ -148,33 +152,6 @@ private:
     Float_t beamspot_ywidth;
     Float_t beamspot_zsigma;
     Float_t beamspot_cov[6];
-/*
-
-    UInt_t track_count;
-    Int_t track_vtx[M_trackmaxcount];
-    Float_t track_px[M_trackmaxcount];
-    Float_t track_py[M_trackmaxcount];
-    Float_t track_pz[M_trackmaxcount];
-    Float_t track_outerx[M_trackmaxcount];
-    Float_t track_outery[M_trackmaxcount];
-    Float_t track_outerz[M_trackmaxcount];
-    Float_t track_closestpointx[M_trackmaxcount];
-    Float_t track_closestpointy[M_trackmaxcount];
-    Float_t track_closestpointz[M_trackmaxcount];
-    Float_t track_chi2[M_trackmaxcount];
-    Float_t track_ndof[M_trackmaxcount];
-    Float_t track_dxy[M_trackmaxcount];
-    Float_t track_dxyerr[M_trackmaxcount];
-    Float_t track_dz[M_trackmaxcount];
-    Float_t track_dzerr[M_trackmaxcount];
-    Float_t track_dedxharmonic2[M_trackmaxcount];
-    Int_t track_charge[M_trackmaxcount];
-    UChar_t track_nhits[M_trackmaxcount];
-    UChar_t track_nmissinghits[M_trackmaxcount];
-    UChar_t track_npixelhits[M_trackmaxcount];
-    UChar_t track_npixellayers[M_trackmaxcount];
-    UChar_t track_nstriplayers[M_trackmaxcount];
-*/
 
     UInt_t primvertex_count;
     vector<Float_t> *primvertex_x;
@@ -192,63 +169,21 @@ private:
     vector<Float_t> *primvertex_cov4;
     vector<Float_t> *primvertex_cov5;
 
-    //Float_t primvertex_x[M_primvertexmaxcount];
-    //Float_t primvertex_y[M_primvertexmaxcount];
-    //Float_t primvertex_z[M_primvertexmaxcount];
-    //UInt_t primvertex_info[M_primvertexmaxcount];
-    //Float_t primvertex_chi2[M_primvertexmaxcount];
-    //Float_t primvertex_ndof[M_primvertexmaxcount];
-    //Float_t primvertex_ptq[M_primvertexmaxcount];
-    //Int_t primvertex_ntracks[M_primvertexmaxcount];
-    //Float_t primvertex_cov[M_primvertexmaxcount][6];
-/*
-    UInt_t supercluster_count;
-    Float_t supercluster_e[M_superclustermaxcount];
-    Float_t supercluster_x[M_superclustermaxcount];
-    Float_t supercluster_y[M_superclustermaxcount];
-    Float_t supercluster_z[M_superclustermaxcount];
-    Float_t supercluster_rawe[M_superclustermaxcount];
-    Float_t supercluster_phiwidth[M_superclustermaxcount];
-    Float_t supercluster_etawidth[M_superclustermaxcount];
-    Int_t supercluster_nbasiccluster[M_superclustermaxcount];
-    Int_t supercluster_basicclusterbegin[M_superclustermaxcount];
-    Int_t supercluster_esclusterbegin[M_superclustermaxcount];
-
-    UInt_t supercluster_basiccluster_count;
-    Float_t supercluster_basiccluster_e[M_superclustermembermaxcount];
-    Float_t supercluster_basiccluster_x[M_superclustermembermaxcount];
-    Float_t supercluster_basiccluster_y[M_superclustermembermaxcount];
-    Float_t supercluster_basiccluster_z[M_superclustermembermaxcount];
-    Int_t supercluster_basiccluster_nhit[M_superclustermembermaxcount];
-    Int_t supercluster_basiccluster_hitbegin[M_superclustermembermaxcount];
-
-    UInt_t supercluster_basiccluster_hit_count;
-    Float_t supercluster_basiccluster_hit_e[M_superclusterhitmaxcount];
-    Float_t supercluster_basiccluster_hit_x[M_superclusterhitmaxcount];
-    Float_t supercluster_basiccluster_hit_y[M_superclusterhitmaxcount];
-    Float_t supercluster_basiccluster_hit_z[M_superclusterhitmaxcount];
-
-    UInt_t supercluster_escluster_count;
-    Float_t supercluster_escluster_e[M_superclustermembermaxcount];
-    Float_t supercluster_escluster_x[M_superclustermembermaxcount];
-    Float_t supercluster_escluster_y[M_superclustermembermaxcount];
-    Float_t supercluster_escluster_z[M_superclustermembermaxcount];
-    Int_t supercluster_escluster_nhit[M_superclustermembermaxcount];
-    Int_t supercluster_escluster_hitbegin[M_superclustermembermaxcount];
-
-    UInt_t supercluster_escluster_hit_count;
-    Float_t supercluster_escluster_hit_e[M_superclusterhitmaxcount];
-    Float_t supercluster_escluster_hit_x[M_superclusterhitmaxcount];
-    Float_t supercluster_escluster_hit_y[M_superclusterhitmaxcount];
-    Float_t supercluster_escluster_hit_z[M_superclusterhitmaxcount];
-*/
     UInt_t muon_count;
     vector<Float_t> *muon_px;
     vector<Float_t> *muon_py;
     vector<Float_t> *muon_pz;
+    vector<Float_t> *muon_pt;
     vector<Float_t> *muon_pterror;
     vector<Float_t> *muon_chi2;
     vector<Float_t> *muon_ndof;
+    vector<Int_t>   *muon_is_global;
+    vector<Int_t>   *muon_is_tracker;
+    vector<Int_t>   *muon_is_standalone;
+    vector<Int_t>   *muon_is_pf_muon;
+    vector<Int_t>   *muon_is_tight_muon;
+    vector<Int_t>   *muon_is_medium_muon;
+    vector<Int_t>   *muon_is_loose_muon;
     //vector<Int_t>   *muon_innertrack_vtx;
     vector<Float_t> *muon_innertrack_px;
     vector<Float_t> *muon_innertrack_py;
@@ -299,6 +234,7 @@ private:
     vector<Float_t> *muon_pfisolationr4_sumneutralhadronethighthreshold;
     vector<Float_t> *muon_pfisolationr4_sumphotonethighthreshold;
     vector<Float_t> *muon_pfisolationr4_sumpupt;
+    vector<Float_t> *muon_pfisolationr4_dBrel;
     vector<Int_t>   *muon_charge;
     vector<Int_t>   *muon_numchambers;
     vector<Int_t>   *muon_numchamberswithsegments;
@@ -306,12 +242,15 @@ private:
     vector<Int_t>   *muon_nummatchedstations;
     vector<UInt_t>  *muon_trigger;
     vector<UInt_t>  *muon_trackermuonquality;
+    vector<Int_t>   *muon_matches_IsoMu20;
+    vector<Int_t>   *muon_matches_IsoTkMu20;
 
     UInt_t ak4pfchsjet_count;
     vector<Float_t> *ak4pfchsjet_energy;
     vector<Float_t> *ak4pfchsjet_px;
     vector<Float_t> *ak4pfchsjet_py;
     vector<Float_t> *ak4pfchsjet_pz;
+    //vector<Float_t> *ak4pfchsjet_pt;
     vector<Float_t> *ak4pfchsjet_area;
     vector<Float_t> *ak4pfchsjet_hadronicenergy;
     vector<Float_t> *ak4pfchsjet_chargedhadronicenergy;
@@ -338,7 +277,10 @@ private:
     vector<Float_t> *ak4pfchsjet_energycorrunc;
     vector<Float_t> *ak4pfchsjet_energycorrl7uds;
     vector<Float_t> *ak4pfchsjet_energycorrl7bottom;
-    vector<vector<Float_t> > *ak4pfchsjet_btag;
+    vector<Int_t>   *ak4pfchsjet_btag;
+    vector<Int_t>   *ak4pfchsjet_idLoose;
+    vector<Int_t>   *ak4pfchsjet_idTight;
+    vector<Int_t>   *ak4pfchsjet_idTightLepVeto;
     vector<UInt_t>  *ak4pfchsjet_trigger;
     vector<Int_t>   *ak4pfchsjet_mcflavour;
 
@@ -620,16 +562,16 @@ public:
         }
     }
 
-    //general event information
+    // general event information
     Double_t Number() const { return(event_nr); }
-    UInt_t Run() const { return(event_run); }
-    UInt_t LumiBlock() const { return(event_luminosityblock); }
-    UInt_t TimeUnix() const { return(event_timeunix); }
-    UInt_t TimeMicroSec() const { return(event_timemicrosec); }
+    UInt_t   Run() const { return(event_run); }
+    UInt_t   LumiBlock() const { return(event_luminosityblock); }
+    UInt_t   TimeUnix() const { return(event_timeunix); }
+    UInt_t   TimeMicroSec() const { return(event_timemicrosec); }
     Double_t Rho() const { return(event_rho); }
     //Double_t Sigma() const { return(ak4pfjet_sigma); }
 
-    //RECO-level information
+    // RECO-level information
     void LoadBeamSpot(bool select = true);
     BeamSpot GetBeamSpot() const;
 
@@ -661,40 +603,13 @@ public:
         return(ak4pfchsjet_count);
     }
 
-/*
-    void LoadAK4CaloJets(bool select = true);
-    Jet AK4CaloJets(UInt_t n) const;
-    UInt_t NumAK4CaloJets() const {return(0);}
-
-    void LoadAK4JPTJets(bool select = true);
-    Jet AK4JPTJets(UInt_t n) const;
-    UInt_t NumAK4JPTJets() const {return(0);}
-
-    void LoadAK4PFJets(bool select = true);
-    Jet AK4PFJets(UInt_t n) const;
-    UInt_t NumAK4PFJets() const {
-        return(0);
-    }
-    void LoadTracks(bool select = true);
-    Track Tracks(UInt_t n) const;
-    UInt_t NumTracks() const {
-        return(track_count);
-    }
-*/
     void LoadPrimVertices(bool select = true);
     Vertex PrimVertices(UInt_t n) const;
     UInt_t NumPrimVertices() const {
         return(primvertex_count);
     }
-/*
-    void LoadSuperClusters(bool select = true, bool usebasiccluster = false, bool usebasicclusterhit = false);
-    SuperCluster SuperClusters(UInt_t n, TVector3 refpoint) const;
-    SuperCluster SuperClusters(UInt_t n) const;
-    UInt_t NumSuperClusters() const {
-        return(supercluster_count);
-    }
-*/
-    //generator-level information
+
+    // generator-level information
     void LoadGenInfo(bool select = true);
     Double_t GenWeight() const {
         return(genweight);
@@ -826,11 +741,19 @@ public:
     //Use JSON filter
     bool LoadJSON(string filename);
 
+
+// v. hacky and should be removed asap
+    Bool_t passesisomu20() const { return(IsoMu20Pass); }
+    Bool_t passesisotkmu20() const { return(IsoTkMu20Pass); }
+
+    bool EventPassesHLT(std::vector<string> hltnames) const;
     bool IsData() const {
-        return(NumTruePileUpInteractions() == -1);
+        //return(NumTruePileUpInteractions() == -1);
+        return(bool(isdata));
     }
     bool IsMC() const {
-        return(NumTruePileUpInteractions() != -1);
+        //return(NumTruePileUpInteractions() != -1);
+        return(!(bool(isdata)));
     }
 };
 

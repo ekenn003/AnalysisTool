@@ -174,6 +174,13 @@ Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     pterror(ma->muon_pterror->at(n)),
     chi2(ma->muon_chi2->at(n)),
     ndof(ma->muon_ndof->at(n)),
+    is_global(ma->muon_is_global->at(n)),
+    is_tracker(ma->muon_is_tracker->at(n)),
+    is_standalone(ma->muon_is_standalone->at(n)),
+    is_pf_muon(ma->muon_is_pf_muon->at(n)),
+    is_tight_muon(ma->muon_is_tight_muon->at(n)),
+    is_medium_muon(ma->muon_is_medium_muon->at(n)),
+    is_loose_muon(ma->muon_is_loose_muon->at(n)),
     isolationr3track(ma->muon_isolationr3track->at(n)),
     isolationr3ntrack(ma->muon_isolationr3ntrack->at(n)),
     isolationr3ecal(ma->muon_isolationr3ecal->at(n)),
@@ -192,6 +199,7 @@ Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     pfisolationr4_sumneutralhadronethighthreshold(ma->muon_pfisolationr4_sumneutralhadronethighthreshold->at(n)),
     pfisolationr4_sumphotonethighthreshold(ma->muon_pfisolationr4_sumphotonethighthreshold->at(n)),
     pfisolationr4_sumpupt(ma->muon_pfisolationr4_sumpupt->at(n)),
+    pfisolationr4_dBrel(ma->muon_pfisolationr4_dBrel->at(n)),
     ecalenergy(ma->muon_ecalenergy->at(n)),
     hcalenergy(ma->muon_hcalenergy->at(n)),
     charge(ma->muon_charge->at(n)),
@@ -199,19 +207,25 @@ Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     numchamberswithsegments(ma->muon_numchamberswithsegments->at(n)),
     numvalidmuonhits(ma->muon_numvalidmuonhits->at(n)),
     nummatchedstations(ma->muon_nummatchedstations->at(n)),
+
+    matches_IsoMu20(ma->muon_matches_IsoMu20->at(n)),
+    matches_IsoTkMu20(ma->muon_matches_IsoTkMu20->at(n)),
+
     trackermuonquality(ma->muon_trackermuonquality->at(n)) {
-    //if(correction == 2012) {
-    //    float dummy;
-    //    if(ma->IsData()) {
-    //        if(ma->Run() < 203768) { // 2012A,B,C
-    //            ma->rochester2012->momcor_data(*this, Charge(), 0, dummy);
-    //        } else { //2012D
-    //            ma->rochester2012->momcor_data(*this, Charge(), 1, dummy);
-    //        }
-    //    } else {
-    //        ma->rochester2012->momcor_mc(*this, Charge(), 1, dummy);
-    //    }
-    //}
+}
+
+bool Muon::MatchesHLT(std::vector<string> hltnames) const {
+    bool matchedAny = false;
+    // range-based 'for' loops are not allowed in C++98 mode :(
+    //for (auto &path : hltnames) {
+    for (size_t i = 0; i < hltnames.size(); i++) {
+        if (hltnames[i] == "IsoMu20")        matchedAny = matchedAny || (bool(matches_IsoMu20));
+        else if (hltnames[i] == "IsoTkMu20") matchedAny = matchedAny || (bool(matches_IsoTkMu20));
+
+        else { cerr<<"HLT name "<<hltnames[i]<<" not recognized."<<endl; throw; }
+    }
+
+    return(matchedAny);
 }
 
 Int_t Muon::NumStations() const {
@@ -530,7 +544,7 @@ Photon::Photon(const Analyse *ma, UInt_t n) :
     //supercluster.push_back(SuperCluster(ma->photon_supercluster_e->at(n), ma->photon_supercluster_x->at(n), ma->photon_supercluster_y->at(n), ma->photon_supercluster_z->at(n), ma->photon_supercluster_rawe->at(n), ma->photon_supercluster_phiwidth->at(n), ma->photon_supercluster_etawidth->at(n)));
 }
 
-Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, const vector<Float_t> Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased) :
+Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, Int_t Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased) :
     TLorentzVector(Px, Py, Pz, E),
     hadronicenergy(Hadronicenergy),
     chargedhadronicenergy(Chargedhadronicenergy),
@@ -558,28 +572,11 @@ Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicener
     energycorrl7uds(Energycorrl7uds),
     energycorrl7bottom(Energycorrl7bottom),
     mcflavour(Mcflavour),
+    btag(Btag),
     puidfull(Puidfull),
     puidsimple(Puidsimple),
     puidcutbased(Puidcutbased),
     mymvonly(false) {
-    //if(btag == 0) {
-    //    for(int i = 0 ; i < m_btagmax ; i++) {
-    //        btag.at(i) = -1000000.;
-    //    }
-    //} else {
-    //    for(int i = 0 ; i < m_btagmax ; i++) {
-    //        btag.at(i) = btag.at(i);
-    //    }
-    //}
-    if(Btag.size()) {
-        for(int i = 0 ; i < M_btagmax; i++) {
-            btag.at(i) = Btag.at(i);
-        }
-    } else {
-        for(int i = 0 ; i < M_btagmax; i++) {
-            btag.at(i) = -1000000.;
-        }
-    }
 }
 
 void Jet::ScaleMV(bool mvonly) {
@@ -595,14 +592,17 @@ void Jet::ScaleMV(bool mvonly) {
     }
 }
 
-Float_t Jet::BTag(Int_t n) const {
-    if(n < M_btagmax) {
-        //return(btag[n]);
-        return(btag.at(n));
-    } else {
-        cerr << "Jet::Btag(int): Selected number of btag is out of range." << endl;
-        return(-1);
-    }
+bool Jet::BTag(string disc) const {
+    if     (disc == "JPL")     return (btag & 1);
+    else if(disc == "JPM")     return (btag & 2);
+    else if(disc == "JPT")     return (btag & 3);
+    else if(disc == "CSVv2L")  return (btag & 4);
+    else if(disc == "CSVv2M")  return (btag & 5);
+    else if(disc == "CSVv2T")  return (btag & 6);
+    else if(disc == "CMVAv2L") return (btag & 7);
+    else if(disc == "CMVAv2M") return (btag & 8);
+    else if(disc == "CMVAv2T") return (btag & 9);
+    return(false);
 }
 
 
@@ -674,8 +674,8 @@ Tau::Tau(const Analyse *ma, UInt_t n) :
     bremsrecoveryeoverplead(ma->tau_bremsrecoveryeoverplead->at(n)),
     calocomp(ma->tau_calocomp->at(n)),
     segcomp(ma->tau_segcomp->at(n)),
-    //jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0, 0., 0., 0.),
-    jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, dummyvec, 0, 0., 0., 0.),
+    jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0, 0., 0., 0.),
+    //jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0., 0., 0.),
     taudiscriminators(ma->runlist.find(ma->Run())->second.GetTauDiscriminators()) {
     UInt_t begin = ma->tau_chargedbegin->at(n);
     UInt_t end = ma->tau_charged_count;
