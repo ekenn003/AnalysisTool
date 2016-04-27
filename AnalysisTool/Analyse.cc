@@ -512,6 +512,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_pfisolationr4_sumchargedparticlept", &muon_pfisolationr4_sumchargedparticlept);
     tree->SetBranchAddress("muon_pfisolationr4_sumneutralhadronet", &muon_pfisolationr4_sumneutralhadronet);
     tree->SetBranchAddress("muon_pfisolationr4_sumphotonet", &muon_pfisolationr4_sumphotonet);
+    tree->SetBranchAddress("muon_pfisolationr4_dBrel", &muon_pfisolationr4_dBrel);
     tree->SetBranchAddress("muon_ecalenergy", &muon_ecalenergy);
     tree->SetBranchAddress("muon_hcalenergy", &muon_hcalenergy);
     tree->SetBranchAddress("muon_charge", &muon_charge);
@@ -970,7 +971,6 @@ BeamSpot Analyse::GetBeamSpot() const {
 Muon Analyse::Muons(UInt_t n, int correction) const {
     //vector<string> a = runlist.find(Run())->second.GetHLTMuonNames();
     Muon newmuon(this, n, correction);
-
     Track Outertrack(sqrt(pow(muon_outertrack_px->at(n),2) + pow(muon_outertrack_py->at(n),2) + pow(muon_outertrack_pz->at(n),2)), muon_outertrack_px->at(n), muon_outertrack_py->at(n), muon_outertrack_pz->at(n), 10000., 10000., 10000., 1000., 1000., 1000., muon_outertrack_chi2->at(n), muon_outertrack_ndof->at(n), 0., 0., 0., 0., muon_charge->at(n), muon_outertrack_hits->at(n), muon_outertrack_missinghits->at(n), 0, 0, 0, -1, 0.);
     newmuon.SetOuterTrack(Outertrack);
 
