@@ -29,19 +29,24 @@ const Double_t TauMassQ = TauMass*TauMass;
 class GenJet : public TLorentzVector {
   private:
     Float_t einvisible;
-    Int_t   flavour;
-    UInt_t  info;
+    //Int_t   flavour;
+    //UInt_t  info;
     bool    myvisible;
   public:
     // constructors
-    GenJet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Einvisible, Int_t Flavour, UInt_t Info) : TLorentzVector(Px, Py, Pz, E), einvisible(Einvisible), flavour(Flavour), info(Info), myvisible(false) {}
-    GenJet() : flavour(0) {}
+    //GenJet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Einvisible, Int_t Flavour, UInt_t Info) : TLorentzVector(Px, Py, Pz, E), einvisible(Einvisible), flavour(Flavour), info(Info), myvisible(false) {}
+    GenJet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Einvisible) : 
+        TLorentzVector(Px, Py, Pz, E),
+        einvisible(Einvisible),
+        myvisible(false) {}
+    //GenJet() : flavour(0) {}
+    GenJet() {}
     // methods
     Float_t InvisibleEnergy() const { return(einvisible); }
-    Int_t   Flavour() const { return(flavour); }
+    //Int_t   Flavour() const { return(flavour); }
     void    ScaleVisible(bool visible); //include or exlude invisible energy fraction
-    enum    CONSTITUENTS { CONS_b=1<<0, CONS_bbar=1<<1, CONS_c=1<<2, CONS_cbar=1<<3, CONS_light=1<<4, CONS_gluon=1<<5 };
-    bool    HasConstituent(UInt_t constituent) const { return(info & constituent); }
+    //enum    CONSTITUENTS { CONS_b=1<<0, CONS_bbar=1<<1, CONS_c=1<<2, CONS_cbar=1<<3, CONS_light=1<<4, CONS_gluon=1<<5 };
+    //bool    HasConstituent(UInt_t constituent) const { return(info & constituent); }
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -66,7 +71,8 @@ class GenBasicParticle : public TLorentzVector {
 //////////////////////////////////////////////////////////////////////
 // CLASS: GENLIGHTPARTICLE ///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
-class GenLightParticle : public GenBasicParticle {
+class GenLightParticle : public GenBasicParticle 
+{
   private:
     UInt_t info;
     Int_t  indirectmother;
@@ -187,7 +193,7 @@ class Track : public TLorentzVector {
     Int_t    NPixelLayers() const { return(npixellayers); }
     Int_t    NStripLayers() const { return(nstriplayers); }
     Int_t    VertexNumber() const { return(vtx); }
-    TVector3 ECalPoint() const { return(outerpoint); }
+    TVector3 EcalPoint() const { return(outerpoint); }
     TVector3 ClosestPoint() const { return(closestpoint); }
     TVector3 MomentumSpace() const { return(TVector3(Px(), Py(), Pz())); }
     Float_t  dEdxHarmonic2() const { return(dedxharmonic2); }
@@ -257,6 +263,10 @@ class TriggerObject {
 class Muon : public TLorentzVector, public TriggerObject {
     friend class Analyse;
   private:
+    Float_t rochesterpx;
+    Float_t rochesterpy;
+    Float_t rochesterpz;
+    Float_t rochesterpt;
     Float_t pterror;
     Float_t chi2;
     Float_t ndof;
@@ -283,7 +293,7 @@ class Muon : public TLorentzVector, public TriggerObject {
     Float_t pfisolationr4_sumneutralhadronethighthreshold;
     Float_t pfisolationr4_sumphotonethighthreshold;
     Float_t pfisolationr4_sumpupt;
-    Float_t pfisolationr4_dBrel;
+    //Float_t pfisolationr4_dBrel;
     Float_t ecalenergy;
     Float_t hcalenergy;
     Int_t   charge;
@@ -309,6 +319,10 @@ class Muon : public TLorentzVector, public TriggerObject {
     Muon() {}
     Muon(const Analyse *ma, UInt_t n, int correction = 0);
     // methods
+    Float_t RochCorrPx() const { return(rochesterpx); }
+    Float_t RochCorrPy() const { return(rochesterpy); }
+    Float_t RochCorrPz() const { return(rochesterpz); }
+    Float_t RochCorrPt() const { return(rochesterpt); }
     Float_t PtError() const { return(pterror); }
     Float_t IsoR3Track() const { return(isolationr3track); }
     Float_t IsoR3TrackRel() const { return(isolationr3track/Pt()); }
@@ -317,19 +331,20 @@ class Muon : public TLorentzVector, public TriggerObject {
     Float_t IsoPFR3NeutralHadrons() const { return(pfisolationr3_sumneutralhadronet); }
     Float_t IsoPFR3SumPhotonEt() const { return(pfisolationr3_sumphotonet); }
     Float_t IsoPFR3SumPUPt() const { return(pfisolationr3_sumpupt); }
+    Float_t IsoPFR3dBCombRel() const { return((pfisolationr3_sumchargedhadronpt+max(0., pfisolationr3_sumneutralhadronet+pfisolationr3_sumphotonet-0.5*pfisolationr3_sumpupt))/Pt()); }
     Float_t IsoPFR4ChargedHadrons() const { return(pfisolationr4_sumchargedhadronpt); }
     Float_t IsoPFR4ChargedParticles() const { return(pfisolationr4_sumchargedparticlept); }
     Float_t IsoPFR4NeutralHadrons() const { return(pfisolationr4_sumneutralhadronet); }
     Float_t IsoPFR4Photons() const { return(pfisolationr4_sumphotonet); }
     Float_t IsoPFR4SumPUPt() const { return(pfisolationr4_sumpupt); }
-    Float_t IsoPFR4dBCombRel() const { return(pfisolationr4_dBrel); }
+    Float_t IsoPFR4dBCombRel() const { return((pfisolationr4_sumchargedhadronpt+max(0., pfisolationr4_sumneutralhadronet+pfisolationr4_sumphotonet-0.5*pfisolationr4_sumpupt))/Pt()); }
     Int_t   IsoR3NTrack() const { return(isolationr3ntrack); }
-    Float_t IsoR3ECal() const { return(isolationr3ecal); }
-    Float_t IsoR3HCal() const { return(isolationr3hcal); }
-    Float_t IsoR3Combined() const { return(IsoR3Track()+IsoR3ECal()+IsoR3HCal()); }
+    Float_t IsoR3Ecal() const { return(isolationr3ecal); }
+    Float_t IsoR3Hcal() const { return(isolationr3hcal); }
+    Float_t IsoR3Combined() const { return(IsoR3Track()+IsoR3Ecal()+IsoR3Hcal()); }
     Float_t IsoR3CombinedRel() const { return(IsoR3Combined()/Pt()); }
-    Float_t ECalEnergy() const { return(ecalenergy); }
-    Float_t HCalEnergy() const { return(hcalenergy); }
+    Float_t EcalEnergy() const { return(ecalenergy); }
+    Float_t HcalEnergy() const { return(hcalenergy); }
     Int_t   Charge() const { return(charge); }
     Int_t   NumChambers() const { return(numchambers); }
     Int_t   NumChambersWithSegments() const { return(numchamberswithsegments); }
@@ -420,6 +435,7 @@ class Electron : public TLorentzVector, public TriggerObject {
     Float_t  isolationr4ecal;
     Float_t  isolationr4hcal;
     Float_t  isolationpfr3charged;
+    Float_t  isolationpfr3chargedpu;
     Float_t  isolationpfr3photon;
     Float_t  isolationpfr3neutral;
     Float_t  trackchi2;
@@ -437,6 +453,13 @@ class Electron : public TLorentzVector, public TriggerObject {
     Float_t  fbrems;
     Int_t    numbrems;
     Int_t    charge;
+    Float_t  pt;
+    Float_t  effectiveArea;
+    Int_t    cutBasedLoose;
+    Int_t    cutBasedMedium;
+    Int_t    cutBasedTight;
+    Int_t    mvaNonTrigWP90;
+    Int_t    mvaNonTrigWP80;
     //Byte_t   info;
     Int_t    iselectron;
     Int_t    passconversionveto;
@@ -459,6 +482,7 @@ class Electron : public TLorentzVector, public TriggerObject {
     Float_t  ESeedClusterOverTrack() const { return(eseedclusterovertrack); }
     Float_t  DeltaEtaSuperClusterTrack() const { return(deltaetasuperclustertrack); }
     Float_t  DeltaPhiSuperClusterTrack() const { return(deltaphisuperclustertrack); }
+
     Float_t  E1x5() const { return(e1x5); }
     Float_t  E2x5() const { return(e2x5); }
     Float_t  E5x5() const { return(e5x5); }
@@ -466,26 +490,31 @@ class Electron : public TLorentzVector, public TriggerObject {
     Float_t  SigmaEtaEta() const { return(sigmaetaeta); }
     Float_t  SigmaIEtaIEta() const { return(sigmaietaieta); }
     Float_t  SigmaIPhiIPhi() const { return(sigmaiphiiphi); }
-    Float_t  EHcalOverECal() const { return(ehcaloverecaldepth1+ehcaloverecaldepth2); }
-    Float_t  EHcalOverECalDepth1() const { return(ehcaloverecaldepth1); }
-    Float_t  EHcalOverECalDepth2() const { return(ehcaloverecaldepth2); }
-    Float_t  EHcalTowerOverECal() const { return(ehcaltoweroverecaldepth1+ehcaltoweroverecaldepth2); }
-    Float_t  EHcalTowerOverECalDepth1() const { return(ehcaltoweroverecaldepth1); }
-    Float_t  EHcalTowerOverECalDepth2() const { return(ehcaltoweroverecaldepth2); }
-    Float_t  IsoR3Track() const { return(isolationr3track); }
-    Float_t  IsoR3TrackRel() const { return(isolationr3track/Pt()); }
-    Float_t  IsoR3ECal() const { return(isolationr3ecal); }
-    Float_t  IsoR3ECalRel() const { return(IsoR3ECal()/Pt()); }
-    Float_t  IsoR3HCal() const { return(isolationr3hcal); }
-    Float_t  IsoR3HCalRel() const { return(IsoR3HCal()/Pt()); }
-    Float_t  IsoR3Combined() const { return(IsoR3Track() + IsoR3ECal() + IsoR3HCal()); }
-    Float_t  IsoR3CombinedRel() const { return(IsoR3Combined()/Pt()); }
+    Float_t  EHcalOverEcal() const { return(ehcaloverecaldepth1+ehcaloverecaldepth2); }
+    Float_t  EHcalOverEcalDepth1() const { return(ehcaloverecaldepth1); }
+    Float_t  EHcalOverEcalDepth2() const { return(ehcaloverecaldepth2); }
+    Float_t  EHcalTowerOverEcal() const { return(ehcaltoweroverecaldepth1+ehcaltoweroverecaldepth2); }
+    Float_t  EHcalTowerOverEcalDepth1() const { return(ehcaltoweroverecaldepth1); }
+    Float_t  EHcalTowerOverEcalDepth2() const { return(ehcaltoweroverecaldepth2); }
+
+    Float_t  IsoR3Track() const       { return(isolationr3track); }
+    Float_t  IsoR3TrackRel() const    { return(isolationr3track/pt); }
+    Float_t  IsoR3Ecal() const        { return(isolationr3ecal); }
+    Float_t  IsoR3EcalRel() const     { return(isolationr3ecal/pt); }
+    Float_t  IsoR3Hcal() const        { return(isolationr3hcal); }
+    Float_t  IsoR3HcalRel() const     { return(isolationr3hcal/pt); }
+    Float_t  IsoR3Combined() const    { return(isolationr3track+isolationr3ecal+isolationr3hcal); }
+    Float_t  IsoR3CombinedRel() const { return((isolationr3track+isolationr3ecal+isolationr3hcal)/pt); }
+
+    Float_t  IsoPFR3Charged() const    { return(isolationpfr3charged); }
+    Float_t  IsoPFR3Photon() const     { return(isolationpfr3photon); }
+    Float_t  IsoPFR3Neutral() const    { return(isolationpfr3neutral); }
+    Float_t  IsoPFR3dBCombRel() const  { return((isolationpfr3charged+max(0.0,isolationpfr3neutral+isolationpfr3photon-0.5*isolationpfr3chargedpu))/pt); }
+    Float_t  IsoPFR3RhoCombRel() const { return((isolationpfr3charged+max(0.0,isolationpfr3neutral+isolationpfr3photon-Rho()*effectiveArea))/pt); }
+
     Float_t  IsoR4Track() const { return(isolationr4track); }
-    Float_t  IsoR4ECal() const { return(isolationr4ecal); }
-    Float_t  IsoR4HCal() const { return(isolationr4hcal); }
-    Float_t  IsoPFR3Charged() const { return(isolationpfr3charged); }
-    Float_t  IsoPFR3Photon() const { return(isolationpfr3photon); }
-    Float_t  IsoPFR3Neutral() const { return(isolationpfr3neutral); }
+    Float_t  IsoR4Ecal() const { return(isolationr4ecal); }
+    Float_t  IsoR4Hcal() const { return(isolationr4hcal); }
     Float_t  TrackChi2() const { return(trackchi2); }
     Float_t  TrackNdof() const { return(trackndof); }
     Float_t  TrackChi2OverNdof() const { return(trackchi2/trackndof); }
@@ -511,12 +540,13 @@ class Electron : public TLorentzVector, public TriggerObject {
     Double_t DxyError() const { return(dxyerr); }
     Double_t Dz() const { return(dz); }
     Double_t DzError() const { return(dzerr); }
-    bool     WP95_v1(Int_t combined = 0) const;
-    bool     WP90_v1(Int_t combined = 0) const;
-    bool     WP85_v1(Int_t combined = 0) const;
-    bool     WP80_v1(Int_t combined = 0) const;
-    bool     WP70_v1(Int_t combined = 0) const;
-    bool     WP60_v1(Int_t combined = 0) const;
+
+    bool     IsTightElectron() const  { return(bool(cutBasedTight)); }
+    bool     IsMediumElectron() const { return(bool(cutBasedMedium)); }
+    bool     IsLooseElectron() const  { return(bool(cutBasedLoose)); }
+    bool     WP90_v1() const { return(bool(mvaNonTrigWP90)); }
+    bool     WP80_v1() const { return(bool(mvaNonTrigWP80)); }
+
     bool     IsEB() const { return(gapinfo & 1<<0); }
     bool     IsEE() const { return(gapinfo & 1<<1); }
     bool     IsEBGap() const { return(gapinfo & 1<<2); }
@@ -622,23 +652,23 @@ class Photon : public TLorentzVector, public TriggerObject {
     Float_t SigmaIEtaIPhi() const { return(sigmaietaiphi); }
     Float_t SigmaIPhiIPhi() const { return(sigmaiphiiphi); }
     Float_t MaxEnergyXtal() const { return(maxenergyxtal); }
-    Float_t EHCalOverECal() const { return(ehcaloverecaldepth1+ehcaloverecaldepth2); }
-    Float_t EHCalOverECalDepth1() const { return(ehcaloverecaldepth1); }
-    Float_t EHCalOverECalDepth2() const { return(ehcaloverecaldepth2); }
-    Float_t EHCalTowerOverECal() const { return(ehcaltoweroverecaldepth1+ehcaltoweroverecaldepth2); }
-    Float_t EHCalTowerOverECalDepth1() const { return(ehcaltoweroverecaldepth1); }
-    Float_t EHCalTowerOverECalDepth2() const { return(ehcaltoweroverecaldepth2); }
+    Float_t EHcalOverEcal() const { return(ehcaloverecaldepth1+ehcaloverecaldepth2); }
+    Float_t EHcalOverEcalDepth1() const { return(ehcaloverecaldepth1); }
+    Float_t EHcalOverEcalDepth2() const { return(ehcaloverecaldepth2); }
+    Float_t EHcalTowerOverEcal() const { return(ehcaltoweroverecaldepth1+ehcaltoweroverecaldepth2); }
+    Float_t EHcalTowerOverEcalDepth1() const { return(ehcaltoweroverecaldepth1); }
+    Float_t EHcalTowerOverEcalDepth2() const { return(ehcaltoweroverecaldepth2); }
     Float_t IsoR3Track() const { return(isolationr3track); }
     Float_t IsoR3TrackHollow() const { return(isolationr3trackhollow); }
     UInt_t  IsoR3NTrack() const { return(isolationr3ntrack); }
     UInt_t  IsoR3NTrackHollow() const { return(isolationr3ntrackhollow); }
-    Float_t IsoR3ECal() const { return(isolationr3ecal); }
-    Float_t IsoR3HCal() const { return(isolationr3hcal); }
+    Float_t IsoR3Ecal() const { return(isolationr3ecal); }
+    Float_t IsoR3Hcal() const { return(isolationr3hcal); }
     Float_t IsoR4Track() const { return(isolationr4track); }
     Float_t IsoR4TrackHollow() const { return(isolationr4trackhollow); }
     UInt_t  IsoR4NTrackHollow() const { return(isolationr4ntrackhollow); }
-    Float_t IsoR4ECal() const { return(isolationr4ecal); }
-    Float_t IsoR4HCal() const { return(isolationr4hcal); }
+    Float_t IsoR4Ecal() const { return(isolationr4ecal); }
+    Float_t IsoR4Hcal() const { return(isolationr4hcal); }
     Float_t IsoPFR3Charged() const { return(isolationpfr3charged); }
     Float_t IsoPFR3Photon() const { return(isolationpfr3photon); }
     Float_t IsoPFR3Neutral() const { return(isolationpfr3neutral); }
@@ -695,8 +725,8 @@ class Jet : public TLorentzVector {
     Float_t chargedfractionmv;
     Float_t energycorr;
     Float_t energycorrunc;
-    Float_t energycorrl7uds;
-    Float_t energycorrl7bottom;
+    //Float_t energycorrl7uds;
+    //Float_t energycorrl7bottom;
     Int_t   mcflavour;
     Float_t puidfull;
     Float_t puidsimple;
@@ -711,7 +741,7 @@ class Jet : public TLorentzVector {
     // constructors
     Jet() {}
     //Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, const vector<Float_t> Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
-    Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, Int_t btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
+    Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Int_t btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased);
     // methods
     Float_t HadEnergyFraction() const { return(hadronicenergy/E()/energycorr); }
     Float_t HadEnergy() const { return(hadronicenergy); }
@@ -742,8 +772,8 @@ class Jet : public TLorentzVector {
     bool    BTag(string disc) const;
     Float_t JECRaw() const { return(energycorr); }
     Float_t JECUncertainty() const { return(energycorrunc); }
-    Float_t JECL7UDSCorretion() const { return(energycorrl7uds); }
-    Float_t JECL7BottomCorretion() const { return(energycorrl7bottom); }
+    //Float_t JECL7UDSCorretion() const { return(energycorrl7uds); }
+    //Float_t JECL7BottomCorretion() const { return(energycorrl7bottom); }
 
 // WIP
     //Float_t trackCountingHighPurBJetTags() const { return(btag); }
@@ -776,15 +806,15 @@ class Tau : public TLorentzVector, public TriggerObject {
     Float_t isolationgammapt;
     UInt_t  isolationgammanum;
     Char_t  charge;
-    UInt_t  dishps;
-    Float_t emfraction;
-    Float_t hcaltotoverplead;
-    Float_t hcal3x3overplead;
-    Float_t ecalstripsumeoverplead;
-    Float_t bremsrecoveryeoverplead;
-    Float_t calocomp;
-    Float_t segcomp;
-    Jet     jet;
+    UInt_t  disc;
+    //Float_t emfraction;
+    //Float_t hcaltotoverplead;
+    //Float_t hcal3x3overplead;
+    //Float_t ecalstripsumeoverplead;
+    //Float_t bremsrecoveryeoverplead;
+    //Float_t calocomp;
+    //Float_t segcomp;
+    //Jet     jet;
     vector<Track> tracks;
     const vector<string> *taudiscriminators;
   public:
@@ -799,13 +829,13 @@ class Tau : public TLorentzVector, public TriggerObject {
     Float_t IsoGammaPt() const { return(isolationgammapt); }
     UInt_t  IsoGammaNum() const { return(isolationgammanum); }
     Int_t   Charge() const { return(charge); }
-    Float_t EMFraction() const { return(emfraction); }
-    Float_t HCalTotOverPLead() const { return(hcaltotoverplead); }
-    Float_t HCal3x3OverPLead() const { return(hcal3x3overplead); }
-    Float_t ECalStripSumEOverPLead() const { return(ecalstripsumeoverplead); }
-    Float_t BremsRecoveryEOverPLead() const { return(bremsrecoveryeoverplead); }
-    Float_t CaloComp() const { return(calocomp); }
-    Float_t SegComp() const { return(segcomp); }
+    //Float_t EMFraction() const { return(emfraction); }
+    //Float_t HcalTotOverPLead() const { return(hcaltotoverplead); }
+    //Float_t Hcal3x3OverPLead() const { return(hcal3x3overplead); }
+    //Float_t EcalStripSumEOverPLead() const { return(ecalstripsumeoverplead); }
+    //Float_t BremsRecoveryEOverPLead() const { return(bremsrecoveryeoverplead); }
+    //Float_t CaloComp() const { return(calocomp); }
+    //Float_t SegComp() const { return(segcomp); }
     Track   LeadingTrack() const;
     UInt_t  NumTracks() const { return(tracks.size()); }
     Track   GetTrack(UInt_t num) const { return(tracks[num]); }

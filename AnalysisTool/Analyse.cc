@@ -9,6 +9,7 @@ Analyse *GLAN = 0;
 
 //____________________________________________________________________________________
 Analyse::Analyse(int argc, char **argv, bool batchmode) :
+    isdata(isdata),
     currentfile(0),
     currentloadtype(-1),
     printinfo(1),
@@ -25,7 +26,7 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     loadtrigger(0),
     loadgeninfo(0),
     loadgenparticles(0),
-    loadgenak4jets(0),
+    loadgenjets(0),
     loadallgenparticles(0),
     duplicatecheck(false),
     skimtree(0),
@@ -52,11 +53,12 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     electron_count(0),
     photon_count(0),
     tau_count(0),
-    tau_charged_count(0),
-    genparticles_count(0),
-    genallparticles_count(0),
-    genallparticlesmother_count(0),
-    genallparticlesdaughter_count(0) {
+    //tau_charged_count(0),
+    genparticles_count(0)
+    //genallparticles_count(0),
+    //genallparticlesmother_count(0),
+    //genallparticlesdaughter_count(0) 
+{
     GLAN = this;
 #ifdef USE_MPI
     if(batchmode) {
@@ -204,11 +206,11 @@ void Analyse::SetLoad() {
         tree->SetBranchStatus("genmet*", false);
     }
 
-    if(loadallgenparticles == 1) {
-        tree->SetBranchStatus("genall*", true);
-    } else {
-        tree->SetBranchStatus("genall*", false);
-    }
+    //if(loadallgenparticles == 1) {
+    //    tree->SetBranchStatus("genall*", true);
+    //} else {
+    //    tree->SetBranchStatus("genall*", false);
+    //}
 
     if(loadgenparticles == 1) {
         tree->SetBranchStatus("genparticle*", true);
@@ -216,10 +218,10 @@ void Analyse::SetLoad() {
         tree->SetBranchStatus("genparticle*", false);
     }
 
-    if(loadgenak4jets == 1) {
-        tree->SetBranchStatus("genak4jet*", true);
+    if(loadgenjets == 1) {
+        tree->SetBranchStatus("genjet*", true);
     } else {
-        tree->SetBranchStatus("genak4jet*", false);
+        tree->SetBranchStatus("genjet*", false);
     }
 }
 
@@ -380,9 +382,7 @@ void Analyse::GetEvent(Long64_t num, Int_t loadtype) {
             SetLoad();
         } else if(loadtype == 3) {
             tree->SetBranchStatus("*", false);
-            tree->SetBranchStatus("event_nr", true);
-            tree->SetBranchStatus("event_luminosityblock", true);
-            tree->SetBranchStatus("event_run", true);
+            tree->SetBranchStatus("isdata", true);
             tree->SetBranchStatus("event_nr", true);
             tree->SetBranchStatus("event_luminosityblock", true);
             tree->SetBranchStatus("event_run", true);
@@ -390,12 +390,14 @@ void Analyse::GetEvent(Long64_t num, Int_t loadtype) {
             tree->SetBranchStatus("*", false);
             tree->SetBranchStatus("numtruepileupinteractions", true);
             tree->SetBranchStatus("numpileupinteractions", true);
+            tree->SetBranchStatus("isdata", true);
             tree->SetBranchStatus("event_nr", true);
             tree->SetBranchStatus("event_luminosityblock", true);
             tree->SetBranchStatus("event_run", true);
         } else if(loadtype == 2) {
             tree->SetBranchStatus("*", false);
             tree->SetBranchStatus("primvertex_*", true);
+            tree->SetBranchStatus("isdata", true);
             tree->SetBranchStatus("event_nr", true);
             tree->SetBranchStatus("event_luminosityblock", true);
             tree->SetBranchStatus("event_run", true);
@@ -454,6 +456,11 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_px", &muon_px);
     tree->SetBranchAddress("muon_py", &muon_py);
     tree->SetBranchAddress("muon_pz", &muon_pz);
+    tree->SetBranchAddress("muon_pt", &muon_pt);
+    tree->SetBranchAddress("muon_rochesterPx", &muon_rochesterPx);
+    tree->SetBranchAddress("muon_rochesterPy", &muon_rochesterPy);
+    tree->SetBranchAddress("muon_rochesterPz", &muon_rochesterPz);
+    tree->SetBranchAddress("muon_rochesterPt", &muon_rochesterPt);
     tree->SetBranchAddress("muon_pterror", &muon_pterror);
     tree->SetBranchAddress("muon_chi2", &muon_chi2);
     tree->SetBranchAddress("muon_ndof", &muon_ndof);
@@ -468,19 +475,19 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_innertrack_px", &muon_innertrack_px);
     tree->SetBranchAddress("muon_innertrack_py", &muon_innertrack_py);
     tree->SetBranchAddress("muon_innertrack_pz", &muon_innertrack_pz);
-    tree->SetBranchAddress("muon_innertrack_outerx", &muon_innertrack_outerx);
-    tree->SetBranchAddress("muon_innertrack_outery", &muon_innertrack_outery);
-    tree->SetBranchAddress("muon_innertrack_outerz", &muon_innertrack_outerz);
-    tree->SetBranchAddress("muon_innertrack_closestpointx", &muon_innertrack_closestpointx);
-    tree->SetBranchAddress("muon_innertrack_closestpointy", &muon_innertrack_closestpointy);
-    tree->SetBranchAddress("muon_innertrack_closestpointz", &muon_innertrack_closestpointz);
+    //tree->SetBranchAddress("muon_innertrack_outerx", &muon_innertrack_outerx);
+    //tree->SetBranchAddress("muon_innertrack_outery", &muon_innertrack_outery);
+    //tree->SetBranchAddress("muon_innertrack_outerz", &muon_innertrack_outerz);
+    //tree->SetBranchAddress("muon_innertrack_closestpointx", &muon_innertrack_closestpointx);
+    //tree->SetBranchAddress("muon_innertrack_closestpointy", &muon_innertrack_closestpointy);
+    //tree->SetBranchAddress("muon_innertrack_closestpointz", &muon_innertrack_closestpointz);
     tree->SetBranchAddress("muon_innertrack_chi2", &muon_innertrack_chi2);
     tree->SetBranchAddress("muon_innertrack_ndof", &muon_innertrack_ndof);
     tree->SetBranchAddress("muon_innertrack_dxy", &muon_innertrack_dxy);
     tree->SetBranchAddress("muon_innertrack_dxyerr", &muon_innertrack_dxyerr);
     tree->SetBranchAddress("muon_innertrack_dz", &muon_innertrack_dz);
     tree->SetBranchAddress("muon_innertrack_dzerr", &muon_innertrack_dzerr);
-    tree->SetBranchAddress("muon_innertrack_dedxharmonic2", &muon_innertrack_dedxharmonic2);
+    //tree->SetBranchAddress("muon_innertrack_dedxharmonic2", &muon_innertrack_dedxharmonic2);
     tree->SetBranchAddress("muon_innertrack_charge", &muon_innertrack_charge);
     tree->SetBranchAddress("muon_innertrack_nhits", &muon_innertrack_nhits);
     tree->SetBranchAddress("muon_innertrack_npixelhits", &muon_innertrack_npixelhits);
@@ -512,7 +519,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("muon_pfisolationr4_sumchargedparticlept", &muon_pfisolationr4_sumchargedparticlept);
     tree->SetBranchAddress("muon_pfisolationr4_sumneutralhadronet", &muon_pfisolationr4_sumneutralhadronet);
     tree->SetBranchAddress("muon_pfisolationr4_sumphotonet", &muon_pfisolationr4_sumphotonet);
-    tree->SetBranchAddress("muon_pfisolationr4_dBrel", &muon_pfisolationr4_dBrel);
+    //tree->SetBranchAddress("muon_pfisolationr4_dBrel", &muon_pfisolationr4_dBrel);
     tree->SetBranchAddress("muon_ecalenergy", &muon_ecalenergy);
     tree->SetBranchAddress("muon_hcalenergy", &muon_hcalenergy);
     tree->SetBranchAddress("muon_charge", &muon_charge);
@@ -554,8 +561,8 @@ void Analyse::Load() {
     tree->SetBranchAddress("ak4pfchsjet_chargedfractionmv", &ak4pfchsjet_chargedfractionmv);
     tree->SetBranchAddress("ak4pfchsjet_energycorr", &ak4pfchsjet_energycorr);
     tree->SetBranchAddress("ak4pfchsjet_energycorrunc", &ak4pfchsjet_energycorrunc);
-    tree->SetBranchAddress("ak4pfchsjet_energycorrl7uds", &ak4pfchsjet_energycorrl7uds);
-    tree->SetBranchAddress("ak4pfchsjet_energycorrl7bottom", &ak4pfchsjet_energycorrl7bottom);
+    //tree->SetBranchAddress("ak4pfchsjet_energycorrl7uds", &ak4pfchsjet_energycorrl7uds);
+    //tree->SetBranchAddress("ak4pfchsjet_energycorrl7bottom", &ak4pfchsjet_energycorrl7bottom);
     tree->SetBranchAddress("ak4pfchsjet_btag", &ak4pfchsjet_btag);
     tree->SetBranchAddress("ak4pfchsjet_mcflavour", &ak4pfchsjet_mcflavour);
 
@@ -591,6 +598,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("electron_isolationr3track", &electron_isolationr3track);
     tree->SetBranchAddress("electron_isolationr3ecal", &electron_isolationr3ecal);
     tree->SetBranchAddress("electron_isolationr3hcal", &electron_isolationr3hcal);
+    //tree->SetBranchAddress("electron_pfisolationr3_dBrel", &electron_pfisolationr3_dBrel);
     tree->SetBranchAddress("electron_isolationr4track", &electron_isolationr4track);
     tree->SetBranchAddress("electron_isolationr4ecal", &electron_isolationr4ecal);
     tree->SetBranchAddress("electron_isolationr4hcal", &electron_isolationr4hcal);
@@ -614,7 +622,15 @@ void Analyse::Load() {
     tree->SetBranchAddress("electron_fbrems", &electron_fbrems);
     tree->SetBranchAddress("electron_numbrems", &electron_numbrems);
     tree->SetBranchAddress("electron_charge", &electron_charge);
+
+    tree->SetBranchAddress("electron_effectiveArea", &electron_effectiveArea);
+
     //tree->SetBranchAddress("electron_info", &electron_info);
+    tree->SetBranchAddress("electron_cutBasedLoose", &electron_cutBasedLoose);
+    tree->SetBranchAddress("electron_cutBasedMedium", &electron_cutBasedMedium);
+    tree->SetBranchAddress("electron_cutBasedTight", &electron_cutBasedTight);
+    tree->SetBranchAddress("electron_mvaNonTrigWP90", &electron_mvaNonTrigWP90);
+    tree->SetBranchAddress("electron_mvaNonTrigWP80", &electron_mvaNonTrigWP80);
     tree->SetBranchAddress("electron_iselectron", &electron_iselectron);
     tree->SetBranchAddress("electron_passconversionveto", &electron_passconversionveto);
     tree->SetBranchAddress("electron_ecaldrivenseed", &electron_ecaldrivenseed);
@@ -684,7 +700,7 @@ void Analyse::Load() {
     //tree->SetBranchAddress("photon_conversionbegin", &photon_conversionbegin);
 
     tree->SetBranchAddress("tau_count", &tau_count);
-    tree->SetBranchAddress("tau_charged_count", &tau_charged_count);
+    //tree->SetBranchAddress("tau_charged_count", &tau_charged_count);
     tree->SetBranchAddress("tau_px", &tau_px);
     tree->SetBranchAddress("tau_py", &tau_py);
     tree->SetBranchAddress("tau_pz", &tau_pz);
@@ -695,25 +711,26 @@ void Analyse::Load() {
     tree->SetBranchAddress("tau_isolationgammapt", &tau_isolationgammapt);
     tree->SetBranchAddress("tau_isolationgammanum", &tau_isolationgammanum);
     tree->SetBranchAddress("tau_charge", &tau_charge);
-    tree->SetBranchAddress("tau_dishps", &tau_dishps);
-    tree->SetBranchAddress("tau_emfraction", &tau_emfraction);
-    tree->SetBranchAddress("tau_hcaltotoverplead", &tau_hcaltotoverplead);
-    tree->SetBranchAddress("tau_hcal3x3overplead", &tau_hcal3x3overplead);
-    tree->SetBranchAddress("tau_ecalstripsumeoverplead", &tau_ecalstripsumeoverplead);
-    tree->SetBranchAddress("tau_bremsrecoveryeoverplead", &tau_bremsrecoveryeoverplead);
-    tree->SetBranchAddress("tau_calocomp", &tau_calocomp);
-    tree->SetBranchAddress("tau_segcomp", &tau_segcomp);
+    tree->SetBranchAddress("tau_disc", &tau_disc);
+    //tree->SetBranchAddress("tau_emfraction", &tau_emfraction);
+    //tree->SetBranchAddress("tau_hcaltotoverplead", &tau_hcaltotoverplead);
+    //tree->SetBranchAddress("tau_hcal3x3overplead", &tau_hcal3x3overplead);
+    //tree->SetBranchAddress("tau_ecalstripsumeoverplead", &tau_ecalstripsumeoverplead);
+    //tree->SetBranchAddress("tau_bremsrecoveryeoverplead", &tau_bremsrecoveryeoverplead);
+    //tree->SetBranchAddress("tau_calocomp", &tau_calocomp);
+    //tree->SetBranchAddress("tau_segcomp", &tau_segcomp);
     tree->SetBranchAddress("tau_trigger", &tau_trigger);
-    tree->SetBranchAddress("tau_ak4pfjet_e", &tau_ak4pfjet_e);
-    tree->SetBranchAddress("tau_ak4pfjet_px", &tau_ak4pfjet_px);
-    tree->SetBranchAddress("tau_ak4pfjet_py", &tau_ak4pfjet_py);
-    tree->SetBranchAddress("tau_ak4pfjet_pz", &tau_ak4pfjet_pz);
-    tree->SetBranchAddress("tau_ak4pfjet_hadronicenergy", &tau_ak4pfjet_hadronicenergy);
-    tree->SetBranchAddress("tau_ak4pfjet_chargedhadronicenergy", &tau_ak4pfjet_chargedhadronicenergy);
-    tree->SetBranchAddress("tau_ak4pfjet_emenergy", &tau_ak4pfjet_emenergy);
-    tree->SetBranchAddress("tau_ak4pfjet_chargedemenergy", &tau_ak4pfjet_chargedemenergy);
-    tree->SetBranchAddress("tau_ak4pfjet_chargedmulti", &tau_ak4pfjet_chargedmulti);
-    tree->SetBranchAddress("tau_ak4pfjet_neutralmulti", &tau_ak4pfjet_neutralmulti);
+    //tree->SetBranchAddress("tau_ak4pfjet_e", &tau_ak4pfjet_e);
+    //tree->SetBranchAddress("tau_ak4pfjet_px", &tau_ak4pfjet_px);
+    //tree->SetBranchAddress("tau_ak4pfjet_py", &tau_ak4pfjet_py);
+    //tree->SetBranchAddress("tau_ak4pfjet_pz", &tau_ak4pfjet_pz);
+    //tree->SetBranchAddress("tau_ak4pfjet_hadronicenergy", &tau_ak4pfjet_hadronicenergy);
+    //tree->SetBranchAddress("tau_ak4pfjet_chargedhadronicenergy", &tau_ak4pfjet_chargedhadronicenergy);
+    //tree->SetBranchAddress("tau_ak4pfjet_emenergy", &tau_ak4pfjet_emenergy);
+    //tree->SetBranchAddress("tau_ak4pfjet_chargedemenergy", &tau_ak4pfjet_chargedemenergy);
+    //tree->SetBranchAddress("tau_ak4pfjet_chargedmulti", &tau_ak4pfjet_chargedmulti);
+    //tree->SetBranchAddress("tau_ak4pfjet_neutralmulti", &tau_ak4pfjet_neutralmulti);
+/*
     tree->SetBranchAddress("tau_chargedbegin", &tau_chargedbegin);
     tree->SetBranchAddress("tau_charged_px", &tau_charged_px);
     tree->SetBranchAddress("tau_charged_py", &tau_charged_py);
@@ -737,6 +754,7 @@ void Analyse::Load() {
     tree->SetBranchAddress("tau_charged_npixelhits", &tau_charged_npixelhits);
     tree->SetBranchAddress("tau_charged_npixellayers", &tau_charged_npixellayers);
     tree->SetBranchAddress("tau_charged_nstriplayers", &tau_charged_nstriplayers);
+*/
 
     tree->SetBranchAddress("event_rho", &event_rho);
     //tree->SetBranchAddress("ak4pfjet_sigma", &ak4pfjet_sigma);
@@ -776,6 +794,14 @@ void Analyse::Load() {
     tree->SetBranchAddress("genparticles_indirectmother", genparticles_indirectmother);
     tree->SetBranchAddress("genparticles_info", genparticles_info);
 
+    tree->SetBranchAddress("genparticles_motherbeg", genparticles_motherbeg);
+    tree->SetBranchAddress("genparticles_daughterbeg", genparticles_daughterbeg);
+    tree->SetBranchAddress("genparticlesmother_count", &genparticlesmother_count);
+    tree->SetBranchAddress("genparticles_mothers", genparticles_mothers);
+    tree->SetBranchAddress("genparticlesdaughter_count", &genparticlesdaughter_count);
+    tree->SetBranchAddress("genparticles_daughters", genparticles_daughters);
+
+/*
     tree->SetBranchAddress("genallparticles_count", &genallparticles_count);
     tree->SetBranchAddress("genallparticles_e", genallparticles_e);
     tree->SetBranchAddress("genallparticles_px", genallparticles_px);
@@ -794,20 +820,23 @@ void Analyse::Load() {
 
     tree->SetBranchAddress("genallparticlesdaughter_count", &genallparticlesdaughter_count);
     tree->SetBranchAddress("genallparticles_daughters", genallparticles_daughters);
+*/
 
-    tree->SetBranchAddress("genmetcalo_ex", &genmetcalo_ex);
-    tree->SetBranchAddress("genmetcalo_ey", &genmetcalo_ey);
-    tree->SetBranchAddress("genmettrue_ex", &genmettrue_ex);
-    tree->SetBranchAddress("genmettrue_ey", &genmettrue_ey);
+    //tree->SetBranchAddress("genmetcalo_ex", &genmetcalo_ex);
+    //tree->SetBranchAddress("genmetcalo_ey", &genmetcalo_ey);
+    //tree->SetBranchAddress("genmettrue_ex", &genmettrue_ex);
+    //tree->SetBranchAddress("genmettrue_ey", &genmettrue_ey);
+    tree->SetBranchAddress("genmet_ex", &genmet_ex);
+    tree->SetBranchAddress("genmet_ey", &genmet_ey);
 
-    tree->SetBranchAddress("genak4jet_count", &genak4jet_count);
-    tree->SetBranchAddress("genak4jet_e", genak4jet_e);
-    tree->SetBranchAddress("genak4jet_px", genak4jet_px);
-    tree->SetBranchAddress("genak4jet_py", genak4jet_py);
-    tree->SetBranchAddress("genak4jet_pz", genak4jet_pz);
-    tree->SetBranchAddress("genak4jet_einvisible", genak4jet_einvisible);
-    tree->SetBranchAddress("genak4jet_flavour", genak4jet_flavour);
-    tree->SetBranchAddress("genak4jet_info", genak4jet_info);
+    tree->SetBranchAddress("genjet_count", &genjet_count);
+    tree->SetBranchAddress("genjet_e", &genjet_e);
+    tree->SetBranchAddress("genjet_px", &genjet_px);
+    tree->SetBranchAddress("genjet_py", &genjet_py);
+    tree->SetBranchAddress("genjet_pz", &genjet_pz);
+    tree->SetBranchAddress("genjet_einvisible", &genjet_einvisible);
+    //tree->SetBranchAddress("genak4jet_flavour", genak4jet_flavour);
+    //tree->SetBranchAddress("genak4jet_info", genak4jet_info);
 
 }
 
@@ -908,6 +937,7 @@ void Analyse::LoadGenInfo(bool select) {
     }
 }
 
+/*
 //____________________________________________________________________________________
 void Analyse::LoadAllGenParticles(bool select) {
     if(select) {
@@ -916,7 +946,7 @@ void Analyse::LoadAllGenParticles(bool select) {
         loadallgenparticles = 0;
     }
 }
-
+*/
 //____________________________________________________________________________________
 void Analyse::LoadGenParticles(bool select) {
     if(select) {
@@ -927,11 +957,11 @@ void Analyse::LoadGenParticles(bool select) {
 }
 
 //____________________________________________________________________________________
-void Analyse::LoadGenAK4Jets(bool select) {
+void Analyse::LoadGenJets(bool select) {
     if(select) {
-        loadgenak4jets = 1;
+        loadgenjets = 1;
     } else {
-        loadgenak4jets = 0;
+        loadgenjets = 0;
     }
 }
 
@@ -1034,7 +1064,8 @@ TLorentzVector Analyse::PFMETTYPE1() const {
 
 //____________________________________________________________________________________
 Jet Analyse::AK4PFCHSJets(UInt_t n) const {
-    return(Jet(ak4pfchsjet_energy->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
+    //return(Jet(ak4pfchsjet_energy->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_energycorrl7uds->at(n), ak4pfchsjet_energycorrl7bottom->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
+    return(Jet(ak4pfchsjet_energy->at(n), ak4pfchsjet_px->at(n), ak4pfchsjet_py->at(n), ak4pfchsjet_pz->at(n), ak4pfchsjet_hadronicenergy->at(n), ak4pfchsjet_chargedhadronicenergy->at(n), ak4pfchsjet_emenergy->at(n), ak4pfchsjet_chargedemenergy->at(n), ak4pfchsjet_hfemenergy->at(n), ak4pfchsjet_hfhadronicenergy->at(n), ak4pfchsjet_electronenergy->at(n), ak4pfchsjet_muonenergy->at(n), ak4pfchsjet_chargedmulti->at(n), ak4pfchsjet_neutralmulti->at(n), ak4pfchsjet_hfhadronicmulti->at(n), ak4pfchsjet_hfemmulti->at(n), ak4pfchsjet_electronmulti->at(n), ak4pfchsjet_muonmulti->at(n), ak4pfchsjet_chargeda->at(n), ak4pfchsjet_chargedb->at(n), ak4pfchsjet_neutrala->at(n), ak4pfchsjet_neutralb->at(n), ak4pfchsjet_alla->at(n), ak4pfchsjet_allb->at(n), ak4pfchsjet_chargedfractionmv->at(n), ak4pfchsjet_energycorr->at(n), ak4pfchsjet_energycorrunc->at(n), ak4pfchsjet_btag->at(n), ak4pfchsjet_mcflavour->at(n), 0., 0., 0.));
 }
 
 //____________________________________________________________________________________
@@ -1048,10 +1079,11 @@ GenLightParticle Analyse::GenParticles(UInt_t n) const {
 }
 
 //____________________________________________________________________________________
-GenJet Analyse::GenAK4Jets(UInt_t n) const {
-    return(GenJet(genak4jet_e[n], genak4jet_px[n], genak4jet_py[n], genak4jet_pz[n], genak4jet_einvisible[n], genak4jet_flavour[n], genak4jet_info[n]));
+GenJet Analyse::GenJets(UInt_t n) const {
+    return(GenJet(genjet_e->at(n), genjet_px->at(n), genjet_py->at(n), genjet_pz->at(n), genjet_einvisible->at(n)));
 }
 
+/*
 //____________________________________________________________________________________
 GenParticle Analyse::AllGenParticles(UInt_t n) const {
     UInt_t motherend(n == genallparticles_count-1 ? genallparticlesmother_count : genallparticles_motherbeg[n+1]);
@@ -1061,11 +1093,12 @@ GenParticle Analyse::AllGenParticles(UInt_t n) const {
 
     return(newpart);
 }
+*/
 
-//____________________________________________________________________________________
-TLorentzVector Analyse::GenMETTrue() const {
-    return(TLorentzVector(genmettrue_ex, genmettrue_ey, 0., sqrt(pow(genmettrue_ex, 2) + pow(genmettrue_ey, 2))));
-}
+////____________________________________________________________________________________
+//TLorentzVector Analyse::GenMETTrue() const {
+//    return(TLorentzVector(genmettrue_ex, genmettrue_ey, 0., sqrt(pow(genmettrue_ex, 2) + pow(genmettrue_ey, 2))));
+//}
 
 //____________________________________________________________________________________
 bool Analyse::IsBatchSelected(UInt_t run, UInt_t lumiblock) {
@@ -1401,6 +1434,8 @@ Long64_t Analyse::Loop(Long64_t start, Long64_t end) {
     if(!batch_emptyjob) {
         if(Batch_MyId() != -1) cerr << "JOB " << Batch_MyId() << ": ";
         cerr << GetNumAddedEvents() << " Events are added." << endl;
+        if(IsData()) cerr<<"Sample will be treated as DATA."<<endl;
+        else cerr<<"Sample will be treated as MC."<<endl;
         //Looping
         if(Batch_MyId() != -1) cerr << "JOB " << Batch_MyId() << ": ";
         cerr << "Events " << start << " - " << end << " will be processed (" << end - start << " Events)." << endl;

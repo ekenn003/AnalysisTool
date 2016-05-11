@@ -1,8 +1,9 @@
 #include "DataForm.h"
 #include "Analyse.h"
 
-
-//GenJet
+//////////////////////////////////////////////////////////////////////
+/// CLASS: GENJET ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 void GenJet::ScaleVisible(bool visible) {
     if(myvisible == false && visible == true) {
         Double_t f = 1. - InvisibleEnergy()/E();
@@ -16,20 +17,30 @@ void GenJet::ScaleVisible(bool visible) {
     }
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: GENBASICPARTICLE ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 GenBasicParticle::GenBasicParticle(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t X, Float_t Y, Float_t Z, Int_t Status, Int_t Pdgid) :
     TLorentzVector(Px, Py, Pz, E),
     vertex(X, Y, Z),
     status(Status),
-    pdgid(Pdgid) {
-
+    pdgid(Pdgid)
+{
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: GENLIGHTPARTICLE ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 GenLightParticle::GenLightParticle(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t X, Float_t Y, Float_t Z, Int_t Status, Int_t Pdgid, UInt_t Info, Int_t Indirectmother) :
     GenBasicParticle(E, Px, Py, Pz, X, Y, Z, Status, Pdgid),
     info(Info),
-    indirectmother(Indirectmother) {
+    indirectmother(Indirectmother)
+{
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: GENPARTICLE ////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 GenParticle::GenParticle(const Analyse *Myanalyse, UInt_t Myindex, Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t X, Float_t Y, Float_t Z, Int_t Status, Int_t Pdgid, UInt_t Motherfirst, UInt_t Mothernum, UInt_t Daughterfirst, UInt_t Daughternum) :
     GenBasicParticle(E, Px, Py, Pz, X, Y, Z, Status, Pdgid),
     myanalyse(Myanalyse),
@@ -37,40 +48,54 @@ GenParticle::GenParticle(const Analyse *Myanalyse, UInt_t Myindex, Double_t E, D
     motherfirst(Motherfirst),
     mothernum(Mothernum),
     daughterfirst(Daughterfirst),
-    daughternum(Daughternum) {
+    daughternum(Daughternum)
+{
 }
 
-UInt_t GenParticle::GetMotherIndex(UInt_t num) const {
-    return(myanalyse->genallparticles_mothers[motherfirst+num]);
+//______________________________________________________________
+UInt_t GenParticle::GetMotherIndex(UInt_t num) const
+{
+    return(myanalyse->genparticles_mothers[motherfirst+num]);
 }
 
-UInt_t GenParticle::GetDaughterIndex(UInt_t num) const {
-    return(myanalyse->genallparticles_daughters[daughterfirst+num]);
+//______________________________________________________________
+UInt_t GenParticle::GetDaughterIndex(UInt_t num) const
+{
+    return(myanalyse->genparticles_daughters[daughterfirst+num]);
 }
-
-GenParticle GenParticle::GetMother(UInt_t num) const {
-    if(num >= mothernum) {
+// NOTE*
+//______________________________________________________________
+GenParticle GenParticle::GetMother(UInt_t num) const
+{
+//    if(num >= mothernum) {
         cout << "GenParticle::GetMother: mother index out of range. return this." << endl;
         return(*this);
-    }
-    return(myanalyse->AllGenParticles(GetMotherIndex(num)));
+//    }
+//    return(myanalyse->GenParticles(GetMotherIndex(num)));
 }
 
 
-GenParticle GenParticle::GetDaughter(UInt_t num) const {
-    if(num >= daughternum) {
+// NOTE*
+//______________________________________________________________
+GenParticle GenParticle::GetDaughter(UInt_t num) const
+{
+//    if(num >= daughternum) {
         cout << "GenParticle::GetDaughter: daughter index out of range. return this." << endl;
         return(*this);
-    }
-    return(myanalyse->AllGenParticles(GetDaughterIndex(num)));
+//    }
+//    return(myanalyse->GenParticles(GetDaughterIndex(num)));
 }
 
-bool GenParticle::HasAnyMotherPDGId(Int_t pdgid, bool antiparticle) {
+//______________________________________________________________
+bool GenParticle::HasAnyMotherPDGId(Int_t pdgid, bool antiparticle)
+{
     vector<UInt_t> visited;
     return(HasAnyMotherPDGId(visited, pdgid, antiparticle));
 }
 
-bool GenParticle::HasAnyMotherPDGId(vector<UInt_t> &visited, Int_t pdgid, bool antiparticle) {
+//______________________________________________________________
+bool GenParticle::HasAnyMotherPDGId(vector<UInt_t> &visited, Int_t pdgid, bool antiparticle)
+{
     for(UInt_t i = 0 ; i < NumMothers() ; i++) {
         bool isvisited = false;
         for(UInt_t u = 0 ; u < visited.size() ; u++) {
@@ -88,11 +113,15 @@ bool GenParticle::HasAnyMotherPDGId(vector<UInt_t> &visited, Int_t pdgid, bool a
     return(false);
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: TRACKCOMPOSEDPARTICLE //////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 TrackComposedParticle::TrackComposedParticle(Double_t Vx, Double_t Vy, Double_t Vz, Double_t Chi2, Double_t Ndof, const Float_t *Cov) :
     TVector3(Vx,Vy,Vz),
     covmatrix(3),
     chi2(Chi2),
-    ndof(Ndof) {
+    ndof(Ndof)
+{
     covmatrix(0,0) = Cov[0];
     covmatrix(0,1) = Cov[1];
     covmatrix(0,2) = Cov[2];
@@ -106,10 +135,12 @@ TrackComposedParticle::TrackComposedParticle(Double_t Vx, Double_t Vy, Double_t 
 
 
 
+//______________________________________________________________
 void TrackComposedParticle::AddTrack(Track &newtrack) {
     tracks.push_back(newtrack);
 }
 
+//______________________________________________________________
 TVector3 TrackComposedParticle::Momentum() const {
     TVector3 momentum(0., 0., 0.);
     for(int i = 0 ; i < NumTracks() ; ++i) {
@@ -118,31 +149,39 @@ TVector3 TrackComposedParticle::Momentum() const {
     return(momentum);
 }
 
+//______________________________________________________________
 TVector3 TrackComposedParticle::Distance(Vertex &vertex) const {
     TVector3 mom=Momentum();
     double l = (mom*(*this-vertex))/mom.Mag2();
     return(*this-l*mom);
 }
 
+//______________________________________________________________
 Double_t TrackComposedParticle::VertexSig3D(Vertex &vertex) const {
     TVector3 dist = *this - vertex;
     return(dist.Mag2()/Sqrt(((vertex.CovMatrix()+CovMatrix())* dist)*dist));
 }
 
+//______________________________________________________________
 Double_t TrackComposedParticle::VertexSig2D(Vertex &vertex) const {
     TVector3 dist = *this - vertex;
     dist.SetZ(0);
     return(dist.Mag2()/Sqrt(((vertex.CovMatrix()+CovMatrix())* dist)*dist));
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: TRIGGEROBJECT //////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 TriggerObject::TriggerObject(const Analyse *ma, const vector<string> *Triggernames, UInt_t Trigger) :
     MA(ma),
     trigger(Trigger),
-    triggernames(Triggernames) {
-
+    triggernames(Triggernames)
+{
 }
 
-Int_t TriggerObject::Trigger(string triggername) const {
+//______________________________________________________________
+Int_t TriggerObject::Trigger(string triggername) const
+{
     Int_t index = -1;
     for(UInt_t i = 0 ; i < triggernames->size() ; i++) {
         if(triggername == triggernames->at(i)) {
@@ -167,10 +206,16 @@ Int_t TriggerObject::Trigger(string triggername) const {
 }
 
 
-
+//////////////////////////////////////////////////////////////////////
+// CLASS: MUON ///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     TLorentzVector(ma->muon_px->at(n), ma->muon_py->at(n), ma->muon_pz->at(n), sqrt(ma->muon_px->at(n)*ma->muon_px->at(n)+ma->muon_py->at(n)*ma->muon_py->at(n)+ma->muon_pz->at(n)*ma->muon_pz->at(n)+MuonMassQ)),
     TriggerObject(ma, ma->runlist.find(ma->Run())->second.GetHLTMuonNames(), ma->muon_trigger->at(n)),
+    rochesterpx(ma->muon_rochesterPx->at(n)),
+    rochesterpy(ma->muon_rochesterPy->at(n)),
+    rochesterpz(ma->muon_rochesterPz->at(n)),
+    rochesterpt(ma->muon_rochesterPt->at(n)),
     pterror(ma->muon_pterror->at(n)),
     chi2(ma->muon_chi2->at(n)),
     ndof(ma->muon_ndof->at(n)),
@@ -199,7 +244,7 @@ Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     pfisolationr4_sumneutralhadronethighthreshold(ma->muon_pfisolationr4_sumneutralhadronethighthreshold->at(n)),
     pfisolationr4_sumphotonethighthreshold(ma->muon_pfisolationr4_sumphotonethighthreshold->at(n)),
     pfisolationr4_sumpupt(ma->muon_pfisolationr4_sumpupt->at(n)),
-    pfisolationr4_dBrel(ma->muon_pfisolationr4_dBrel->at(n)),
+    //pfisolationr4_dBrel(ma->muon_pfisolationr4_dBrel->at(n)),
     ecalenergy(ma->muon_ecalenergy->at(n)),
     hcalenergy(ma->muon_hcalenergy->at(n)),
     charge(ma->muon_charge->at(n)),
@@ -211,10 +256,13 @@ Muon::Muon(const Analyse *ma, UInt_t n, int correction) :
     matches_IsoMu20(ma->muon_matches_IsoMu20->at(n)),
     matches_IsoTkMu20(ma->muon_matches_IsoTkMu20->at(n)),
 
-    trackermuonquality(ma->muon_trackermuonquality->at(n)) {
+    trackermuonquality(ma->muon_trackermuonquality->at(n))
+{
 }
 
-bool Muon::MatchesHLT(std::vector<string> hltnames) const {
+//______________________________________________________________
+bool Muon::MatchesHLT(std::vector<string> hltnames) const
+{
     bool matchedAny = false;
     // range-based 'for' loops are not allowed in C++98 mode :(
     //for (auto &path : hltnames) {
@@ -228,7 +276,9 @@ bool Muon::MatchesHLT(std::vector<string> hltnames) const {
     return(matchedAny);
 }
 
-Int_t Muon::NumStations() const {
+//______________________________________________________________
+Int_t Muon::NumStations() const
+{
     Int_t result(0);
     if(trackermuonquality & 1<<24) result++;
     if(trackermuonquality & 1<<25) result++;
@@ -241,6 +291,9 @@ Int_t Muon::NumStations() const {
     return(result);
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: ELECTRON ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     TLorentzVector(ma->electron_px->at(n), ma->electron_py->at(n), ma->electron_pz->at(n), sqrt(ma->electron_px->at(n)*ma->electron_px->at(n)+ma->electron_py->at(n)*ma->electron_py->at(n)+ma->electron_pz->at(n)*ma->electron_pz->at(n)+ElectronMassQ)),
     TriggerObject(ma, ma->runlist.find(ma->Run())->second.GetHLTElectronNames(), ma->electron_trigger->at(n)),
@@ -269,6 +322,7 @@ Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     isolationr3track(ma->electron_isolationr3track->at(n)),
     isolationr3ecal(ma->electron_isolationr3ecal->at(n)),
     isolationr3hcal(ma->electron_isolationr3hcal->at(n)),
+    //pfisolationr3_dBrel(ma->electron_pfisolationr3_dBrel->at(n)),
     isolationr4track(ma->electron_isolationr4track->at(n)),
     isolationr4ecal(ma->electron_isolationr4ecal->at(n)),
     isolationr4hcal(ma->electron_isolationr4hcal->at(n)),
@@ -286,6 +340,11 @@ Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     //convdist(ma->electron_convdist->at(n)),
     //convdcot(ma->electron_convdcot->at(n)),
     //convradius(ma->electron_convradius->at(n)),
+    cutBasedTight(ma->electron_cutBasedTight->at(n)),
+    cutBasedMedium(ma->electron_cutBasedMedium->at(n)),
+    cutBasedLoose(ma->electron_cutBasedLoose->at(n)),
+    mvaNonTrigWP90(ma->electron_mvaNonTrigWP90->at(n)),
+    mvaNonTrigWP80(ma->electron_mvaNonTrigWP80->at(n)),
     iselectron(ma->electron_iselectron->at(n)),
     passconversionveto(ma->electron_passconversionveto->at(n)),
     ecaldrivenseed(ma->electron_ecaldrivenseed->at(n)),
@@ -293,84 +352,85 @@ Electron::Electron(const Analyse *ma, UInt_t n, int correction) :
     gapinfo(ma->electron_gapinfo->at(n)),
     fbrems(ma->electron_fbrems->at(n)),
     numbrems(ma->electron_numbrems->at(n)),
+    effectiveArea(ma->electron_effectiveArea->at(n)),
     charge(ma->electron_charge->at(n)) {
     //info(ma->electron_info->at(n)) {
     //vtx(ma->electron_vtx->at(n)) {
     //supercluster.push_back(SuperCluster(ma->electron_supercluster_e->at(n), ma->electron_supercluster_x->at(n), ma->electron_supercluster_y->at(n), ma->electron_supercluster_z->at(n), ma->electron_supercluster_rawe->at(n), ma->electron_supercluster_phiwidth->at(n), ma->electron_supercluster_etawidth->at(n)));
 
-    if(correction == 2012) {
-        int cat = -1;
-        if(IsEB() && Abs(Eta()) < 1. && R9() < 0.94) cat = 0;
-        if(IsEB() && Abs(Eta()) < 1. && R9() >= 0.94) cat = 1;
-        if(IsEB() && Abs(Eta()) >= 1. && R9() < 0.94) cat = 2;
-        if(IsEB() && Abs(Eta()) >= 1. && R9() >= 0.94) cat = 3;
-        if(!IsEB() && Abs(Eta()) < 1. && R9() < 0.94) cat = 4;
-        if(!IsEB() && Abs(Eta()) < 1. && R9() >= 0.94) cat = 5;
-        if(!IsEB() && Abs(Eta()) >= 1. && R9() < 0.94) cat = 6;
-        if(!IsEB() && Abs(Eta()) >= 1. && R9() >= 0.94) cat = 7;
-        double momscale = 1.;
-        if(ma->IsData()) {
-            double scaleval[][10] = {
-                {190645,190781,1.0020,0.9980,1.0032,0.9919,0.9945,0.9881,0.9965,0.9862},
-                {190782,191042,1.0079,1.0039,1.0063,0.9951,0.9996,0.9932,1.0010,0.9907},
-                {191043,193555,0.9989,0.9949,0.9998,0.9885,0.9968,0.9904,0.9987,0.9884},
-                {193556,194150,0.9974,0.9934,0.9954,0.9841,0.9969,0.9905,0.9988,0.9885},
-                {194151,194532,0.9980,0.9940,0.9965,0.9852,0.9986,0.9922,0.9994,0.9891},
-                {194533,195113,0.9983,0.9943,0.9984,0.9872,1.0006,0.9943,0.9999,0.9896},
-                {195114,195915,0.9984,0.9944,0.9977,0.9864,1.0010,0.9946,1.0004,0.9900},
-                {195916,198115,0.9975,0.9936,0.9965,0.9852,1.0020,0.9956,0.9992,0.9889},
-                {198116,199803,1.0010,0.9970,0.9999,0.9886,0.9963,0.9899,1.0044,0.9941},
-                {199804,200048,1.0021,0.9982,1.0008,0.9895,0.9965,0.9901,1.0060,0.9957},
-                {200049,200151,1.0035,0.9996,1.0017,0.9905,0.9992,0.9928,1.0101,0.9999},
-                {200152,200490,1.0013,0.9973,1.0003,0.9890,0.9991,0.9927,1.0073,0.9970},
-                {200491,200531,1.0035,0.9995,1.0017,0.9905,0.9995,0.9931,1.0106,1.0004},
-                {200532,201656,1.0017,0.9978,0.9999,0.9887,0.9978,0.9914,1.0069,0.9967},
-                {201657,202305,1.0026,0.9986,1.0003,0.9891,0.9987,0.9923,1.0121,1.0018},
-                {202305,203002,1.0037,0.9998,1.0010,0.9897,1.0003,0.9940,1.0144,1.0042},
-                {203003,203984,1.0061,1.0024,1.0021,0.9923,0.9994,0.9914,1.0122,1.0033},
-                {203985,205085,1.0050,1.0012,1.0045,0.9947,1.0004,0.9924,1.0108,1.0018},
-                {205086,205310,1.0062,1.0025,1.0045,0.9947,1.0060,0.9981,1.0208,1.0119},
-                {205311,206207,1.0056,1.0018,1.0033,0.9935,1.0015,0.9936,1.0157,1.0068},
-                {206208,206483,1.0060,1.0022,1.0036,0.9938,0.9993,0.9913,1.0181,1.0092},
-                {206484,206597,1.0062,1.0025,1.0033,0.9935,1.0043,0.9964,1.0172,1.0082},
-                {206598,206896,1.0060,1.0023,1.0021,0.9923,0.9980,0.9900,1.0169,1.0079},
-                {206897,207220,1.0063,1.0025,1.0033,0.9935,0.9985,0.9905,1.0180,1.0091},
-                {207221,208686,1.0064,1.0026,1.0036,0.9938,1.0027,0.9948,1.0190,1.0100}
-            };
+    //if(correction == 2012) {
+    //    int cat = -1;
+    //    if(IsEB() && Abs(Eta()) < 1. && R9() < 0.94) cat = 0;
+    //    if(IsEB() && Abs(Eta()) < 1. && R9() >= 0.94) cat = 1;
+    //    if(IsEB() && Abs(Eta()) >= 1. && R9() < 0.94) cat = 2;
+    //    if(IsEB() && Abs(Eta()) >= 1. && R9() >= 0.94) cat = 3;
+    //    if(!IsEB() && Abs(Eta()) < 1. && R9() < 0.94) cat = 4;
+    //    if(!IsEB() && Abs(Eta()) < 1. && R9() >= 0.94) cat = 5;
+    //    if(!IsEB() && Abs(Eta()) >= 1. && R9() < 0.94) cat = 6;
+    //    if(!IsEB() && Abs(Eta()) >= 1. && R9() >= 0.94) cat = 7;
+    //    double momscale = 1.;
+    //    if(ma->IsData()) {
+    //        double scaleval[][10] = {
+    //            {190645,190781,1.0020,0.9980,1.0032,0.9919,0.9945,0.9881,0.9965,0.9862},
+    //            {190782,191042,1.0079,1.0039,1.0063,0.9951,0.9996,0.9932,1.0010,0.9907},
+    //            {191043,193555,0.9989,0.9949,0.9998,0.9885,0.9968,0.9904,0.9987,0.9884},
+    //            {193556,194150,0.9974,0.9934,0.9954,0.9841,0.9969,0.9905,0.9988,0.9885},
+    //            {194151,194532,0.9980,0.9940,0.9965,0.9852,0.9986,0.9922,0.9994,0.9891},
+    //            {194533,195113,0.9983,0.9943,0.9984,0.9872,1.0006,0.9943,0.9999,0.9896},
+    //            {195114,195915,0.9984,0.9944,0.9977,0.9864,1.0010,0.9946,1.0004,0.9900},
+    //            {195916,198115,0.9975,0.9936,0.9965,0.9852,1.0020,0.9956,0.9992,0.9889},
+    //            {198116,199803,1.0010,0.9970,0.9999,0.9886,0.9963,0.9899,1.0044,0.9941},
+    //            {199804,200048,1.0021,0.9982,1.0008,0.9895,0.9965,0.9901,1.0060,0.9957},
+    //            {200049,200151,1.0035,0.9996,1.0017,0.9905,0.9992,0.9928,1.0101,0.9999},
+    //            {200152,200490,1.0013,0.9973,1.0003,0.9890,0.9991,0.9927,1.0073,0.9970},
+    //            {200491,200531,1.0035,0.9995,1.0017,0.9905,0.9995,0.9931,1.0106,1.0004},
+    //            {200532,201656,1.0017,0.9978,0.9999,0.9887,0.9978,0.9914,1.0069,0.9967},
+    //            {201657,202305,1.0026,0.9986,1.0003,0.9891,0.9987,0.9923,1.0121,1.0018},
+    //            {202305,203002,1.0037,0.9998,1.0010,0.9897,1.0003,0.9940,1.0144,1.0042},
+    //            {203003,203984,1.0061,1.0024,1.0021,0.9923,0.9994,0.9914,1.0122,1.0033},
+    //            {203985,205085,1.0050,1.0012,1.0045,0.9947,1.0004,0.9924,1.0108,1.0018},
+    //            {205086,205310,1.0062,1.0025,1.0045,0.9947,1.0060,0.9981,1.0208,1.0119},
+    //            {205311,206207,1.0056,1.0018,1.0033,0.9935,1.0015,0.9936,1.0157,1.0068},
+    //            {206208,206483,1.0060,1.0022,1.0036,0.9938,0.9993,0.9913,1.0181,1.0092},
+    //            {206484,206597,1.0062,1.0025,1.0033,0.9935,1.0043,0.9964,1.0172,1.0082},
+    //            {206598,206896,1.0060,1.0023,1.0021,0.9923,0.9980,0.9900,1.0169,1.0079},
+    //            {206897,207220,1.0063,1.0025,1.0033,0.9935,0.9985,0.9905,1.0180,1.0091},
+    //            {207221,208686,1.0064,1.0026,1.0036,0.9938,1.0027,0.9948,1.0190,1.0100}
+    //        };
 
-            for(int i = 0 ; i < 25 ; ++i) {
-                if(scaleval[i][0] <= ma->Run() && scaleval[i][1] > ma->Run()) {
-                    momscale = scaleval[i][cat+2];
-                    break;
-                }
+    //        for(int i = 0 ; i < 25 ; ++i) {
+    //            if(scaleval[i][0] <= ma->Run() && scaleval[i][1] > ma->Run()) {
+    //                momscale = scaleval[i][cat+2];
+    //                break;
+    //            }
 
-            }
-        } else {
-            double range = ma->analysisrandom->Uniform();
-            double dsigMC = 0.;
-            if(range < 0.63) {
-                if(cat == 0) dsigMC = 0.0103;
-                else if(cat == 1) dsigMC = 0.0090;
-                else if(cat == 2) dsigMC = 0.0190;
-                else if(cat == 3) dsigMC = 0.0156;
-                else if(cat == 4) dsigMC = 0.0269;
-                else if(cat == 5) dsigMC = 0.0287;
-                else if(cat == 6) dsigMC = 0.0364;
-                else if(cat == 7) dsigMC = 0.0321;
-            } else {
-                if(cat == 0) dsigMC = 0.0109;
-                if(cat == 1) dsigMC = 0.0099;
-                if(cat == 2) dsigMC = 0.0182;
-                if(cat == 3) dsigMC = 0.0200;
-                if(cat == 4) dsigMC = 0.0282;
-                if(cat == 5) dsigMC = 0.0309;
-                if(cat == 6) dsigMC = 0.0386;
-                if(cat == 7) dsigMC = 0.0359;
-            }
-            momscale = ma->analysisrandom->Gaus(1., dsigMC);
-        }
-        (*this) *= momscale;
-    }
+    //        }
+    //    } else {
+    //        double range = ma->analysisrandom->Uniform();
+    //        double dsigMC = 0.;
+    //        if(range < 0.63) {
+    //            if(cat == 0) dsigMC = 0.0103;
+    //            else if(cat == 1) dsigMC = 0.0090;
+    //            else if(cat == 2) dsigMC = 0.0190;
+    //            else if(cat == 3) dsigMC = 0.0156;
+    //            else if(cat == 4) dsigMC = 0.0269;
+    //            else if(cat == 5) dsigMC = 0.0287;
+    //            else if(cat == 6) dsigMC = 0.0364;
+    //            else if(cat == 7) dsigMC = 0.0321;
+    //        } else {
+    //            if(cat == 0) dsigMC = 0.0109;
+    //            if(cat == 1) dsigMC = 0.0099;
+    //            if(cat == 2) dsigMC = 0.0182;
+    //            if(cat == 3) dsigMC = 0.0200;
+    //            if(cat == 4) dsigMC = 0.0282;
+    //            if(cat == 5) dsigMC = 0.0309;
+    //            if(cat == 6) dsigMC = 0.0386;
+    //            if(cat == 7) dsigMC = 0.0359;
+    //        }
+    //        momscale = ma->analysisrandom->Gaus(1., dsigMC);
+    //    }
+    //    (*this) *= momscale;
+    //}
 }
 
 /*
@@ -498,6 +558,9 @@ bool Electron::WP60_v1(Int_t combined) const {
 //    ecalpoints.push_back(Ecalpoint2);
 //}
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: PHOTON /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Photon::Photon(const Analyse *ma, UInt_t n) :
     TLorentzVector(ma->photon_px->at(n), ma->photon_py->at(n), ma->photon_pz->at(n), sqrt(ma->photon_px->at(n)*ma->photon_px->at(n)+ma->photon_py->at(n)*ma->photon_py->at(n)+ma->photon_pz->at(n)*ma->photon_pz->at(n))),
     TriggerObject(ma, ma->runlist.find(ma->Run())->second.GetHLTPhotonNames(), 0),
@@ -540,11 +603,16 @@ Photon::Photon(const Analyse *ma, UInt_t n) :
     haspixelseed(ma->photon_haspixelseed->at(n)),
     passelectronveto(ma->photon_passelectronveto->at(n)),
     ispfphoton(ma->photon_ispfphoton->at(n)),
-    gapinfo(ma->photon_gapinfo->at(n)) {
+    gapinfo(ma->photon_gapinfo->at(n))
     //supercluster.push_back(SuperCluster(ma->photon_supercluster_e->at(n), ma->photon_supercluster_x->at(n), ma->photon_supercluster_y->at(n), ma->photon_supercluster_z->at(n), ma->photon_supercluster_rawe->at(n), ma->photon_supercluster_phiwidth->at(n), ma->photon_supercluster_etawidth->at(n)));
+{
 }
 
-Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, Int_t Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased) :
+//////////////////////////////////////////////////////////////////////
+// CLASS: JET ////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Float_t Energycorrl7uds, Float_t Energycorrl7bottom, Int_t Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased) :
+Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicenergy, Float_t Chargedhadronicenergy, Float_t Emenergy, Float_t Chargedemenergy, Float_t Hfemenergy, Float_t Hfhadronicenergy, Float_t Electronenergy, Float_t Muonenergy, Int_t Chargedmulti, Int_t Neutralmulti, Int_t Hfemmulti, Int_t Hfhadronicmulti, Int_t Electronmulti, Int_t Muonmulti, Float_t Chargeda, Float_t Chargedb, Float_t Neutrala, Float_t Neutralb, Float_t Alla, Float_t Allb, Float_t Chargedfractionmv, Float_t Energycorr,Float_t Energycorrunc, Int_t Btag, Int_t Mcflavour, Float_t Puidfull, Float_t Puidsimple, Float_t Puidcutbased) :
     TLorentzVector(Px, Py, Pz, E),
     hadronicenergy(Hadronicenergy),
     chargedhadronicenergy(Chargedhadronicenergy),
@@ -569,16 +637,18 @@ Jet::Jet(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t Hadronicener
     chargedfractionmv(Chargedfractionmv),
     energycorr(Energycorr),
     energycorrunc(Energycorrunc),
-    energycorrl7uds(Energycorrl7uds),
-    energycorrl7bottom(Energycorrl7bottom),
+    //energycorrl7uds(Energycorrl7uds),
+    //energycorrl7bottom(Energycorrl7bottom),
     mcflavour(Mcflavour),
     btag(Btag),
     puidfull(Puidfull),
     puidsimple(Puidsimple),
     puidcutbased(Puidcutbased),
-    mymvonly(false) {
+    mymvonly(false)
+{
 }
 
+//______________________________________________________________
 void Jet::ScaleMV(bool mvonly) {
     if(mymvonly == false && mvonly == true) {
         Double_t f = ChargedMomentumFractionFromMV();
@@ -592,6 +662,7 @@ void Jet::ScaleMV(bool mvonly) {
     }
 }
 
+//______________________________________________________________
 bool Jet::BTag(string disc) const {
     if     (disc == "JPL")     return (btag & 1);
     else if(disc == "JPM")     return (btag & 2);
@@ -606,6 +677,9 @@ bool Jet::BTag(string disc) const {
 }
 
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: TRACK //////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Track::Track(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Double_t Ox, Double_t Oy, Double_t Oz, Double_t Cx, Double_t Cy, Double_t Cz, Double_t Chi2, Double_t Ndof, Double_t Dxy, Double_t Dxyerr, Double_t Dz, Double_t Dzerr, Int_t Charge, Int_t Nhits, Int_t Nmissinghits, Int_t Npixelhits, Int_t Npixellayers, Int_t Nstriplayers, Int_t Vtx, Float_t Dedxharmonic2) :
     TLorentzVector(Px, Py, Pz, E),
     outerpoint(Ox, Oy, Oz),
@@ -623,18 +697,28 @@ Track::Track(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Double_t Ox, Dou
     npixellayers(Npixellayers),
     nstriplayers(Nstriplayers),
     //vtx(Vtx),
-    dedxharmonic2(Dedxharmonic2) {
+    dedxharmonic2(Dedxharmonic2)
+{
 }
 
-EcalHit::EcalHit(Double_t Energy, Double_t X, Double_t Y, Double_t Z) : TVector3(X, Y, Z), energy(Energy) {
+//////////////////////////////////////////////////////////////////////
+// CLASS: ECALHIT ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+EcalHit::EcalHit(Double_t Energy, Double_t X, Double_t Y, Double_t Z) : TVector3(X, Y, Z), energy(Energy)
+{
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: CLUSTER ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Cluster::Cluster(Double_t E, Double_t x, Double_t y, Double_t z, Int_t Size) :
     TLorentzVector(E *x/sqrt(x*x+y*y+z *z), E *y/sqrt(x*x+y*y+z *z), E *z/sqrt(x*x+y*y+z *z), E),
     position(x,y,z),
-    size(Size) {
+    size(Size)
+{
 }
 
+//______________________________________________________________
 void Cluster::AddHit(EcalHit &hit) {
     hits.push_back(hit);
 }
@@ -655,7 +739,10 @@ void SuperCluster::AddESCluster(Cluster &newcluster) {
     esclusters.push_back(newcluster);
 }
 */
-std::vector<Float_t> dummyvec;
+
+//////////////////////////////////////////////////////////////////////
+// CLASS: TAU ////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Tau::Tau(const Analyse *ma, UInt_t n) :
     TLorentzVector(ma->tau_px->at(n), ma->tau_py->at(n), ma->tau_pz->at(n), Sqrt(ma->tau_px->at(n)*ma->tau_px->at(n)+ma->tau_py->at(n)*ma->tau_py->at(n)+ma->tau_pz->at(n)*ma->tau_pz->at(n)+TauMassQ)),
     TriggerObject(ma, ma->runlist.find(ma->Run())->second.GetHLTTauNames(), ma->tau_trigger->at(n)),
@@ -666,17 +753,19 @@ Tau::Tau(const Analyse *ma, UInt_t n) :
     isolationgammapt(ma->tau_isolationgammapt->at(n)),
     isolationgammanum(ma->tau_isolationgammanum->at(n)),
     charge(ma->tau_charge->at(n)),
-    dishps(ma->tau_dishps->at(n)),
-    emfraction(ma->tau_emfraction->at(n)),
-    hcaltotoverplead(ma->tau_hcaltotoverplead->at(n)),
-    hcal3x3overplead(ma->tau_hcal3x3overplead->at(n)),
-    ecalstripsumeoverplead(ma->tau_ecalstripsumeoverplead->at(n)),
-    bremsrecoveryeoverplead(ma->tau_bremsrecoveryeoverplead->at(n)),
-    calocomp(ma->tau_calocomp->at(n)),
-    segcomp(ma->tau_segcomp->at(n)),
-    jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0, 0., 0., 0.),
+    disc(ma->tau_disc->at(n)),
+    //emfraction(ma->tau_emfraction->at(n)),
+    //hcaltotoverplead(ma->tau_hcaltotoverplead->at(n)),
+    //hcal3x3overplead(ma->tau_hcal3x3overplead->at(n)),
+    //ecalstripsumeoverplead(ma->tau_ecalstripsumeoverplead->at(n)),
+    //bremsrecoveryeoverplead(ma->tau_bremsrecoveryeoverplead->at(n)),
+    //calocomp(ma->tau_calocomp->at(n)),
+    //segcomp(ma->tau_segcomp->at(n)),
+    //jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., 0, 0, 0., 0., 0.),
     //jet(ma->tau_ak4pfjet_e->at(n), ma->tau_ak4pfjet_px->at(n), ma->tau_ak4pfjet_py->at(n), ma->tau_ak4pfjet_pz->at(n), ma->tau_ak4pfjet_hadronicenergy->at(n), ma->tau_ak4pfjet_chargedhadronicenergy->at(n), ma->tau_ak4pfjet_emenergy->at(n), ma->tau_ak4pfjet_chargedemenergy->at(n), -1.,-1.,-1.,-1., ma->tau_ak4pfjet_chargedmulti->at(n), ma->tau_ak4pfjet_neutralmulti->at(n),-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1., -1., -1., -1, 0, 0., 0., 0.),
-    taudiscriminators(ma->runlist.find(ma->Run())->second.GetTauDiscriminators()) {
+    taudiscriminators(ma->runlist.find(ma->Run())->second.GetTauDiscriminators())
+{
+/*
     UInt_t begin = ma->tau_chargedbegin->at(n);
     UInt_t end = ma->tau_charged_count;
     if(n < ma->tau_count - 1) {
@@ -686,10 +775,12 @@ Tau::Tau(const Analyse *ma, UInt_t n) :
     for(UInt_t i = begin ; i < end ; i++) {
         tracks.push_back(Track(Sqrt(ma->tau_charged_px->at(i)*ma->tau_charged_px->at(i)+ma->tau_charged_py->at(i)*ma->tau_charged_py->at(i)+ma->tau_charged_pz->at(i)*ma->tau_charged_pz->at(i)), ma->tau_charged_px->at(i), ma->tau_charged_py->at(i), ma->tau_charged_pz->at(i), ma->tau_charged_outerx->at(i), ma->tau_charged_outery->at(i), ma->tau_charged_outerz->at(i), ma->tau_charged_closestpointx->at(i), ma->tau_charged_closestpointy->at(i), ma->tau_charged_closestpointz->at(i), ma->tau_charged_chi2->at(i), ma->tau_charged_ndof->at(i), ma->tau_charged_dxy->at(i), ma->tau_charged_dxyerr->at(i), ma->tau_charged_dz->at(i), ma->tau_charged_dzerr->at(i), ma->tau_charged_charge->at(i), ma->tau_charged_nhits->at(i), ma->tau_charged_nmissinghits->at(i), ma->tau_charged_npixelhits->at(i), ma->tau_charged_npixellayers->at(i), ma->tau_charged_nstriplayers->at(i), -1, ma->tau_charged_dedxharmonic2->at(i)));
     }
-
+*/
 }
 
-Track Tau::LeadingTrack() const {
+//______________________________________________________________
+Track Tau::LeadingTrack() const
+{
     Float_t ptmax = 0.;
     Int_t index = -1;
     for(UInt_t n = 0 ; n < tracks.size() ; n++) {
@@ -701,19 +792,24 @@ Track Tau::LeadingTrack() const {
     return(tracks[index]);
 }
 
-Int_t Tau::TauDiscriminator(string disname) const {
+//______________________________________________________________
+Int_t Tau::TauDiscriminator(string discname) const
+{
     Int_t pos = -1;
     for(UInt_t i = 0 ; i < taudiscriminators->size() ; i++) {
-        if(disname == taudiscriminators->at(i)) {
+        if(discname == taudiscriminators->at(i)) {
             pos = i;
             break;
         }
     }
     if(pos == -1) return(-1);
-    if((dishps & 1<<pos) != 0) return(1);
+    if((disc & 1<<pos) != 0) return(1);
     return(0);
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: VERTEX /////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 Vertex::Vertex(Double_t X, Double_t Y, Double_t Z, UInt_t Isvalid, UInt_t Isfake, Double_t Chi2, Double_t Ndof, Int_t Ntracks, Float_t Cov0, Float_t Cov1, Float_t Cov2, Float_t Cov3, Float_t Cov4, Float_t Cov5) :
     TVector3(X, Y, Z),
     chi2(Chi2),
@@ -721,7 +817,8 @@ Vertex::Vertex(Double_t X, Double_t Y, Double_t Z, UInt_t Isvalid, UInt_t Isfake
     ntracks(Ntracks),
     isvalid(Isvalid),
     isfake(Isfake),
-    covmatrix(3) {
+    covmatrix(3)
+{
     covmatrix(0,0) = Cov0;
     covmatrix(0,1) = Cov1;
     covmatrix(0,2) = Cov2;
@@ -733,12 +830,16 @@ Vertex::Vertex(Double_t X, Double_t Y, Double_t Z, UInt_t Isvalid, UInt_t Isfake
     covmatrix(2,2) = Cov5;
 }
 
+//////////////////////////////////////////////////////////////////////
+// CLASS: BEAMSPOT ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 BeamSpot::BeamSpot(Double_t X, Double_t Y, Double_t Z, const Float_t *Cov, Double_t Xwidth, Double_t Ywidth, Double_t Zsigma) :
     TVector3(X, Y, Z),
     covmatrix(3),
     xwidth(Xwidth),
     ywidth(Ywidth),
-    zsigma(Zsigma) {
+    zsigma(Zsigma)
+{
     covmatrix(0,0) = Cov[0];
     covmatrix(0,1) = Cov[1];
     covmatrix(0,2) = Cov[2];
@@ -750,6 +851,8 @@ BeamSpot::BeamSpot(Double_t X, Double_t Y, Double_t Z, const Float_t *Cov, Doubl
     covmatrix(2,2) = Cov[5];
 }
 
+
+//______________________________________________________________
 void splitstring(string input, vector<string> &output) {
     UInt_t posstart = 0;
     for(UInt_t i = 0 ; i < input.size() ; i++) {
@@ -760,6 +863,7 @@ void splitstring(string input, vector<string> &output) {
     }
 }
 
+//______________________________________________________________
 string combinestring(const vector<string> &input) {
     string output;
     for(UInt_t i = 0 ; i < input.size() ; i++) {
@@ -768,7 +872,10 @@ string combinestring(const vector<string> &input) {
     return(output);
 }
 
-//Luminosity
+
+//////////////////////////////////////////////////////////////////////
+// CLASS: LUMINOSITY /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 void Luminosity::AddFiles(const vector<string> &newfiles) {
     for(size_t i = 0 ; i < newfiles.size() ; i++) {
         if(find(filenames.begin(), filenames.end(), newfiles[i]) == filenames.end()) {
@@ -777,6 +884,7 @@ void Luminosity::AddFiles(const vector<string> &newfiles) {
     }
 }
 
+//______________________________________________________________
 string Luminosity::GetFilesString() const {
     string files(filenames[0].substr(filenames[0].find_last_of("/")+1));
     for(size_t i = 1 ; i < filenames.size() ; i++) {
@@ -785,7 +893,9 @@ string Luminosity::GetFilesString() const {
     return(files);
 }
 
-//RunInfo
+//////////////////////////////////////////////////////////////////////
+// CLASS: RUNINFO ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 RunInfo::RunInfo(UInt_t Number, UInt_t Hltcount, string Hltnames, string Hltmunames, string Hltelnames, string Hltphotonnames, string Hlttaunames, string Hltjetnames, string Taudiscriminators, UInt_t Hltprescaletablescount, UInt_t *Hltprescaletables, UInt_t L1algocount, UInt_t L1algoprescaletablescount, UInt_t *L1algoprescaletables, UInt_t L1techcount, UInt_t L1techprescaletablescount, UInt_t *L1techprescaletables) :
     runnumber(Number),
     hltnum(Hltcount),
@@ -793,7 +903,8 @@ RunInfo::RunInfo(UInt_t Number, UInt_t Hltcount, string Hltnames, string Hltmuna
     l1algonum(L1algocount),
     l1algotablesnum(L1algoprescaletablescount/L1algocount),
     l1technum(L1techcount),
-    l1techtablesnum(L1techprescaletablescount/L1techcount) {
+    l1techtablesnum(L1techprescaletablescount/L1techcount)
+{
     splitstring(Hltnames, hltnames);
     splitstring(Hltmunames, hltmunames);
     splitstring(Hltelnames, hltelnames);
@@ -824,7 +935,9 @@ RunInfo::RunInfo(UInt_t Number, UInt_t Hltcount, string Hltnames, string Hltmuna
 
 }
 
-vector<string> RunInfo::MatchTriggerNames(string name) {
+//______________________________________________________________
+vector<string> RunInfo::MatchTriggerNames(string name)
+{
     boost::cmatch what;
     vector<string> result;
 
@@ -837,48 +950,70 @@ vector<string> RunInfo::MatchTriggerNames(string name) {
     return(result);
 }
 
-Int_t RunInfo::HLTIndex(string name) const {
+//______________________________________________________________
+Int_t RunInfo::HLTIndex(string name) const
+{
     for(Int_t i = 0 ; i < Int_t(hltnames.size()) ; i++) {
         if(hltnames[i] == name) return(i);
     }
     return(-1);
 }
 
-string RunInfo::HLTAllNames() const {
+//______________________________________________________________
+string RunInfo::HLTAllNames() const
+{
     return(combinestring(hltnames));
 }
 
-string RunInfo::HLTMuonAllNames() const {
+//______________________________________________________________
+string RunInfo::HLTMuonAllNames() const
+{
     return(combinestring(hltmunames));
 }
 
-string RunInfo::HLTElectronAllNames() const {
+//______________________________________________________________
+string RunInfo::HLTElectronAllNames() const
+{
     return(combinestring(hltelnames));
 }
 
-string RunInfo::HLTTauAllNames() const {
+//______________________________________________________________
+string RunInfo::HLTTauAllNames() const
+{
     return(combinestring(hlttaunames));
 }
 
-string RunInfo::HLTPhotonAllNames() const {
+//______________________________________________________________
+string RunInfo::HLTPhotonAllNames() const
+{
     return(combinestring(hltphotonnames));
 }
 
-string RunInfo::HLTJetAllNames() const {
+//______________________________________________________________
+string RunInfo::HLTJetAllNames() const
+{
     return(combinestring(hltjetnames));
 }
 
-string RunInfo::TauDiscriminatorsAllNames() const {
+//______________________________________________________________
+string RunInfo::TauDiscriminatorsAllNames() const
+{
     return(combinestring(taudiscriminators));
 }
 
-void TriggerRun::SetBlock(UInt_t block, Int_t index, UInt_t prescale) {
+//////////////////////////////////////////////////////////////////////
+// CLASS: TRIGGERRUN /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+void TriggerRun::SetBlock(UInt_t block, Int_t index, UInt_t prescale)
+{
     if(lumiinfo.find(block) == lumiinfo.end()) {
         lumiinfo[block] = TriggerLumi(index, prescale);
     }
 }
 
-TriggerLumi TriggerRun::GetBlock(UInt_t block) {
+//______________________________________________________________
+TriggerLumi TriggerRun::GetBlock(UInt_t block)
+{
     //return(lumiinfo[block]);
     map<UInt_t, TriggerLumi>::const_iterator blockinfo = lumiinfo.find(block);
     if(blockinfo == lumiinfo.end()) {
@@ -887,7 +1022,12 @@ TriggerLumi TriggerRun::GetBlock(UInt_t block) {
     return(blockinfo->second);
 }
 
-TriggerSelection::TriggerSelection(Analyse *an, vector<string> names, bool useprescaled) : AN(an) {
+//////////////////////////////////////////////////////////////////////
+// CLASS: TRIGGERSELECTION ///////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+TriggerSelection::TriggerSelection(Analyse *an, vector<string> names, bool useprescaled) :
+    AN(an)
+{
     for(map<UInt_t, RunInfo>::iterator a = AN->runlist.begin() ; a != AN->runlist.end(); ++a) {
         UInt_t runnumber = a->first;
         Float_t runlumi = 0.;
@@ -932,7 +1072,9 @@ TriggerSelection::TriggerSelection(Analyse *an, vector<string> names, bool usepr
     }
 }
 
-Int_t TriggerSelection::Result() {
+//______________________________________________________________
+Int_t TriggerSelection::Result()
+{
     const TriggerLumi &triggerlumi = runinfo[AN->Run()].GetBlock(AN->LumiBlock());
     if(triggerlumi.Index() < 0) {
         return(0);
@@ -944,7 +1086,9 @@ Int_t TriggerSelection::Result() {
     }
 }
 
-Float_t TriggerSelection::LumiUsed(Int_t format) {
+//______________________________________________________________
+Float_t TriggerSelection::LumiUsed(Int_t format)
+{
     Double_t lumi = 0.;
     Double_t alllumi = 0.;
     Double_t zerolumi = 0.;
@@ -1005,7 +1149,9 @@ Float_t TriggerSelection::LumiUsed(Int_t format) {
 
 }
 
-Float_t TriggerSelection::LumiBeforeEvent() {
+//______________________________________________________________
+Float_t TriggerSelection::LumiBeforeEvent()
+{
     Float_t lumi = 0.;
     for(map<UInt_t, TriggerRun>::iterator a = runinfo.begin() ; a != runinfo.end(); ++a) {
         if(a->first < AN->Run()) {
@@ -1030,7 +1176,9 @@ Float_t TriggerSelection::LumiBeforeEvent() {
 }
 
 
-string TriggerSelection::GetTriggerName(UInt_t run, UInt_t lumiblock) {
+//______________________________________________________________
+string TriggerSelection::GetTriggerName(UInt_t run, UInt_t lumiblock)
+{
     if(run == 0 && lumiblock == 0) {
         run = AN->Run();
         lumiblock = AN->LumiBlock();
@@ -1044,7 +1192,9 @@ string TriggerSelection::GetTriggerName(UInt_t run, UInt_t lumiblock) {
     return("ERROR: TriggerSelection::GetTriggerName: Invalid run and/or lumiblock.");
 }
 
-void TriggerSelection::PrintInfo() {
+//______________________________________________________________
+void TriggerSelection::PrintInfo()
+{
     Float_t lumi = 0.;
     Float_t lumiuse = 0.;
     Float_t curprescale;
@@ -1093,7 +1243,4 @@ void TriggerSelection::PrintInfo() {
     cout << "Triggered Lumi: " << lumiuse << "/pb" << endl;
 
 }
-
-
-
 

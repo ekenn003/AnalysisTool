@@ -51,7 +51,8 @@ const UInt_t M_genmotherdaughtermaxcount = 100000;
 bool sortac1b(string a, string b);
 bool sortroot(string a, string b);
 
-class Analyse {
+class Analyse
+{
     friend class GenParticle;
     friend class Tau;
     friend class Muon;
@@ -59,31 +60,32 @@ class Analyse {
     friend class Jet;
     friend class Photon;
     friend class TriggerSelection;
-private:
-    vector<string> filenames;
+
+  private:
+    vector<string>   filenames;
     vector<Long64_t> filelimits;
     Long64_t currentmin, currentmax;
-    TFile *currentfile;
-    Int_t currentloadtype;
-    TTree *tree;
-    string treename;
-    Int_t printinfo;
+    TFile    *currentfile;
+    Int_t    currentloadtype;
+    TTree    *tree;
+    string   treename;
+    Int_t    printinfo;
     Long64_t processed;
-    Int_t loadbeamspot;
-    Int_t loadmuons;
-    Int_t loadelectrons;
-    Int_t loadphotons;
-    Int_t loadtaus;
-    Int_t loadmet;
-    Int_t loadak4pfchsjets;
-    Int_t loadtracks;
-    //Int_t loadsuperclusters;
-    Int_t loadprimvertices;
-    Int_t loadtrigger;
-    Int_t loadgeninfo;
-    Int_t loadgenparticles;
-    Int_t loadgenak4jets;
-    Int_t loadallgenparticles;
+    Int_t    loadbeamspot;
+    Int_t    loadmuons;
+    Int_t    loadelectrons;
+    Int_t    loadphotons;
+    Int_t    loadtaus;
+    Int_t    loadmet;
+    Int_t    loadak4pfchsjets;
+    Int_t    loadtracks;
+    Int_t    loadprimvertices;
+    Int_t    loadtrigger;
+    Int_t    loadgeninfo;
+    Int_t    loadgenparticles;
+    Int_t    loadgenjets;
+    Int_t    loadallgenparticles;
+
     void SetLoad();
     void Load();
     void GetEvent(Long64_t num, Int_t loadtype = 0);
@@ -93,17 +95,17 @@ private:
     map< UInt_t, map< UInt_t, map< Double_t, UInt_t> > > eventlist;
 
     //Skimming
-    TTree *skimtree;
+    TTree  *skimtree;
     map< UInt_t, map< UInt_t, UInt_t > > selected;
     string skimfilename;
-    TFile *skimfile;
+    TFile  *skimfile;
 
     //Lumi calculation
     map< UInt_t, map< UInt_t, Luminosity > > lumilist;
     map< UInt_t, RunInfo> runlist;
-    map<string, TriggerSelection *> triggerselections;
-    bool lumicalculation;
-    bool IsInRange(UInt_t Run, UInt_t LumiBlock);
+    map< string, TriggerSelection *> triggerselections;
+    bool   lumicalculation;
+    bool   IsInRange(UInt_t Run, UInt_t LumiBlock);
     UInt_t minRun;
     UInt_t minLumi;
     UInt_t maxRun;
@@ -115,12 +117,12 @@ private:
     //MPI
     Int_t batch_myid;
     Int_t batch_numjobs;
-    bool batch_emptyjob;
-    map< UInt_t, map< UInt_t, bool > > batchselection;
-    bool IsBatchSelected(UInt_t run, UInt_t lumiblock);
+    bool  batch_emptyjob;
+    map<  UInt_t, map< UInt_t, bool > > batchselection;
+    bool  IsBatchSelected(UInt_t run, UInt_t lumiblock);
 
     //Pileup
-    bool usepileupinfo;
+    bool   usepileupinfo;
     double pileupscale;
     vector<Double_t> pileUpDistMinus;
     vector<Double_t> pileUpDist;
@@ -131,7 +133,7 @@ private:
     TRandom3 *analysisrandom;
 
     //Data
-    Int_t    isdata;
+    Bool_t   isdata;
     UInt_t   errors;
     Double_t event_nr;
     UInt_t   event_luminosityblock;
@@ -171,9 +173,13 @@ private:
 
     UInt_t muon_count;
     vector<Float_t> *muon_px;
+    vector<Float_t> *muon_rochesterPx;
     vector<Float_t> *muon_py;
+    vector<Float_t> *muon_rochesterPy;
     vector<Float_t> *muon_pz;
+    vector<Float_t> *muon_rochesterPz;
     vector<Float_t> *muon_pt;
+    vector<Float_t> *muon_rochesterPt;
     vector<Float_t> *muon_pterror;
     vector<Float_t> *muon_chi2;
     vector<Float_t> *muon_ndof;
@@ -188,19 +194,19 @@ private:
     vector<Float_t> *muon_innertrack_px;
     vector<Float_t> *muon_innertrack_py;
     vector<Float_t> *muon_innertrack_pz;
-    vector<Float_t> *muon_innertrack_outerx;
-    vector<Float_t> *muon_innertrack_outery;
-    vector<Float_t> *muon_innertrack_outerz;
-    vector<Float_t> *muon_innertrack_closestpointx;
-    vector<Float_t> *muon_innertrack_closestpointy;
-    vector<Float_t> *muon_innertrack_closestpointz;
+    //vector<Float_t> *muon_innertrack_outerx;
+    //vector<Float_t> *muon_innertrack_outery;
+    //vector<Float_t> *muon_innertrack_outerz;
+    //vector<Float_t> *muon_innertrack_closestpointx;
+    //vector<Float_t> *muon_innertrack_closestpointy;
+    //vector<Float_t> *muon_innertrack_closestpointz;
     vector<Float_t> *muon_innertrack_chi2;
     vector<Float_t> *muon_innertrack_ndof;
     vector<Float_t> *muon_innertrack_dxy;
     vector<Float_t> *muon_innertrack_dxyerr;
     vector<Float_t> *muon_innertrack_dz;
     vector<Float_t> *muon_innertrack_dzerr;
-    vector<Float_t> *muon_innertrack_dedxharmonic2;
+    //vector<Float_t> *muon_innertrack_dedxharmonic2;
     vector<Int_t>   *muon_innertrack_charge;
     vector<UChar_t> *muon_innertrack_nhits;
     vector<UChar_t> *muon_innertrack_nmissinghits;
@@ -234,7 +240,7 @@ private:
     vector<Float_t> *muon_pfisolationr4_sumneutralhadronethighthreshold;
     vector<Float_t> *muon_pfisolationr4_sumphotonethighthreshold;
     vector<Float_t> *muon_pfisolationr4_sumpupt;
-    vector<Float_t> *muon_pfisolationr4_dBrel;
+    //vector<Float_t> *muon_pfisolationr4_dBrel;
     vector<Int_t>   *muon_charge;
     vector<Int_t>   *muon_numchambers;
     vector<Int_t>   *muon_numchamberswithsegments;
@@ -275,8 +281,8 @@ private:
     vector<Float_t> *ak4pfchsjet_chargedfractionmv;
     vector<Float_t> *ak4pfchsjet_energycorr;
     vector<Float_t> *ak4pfchsjet_energycorrunc;
-    vector<Float_t> *ak4pfchsjet_energycorrl7uds;
-    vector<Float_t> *ak4pfchsjet_energycorrl7bottom;
+    //vector<Float_t> *ak4pfchsjet_energycorrl7uds;
+    //vector<Float_t> *ak4pfchsjet_energycorrl7bottom;
     vector<Int_t>   *ak4pfchsjet_btag;
     vector<Int_t>   *ak4pfchsjet_idLoose;
     vector<Int_t>   *ak4pfchsjet_idTight;
@@ -323,12 +329,14 @@ private:
     vector<Float_t> *electron_isolationpfr3photon;
     vector<Float_t> *electron_isolationpfr3neutral;
     vector<Int_t>   *electron_charge;
-    vector<UChar_t> *electron_nhits;
-    vector<UChar_t> *electron_nmissinghits;
-    vector<UChar_t> *electron_npixelhits;
-    vector<UChar_t> *electron_npixellayers;
-    vector<UChar_t> *electron_nstriplayers;
-    vector<UChar_t> *electron_nhitsexpected;
+    vector<Float_t> *electron_effectiveArea;
+
+    vector<Int_t>   *electron_nhits;
+    vector<Int_t>   *electron_nmissinghits;
+    vector<Int_t>   *electron_npixelhits;
+    vector<Int_t>   *electron_npixellayers;
+    vector<Int_t>   *electron_nstriplayers;
+    vector<Int_t>   *electron_nhitsexpected;
     vector<Float_t> *electron_dxy;
     vector<Float_t> *electron_dxyerr;
     vector<Float_t> *electron_dz;
@@ -340,6 +348,12 @@ private:
     vector<Float_t> *electron_fbrems;
     vector<Int_t>   *electron_numbrems;
     //vector<UChar_t> *electron_info;
+    vector<Int_t>   *electron_cutBasedLoose;
+    vector<Int_t>   *electron_cutBasedMedium;
+    vector<Int_t>   *electron_cutBasedTight;
+    vector<Int_t>   *electron_mvaNonTrigWP90;
+    vector<Int_t>   *electron_mvaNonTrigWP80;
+
     vector<Int_t>   *electron_iselectron;
     vector<Int_t>   *electron_passconversionveto;
     vector<Int_t>   *electron_ecaldrivenseed;
@@ -410,7 +424,7 @@ private:
     //vector<UInt_t>  *photon_conversionbegin;
 
     UInt_t tau_count;
-    UInt_t tau_charged_count;
+    //UInt_t tau_charged_count;
     vector<Float_t> *tau_px;
     vector<Float_t> *tau_py;
     vector<Float_t> *tau_pz;
@@ -421,49 +435,49 @@ private:
     vector<Float_t> *tau_isolationgammapt;
     vector<UInt_t>  *tau_isolationgammanum;
     vector<Int_t>   *tau_charge;
-    vector<UInt_t>  *tau_dishps;
-    vector<Float_t> *tau_emfraction;
-    vector<Float_t> *tau_hcaltotoverplead;
-    vector<Float_t> *tau_hcal3x3overplead;
-    vector<Float_t> *tau_ecalstripsumeoverplead;
-    vector<Float_t> *tau_bremsrecoveryeoverplead;
-    vector<Float_t> *tau_calocomp;
-    vector<Float_t> *tau_segcomp;
+    vector<UInt_t>  *tau_disc;
+    //vector<Float_t> *tau_emfraction;
+    //vector<Float_t> *tau_hcaltotoverplead;
+    //vector<Float_t> *tau_hcal3x3overplead;
+    //vector<Float_t> *tau_ecalstripsumeoverplead;
+    //vector<Float_t> *tau_bremsrecoveryeoverplead;
+    //vector<Float_t> *tau_calocomp;
+    //vector<Float_t> *tau_segcomp;
     vector<UInt_t>  *tau_trigger;
-    vector<Float_t> *tau_ak4pfjet_e;
-    vector<Float_t> *tau_ak4pfjet_px;
-    vector<Float_t> *tau_ak4pfjet_py;
-    vector<Float_t> *tau_ak4pfjet_pz;
-    vector<Float_t> *tau_ak4pfjet_hadronicenergy;
-    vector<Float_t> *tau_ak4pfjet_chargedhadronicenergy;
-    vector<Float_t> *tau_ak4pfjet_emenergy;
-    vector<Float_t> *tau_ak4pfjet_chargedemenergy;
-    vector<UInt_t>  *tau_ak4pfjet_chargedmulti;
-    vector<UInt_t>  *tau_ak4pfjet_neutralmulti;
-    vector<UInt_t>  *tau_ak4pfjet_trigger;
-    vector<UInt_t>  *tau_chargedbegin;
-    vector<Float_t> *tau_charged_px;
-    vector<Float_t> *tau_charged_py;
-    vector<Float_t> *tau_charged_pz;
-    vector<Float_t> *tau_charged_outerx;
-    vector<Float_t> *tau_charged_outery;
-    vector<Float_t> *tau_charged_outerz;
-    vector<Float_t> *tau_charged_closestpointx;
-    vector<Float_t> *tau_charged_closestpointy;
-    vector<Float_t> *tau_charged_closestpointz;
-    vector<Float_t> *tau_charged_chi2;
-    vector<Float_t> *tau_charged_ndof;
-    vector<Float_t> *tau_charged_dxy;
-    vector<Float_t> *tau_charged_dxyerr;
-    vector<Float_t> *tau_charged_dz;
-    vector<Float_t> *tau_charged_dzerr;
-    vector<Float_t> *tau_charged_dedxharmonic2;
-    vector<Int_t>   *tau_charged_charge;
-    vector<UChar_t> *tau_charged_nhits;
-    vector<UChar_t> *tau_charged_nmissinghits;
-    vector<UChar_t> *tau_charged_npixelhits;
-    vector<UChar_t> *tau_charged_npixellayers;
-    vector<UChar_t> *tau_charged_nstriplayers;
+    //vector<Float_t> *tau_ak4pfjet_e;
+    //vector<Float_t> *tau_ak4pfjet_px;
+    //vector<Float_t> *tau_ak4pfjet_py;
+    //vector<Float_t> *tau_ak4pfjet_pz;
+    //vector<Float_t> *tau_ak4pfjet_hadronicenergy;
+    //vector<Float_t> *tau_ak4pfjet_chargedhadronicenergy;
+    //vector<Float_t> *tau_ak4pfjet_emenergy;
+    //vector<Float_t> *tau_ak4pfjet_chargedemenergy;
+    //vector<UInt_t>  *tau_ak4pfjet_chargedmulti;
+    //vector<UInt_t>  *tau_ak4pfjet_neutralmulti;
+    //vector<UInt_t>  *tau_ak4pfjet_trigger;
+    //vector<UInt_t>  *tau_chargedbegin;
+    //vector<Float_t> *tau_charged_px;
+    //vector<Float_t> *tau_charged_py;
+    //vector<Float_t> *tau_charged_pz;
+    //vector<Float_t> *tau_charged_outerx;
+    //vector<Float_t> *tau_charged_outery;
+    //vector<Float_t> *tau_charged_outerz;
+    //vector<Float_t> *tau_charged_closestpointx;
+    //vector<Float_t> *tau_charged_closestpointy;
+    //vector<Float_t> *tau_charged_closestpointz;
+    //vector<Float_t> *tau_charged_chi2;
+    //vector<Float_t> *tau_charged_ndof;
+    //vector<Float_t> *tau_charged_dxy;
+    //vector<Float_t> *tau_charged_dxyerr;
+    //vector<Float_t> *tau_charged_dz;
+    //vector<Float_t> *tau_charged_dzerr;
+    //vector<Float_t> *tau_charged_dedxharmonic2;
+    //vector<Int_t>   *tau_charged_charge;
+    //vector<UChar_t> *tau_charged_nhits;
+    //vector<UChar_t> *tau_charged_nmissinghits;
+    //vector<UChar_t> *tau_charged_npixelhits;
+    //vector<UChar_t> *tau_charged_npixellayers;
+    //vector<UChar_t> *tau_charged_nstriplayers;
 
     Float_t event_rho;
     //Float_t ak4pfjet_sigma;
@@ -492,19 +506,28 @@ private:
     Int_t numpileupinteractionsplus;
     Float_t numtruepileupinteractions;
 
-    Float_t genmetcalo_ex;
-    Float_t genmetcalo_ey;
-    Float_t genmettrue_ex;
-    Float_t genmettrue_ey;
+    //Float_t genmetcalo_ex;
+    //Float_t genmetcalo_ey;
+    //Float_t genmettrue_ex;
+    //Float_t genmettrue_ey;
 
-    UInt_t genak4jet_count;
-    Float_t genak4jet_e[M_genjetmaxcount];
-    Float_t genak4jet_px[M_genjetmaxcount];
-    Float_t genak4jet_py[M_genjetmaxcount];
-    Float_t genak4jet_pz[M_genjetmaxcount];
-    Float_t genak4jet_einvisible[M_genjetmaxcount];
-    Int_t genak4jet_flavour[M_genjetmaxcount];
-    UInt_t genak4jet_info[M_genjetmaxcount];
+    vector<Float_t> *genmet_ex;
+    vector<Float_t> *genmet_ey;
+    //UInt_t genak4jet_count;
+    //Float_t genak4jet_e[M_genjetmaxcount];
+    //Float_t genak4jet_px[M_genjetmaxcount];
+    //Float_t genak4jet_py[M_genjetmaxcount];
+    //Float_t genak4jet_pz[M_genjetmaxcount];
+    //Float_t genak4jet_einvisible[M_genjetmaxcount];
+    //Int_t genak4jet_flavour[M_genjetmaxcount];
+    //UInt_t genak4jet_info[M_genjetmaxcount];
+
+    UInt_t genjet_count;
+    vector<Float_t> *genjet_e;
+    vector<Float_t> *genjet_px;
+    vector<Float_t> *genjet_py;
+    vector<Float_t> *genjet_pz;
+    vector<Float_t> *genjet_einvisible;
 
     UInt_t genparticles_count;
     Float_t genparticles_e[M_genparticlesmaxcount];
@@ -519,24 +542,31 @@ private:
     Int_t genparticles_indirectmother[M_genparticlesmaxcount];
     UInt_t genparticles_info[M_genparticlesmaxcount];
 
-    UInt_t genallparticles_count;
-    Float_t genallparticles_e[M_genallparticlesmaxcount];
-    Float_t genallparticles_px[M_genallparticlesmaxcount];
-    Float_t genallparticles_py[M_genallparticlesmaxcount];
-    Float_t genallparticles_pz[M_genallparticlesmaxcount];
-    Float_t genallparticles_vx[M_genallparticlesmaxcount];
-    Float_t genallparticles_vy[M_genallparticlesmaxcount];
-    Float_t genallparticles_vz[M_genallparticlesmaxcount];
-    Int_t genallparticles_pdgid[M_genallparticlesmaxcount];
-    Int_t genallparticles_status[M_genallparticlesmaxcount];
-    UInt_t genallparticles_motherbeg[M_genallparticlesmaxcount];
-    UInt_t genallparticles_daughterbeg[M_genallparticlesmaxcount];
+    UInt_t genparticles_motherbeg[M_genallparticlesmaxcount];
+    UInt_t genparticles_daughterbeg[M_genallparticlesmaxcount];
+    UInt_t genparticlesmother_count;
+    UInt_t genparticles_mothers[M_genmotherdaughtermaxcount];
+    UInt_t genparticlesdaughter_count;
+    UInt_t genparticles_daughters[M_genmotherdaughtermaxcount];
 
-    UInt_t genallparticlesmother_count;
-    UInt_t genallparticles_mothers[M_genmotherdaughtermaxcount];
+    //UInt_t genallparticles_count;
+    //Float_t genallparticles_e[M_genallparticlesmaxcount];
+    //Float_t genallparticles_px[M_genallparticlesmaxcount];
+    //Float_t genallparticles_py[M_genallparticlesmaxcount];
+    //Float_t genallparticles_pz[M_genallparticlesmaxcount];
+    //Float_t genallparticles_vx[M_genallparticlesmaxcount];
+    //Float_t genallparticles_vy[M_genallparticlesmaxcount];
+    //Float_t genallparticles_vz[M_genallparticlesmaxcount];
+    //Int_t genallparticles_pdgid[M_genallparticlesmaxcount];
+    //Int_t genallparticles_status[M_genallparticlesmaxcount];
+    //UInt_t genallparticles_motherbeg[M_genallparticlesmaxcount];
+    //UInt_t genallparticles_daughterbeg[M_genallparticlesmaxcount];
 
-    UInt_t genallparticlesdaughter_count;
-    UInt_t genallparticles_daughters[M_genmotherdaughtermaxcount];
+    //UInt_t genallparticlesmother_count;
+    //UInt_t genallparticles_mothers[M_genmotherdaughtermaxcount];
+
+    //UInt_t genallparticlesdaughter_count;
+    //UInt_t genallparticles_daughters[M_genmotherdaughtermaxcount];
 
 public:
     Analyse(int argc = 0, char **argv = 0, bool batchmode = false);
@@ -569,6 +599,8 @@ public:
     UInt_t   TimeUnix() const { return(event_timeunix); }
     UInt_t   TimeMicroSec() const { return(event_timemicrosec); }
     Double_t Rho() const { return(event_rho); }
+    bool     IsData() const { return(isdata); }
+    bool     IsMC() const { return(!(isdata)); }
     //Double_t Sigma() const { return(ak4pfjet_sigma); }
 
     // RECO-level information
@@ -655,11 +687,11 @@ public:
     Double_t GetPrimVertexWeight(vector<Double_t> &datadist) const;
     Int_t NumGoodPrimVertices() const;
 
-    void LoadAllGenParticles(bool select = true);
-    GenParticle AllGenParticles(UInt_t n) const;
-    UInt_t NumAllGenParticles() const {
-        return(genallparticles_count);
-    }
+    //void LoadAllGenParticles(bool select = true);
+    //GenParticle AllGenParticles(UInt_t n) const;
+    //UInt_t NumAllGenParticles() const {
+    //    return(genallparticles_count);
+    //}
 
     void LoadGenParticles(bool select = true);
     GenLightParticle GenParticles(UInt_t n) const;
@@ -667,14 +699,16 @@ public:
         return(genparticles_count);
     }
 
-    void LoadGenAK4Jets(bool select = true);
-    GenJet GenAK4Jets(UInt_t n) const;
-    UInt_t NumGenAK4Jets() const {
-        return(genak4jet_count);
+    void LoadGenJets(bool select = true);
+    GenJet GenJets(UInt_t n) const;
+    UInt_t NumGenJets() const {
+        //return(genak4jet_count);
+        return(genjet_count);
     }
 
-    TLorentzVector GenMETCalo() const;
-    TLorentzVector GenMETTrue() const;
+    //TLorentzVector GenMETCalo() const;
+    //TLorentzVector GenMETTrue() const;
+    TLorentzVector GenMET() const;
 
     //virtual dummies:
     //executed for each event in the loop
@@ -747,14 +781,6 @@ public:
     Bool_t passesisotkmu20() const { return(IsoTkMu20Pass); }
 
     bool EventPassesHLT(std::vector<string> hltnames) const;
-    bool IsData() const {
-        //return(NumTruePileUpInteractions() == -1);
-        return(bool(isdata));
-    }
-    bool IsMC() const {
-        //return(NumTruePileUpInteractions() != -1);
-        return(!(bool(isdata)));
-    }
 };
 
 extern Analyse *GLAN;
