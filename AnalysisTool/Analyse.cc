@@ -26,7 +26,7 @@ Analyse::Analyse(int argc, char **argv, bool batchmode) :
     loadtrigger(0),
     loadgeninfo(0),
     loadgenparticles(0),
-    loadgenjets(0),
+    loadgenak4jets(0),
     loadallgenparticles(0),
     duplicatecheck(false),
     skimtree(0),
@@ -218,10 +218,10 @@ void Analyse::SetLoad() {
         tree->SetBranchStatus("genparticle*", false);
     }
 
-    if(loadgenjets == 1) {
-        tree->SetBranchStatus("genjet*", true);
+    if(loadgenak4jets == 1) {
+        tree->SetBranchStatus("genak4jet*", true);
     } else {
-        tree->SetBranchStatus("genjet*", false);
+        tree->SetBranchStatus("genak4jet*", false);
     }
 }
 
@@ -770,73 +770,65 @@ void Analyse::Load() {
     //tree->SetBranchAddress("pfmettype0type1_ey", &pfmettype0type1_ey);
 
     tree->SetBranchAddress("genweight", &genweight);
-    tree->SetBranchAddress("genx1", &genx1);
-    tree->SetBranchAddress("genid1", &genid1);
-    tree->SetBranchAddress("genx2", &genx2);
-    tree->SetBranchAddress("genid2", &genid2);
-    tree->SetBranchAddress("genScale", &genScale);
+    tree->SetBranchAddress("genx1",     &genx1);
+    tree->SetBranchAddress("genid1",    &genid1);
+    tree->SetBranchAddress("genx2",     &genx2);
+    tree->SetBranchAddress("genid2",    &genid2);
+    tree->SetBranchAddress("genScale",  &genScale);
 
     tree->SetBranchAddress("numpileupinteractionsminus", &numpileupinteractionsminus);
-    tree->SetBranchAddress("numpileupinteractions", &numpileupinteractions);
-    tree->SetBranchAddress("numpileupinteractionsplus", &numpileupinteractionsplus);
-    tree->SetBranchAddress("numtruepileupinteractions", &numtruepileupinteractions);
+    tree->SetBranchAddress("numpileupinteractions",      &numpileupinteractions);
+    tree->SetBranchAddress("numpileupinteractionsplus",  &numpileupinteractionsplus);
+    tree->SetBranchAddress("numtruepileupinteractions",  &numtruepileupinteractions);
 
     tree->SetBranchAddress("genparticles_count", &genparticles_count);
-    tree->SetBranchAddress("genparticles_e", genparticles_e);
-    tree->SetBranchAddress("genparticles_px", genparticles_px);
-    tree->SetBranchAddress("genparticles_py", genparticles_py);
-    tree->SetBranchAddress("genparticles_pz", genparticles_pz);
-    tree->SetBranchAddress("genparticles_vx", genparticles_vx);
-    tree->SetBranchAddress("genparticles_vy", genparticles_vy);
-    tree->SetBranchAddress("genparticles_vz", genparticles_vz);
-    tree->SetBranchAddress("genparticles_pdgid", genparticles_pdgid);
-    tree->SetBranchAddress("genparticles_status", genparticles_status);
-    tree->SetBranchAddress("genparticles_indirectmother", genparticles_indirectmother);
-    tree->SetBranchAddress("genparticles_info", genparticles_info);
+    tree->SetBranchAddress("genparticles_e",      &genparticles_e);
+    tree->SetBranchAddress("genparticles_px",     &genparticles_px);
+    tree->SetBranchAddress("genparticles_py",     &genparticles_py);
+    tree->SetBranchAddress("genparticles_pz",     &genparticles_pz);
+    tree->SetBranchAddress("genparticles_vx",     &genparticles_vx);
+    tree->SetBranchAddress("genparticles_vy",     &genparticles_vy);
+    tree->SetBranchAddress("genparticles_vz",     &genparticles_vz);
+    tree->SetBranchAddress("genparticles_pdgid",  &genparticles_pdgid);
+    tree->SetBranchAddress("genparticles_status", &genparticles_status);
+    tree->SetBranchAddress("genparticles_indirectmother", &genparticles_indirectmother);
+    tree->SetBranchAddress("genparticles_info",        &genparticles_info);
 
-    tree->SetBranchAddress("genparticles_motherbeg", genparticles_motherbeg);
-    tree->SetBranchAddress("genparticles_daughterbeg", genparticles_daughterbeg);
-    tree->SetBranchAddress("genparticlesmother_count", &genparticlesmother_count);
-    tree->SetBranchAddress("genparticles_mothers", genparticles_mothers);
-    tree->SetBranchAddress("genparticlesdaughter_count", &genparticlesdaughter_count);
-    tree->SetBranchAddress("genparticles_daughters", genparticles_daughters);
+    //tree->SetBranchAddress("genparticlesmother_count",    &genparticlesmother_count);
+    //tree->SetBranchAddress("genparticlesdaughter_count",  &genparticlesdaughter_count);
+    //tree->SetBranchAddress("genparticles_motherbeg",   &genparticles_motherbeg);
+    //tree->SetBranchAddress("genparticles_daughterbeg", &genparticles_daughterbeg);
+    //tree->SetBranchAddress("genparticles_mothers",     &genparticles_mothers);
+    //tree->SetBranchAddress("genparticles_daughters",   &genparticles_daughters);
 
-/*
-    tree->SetBranchAddress("genallparticles_count", &genallparticles_count);
-    tree->SetBranchAddress("genallparticles_e", genallparticles_e);
-    tree->SetBranchAddress("genallparticles_px", genallparticles_px);
-    tree->SetBranchAddress("genallparticles_py", genallparticles_py);
-    tree->SetBranchAddress("genallparticles_pz", genallparticles_pz);
-    tree->SetBranchAddress("genallparticles_vx", genallparticles_vx);
-    tree->SetBranchAddress("genallparticles_vy", genallparticles_vy);
-    tree->SetBranchAddress("genallparticles_vz", genallparticles_vz);
-    tree->SetBranchAddress("genallparticles_pdgid", genallparticles_pdgid);
-    tree->SetBranchAddress("genallparticles_status", genallparticles_status);
-    tree->SetBranchAddress("genallparticles_motherbeg", genallparticles_motherbeg);
-    tree->SetBranchAddress("genallparticles_daughterbeg", genallparticles_daughterbeg);
-
-    tree->SetBranchAddress("genallparticlesmother_count", &genallparticlesmother_count);
-    tree->SetBranchAddress("genallparticles_mothers", genallparticles_mothers);
-
+    tree->SetBranchAddress("genallparticles_count",         &genallparticles_count);
+    tree->SetBranchAddress("genallparticlesmother_count",   &genallparticlesmother_count);
     tree->SetBranchAddress("genallparticlesdaughter_count", &genallparticlesdaughter_count);
-    tree->SetBranchAddress("genallparticles_daughters", genallparticles_daughters);
-*/
+    tree->SetBranchAddress("genallparticles_e",           &genallparticles_e);
+    tree->SetBranchAddress("genallparticles_px",          &genallparticles_px);
+    tree->SetBranchAddress("genallparticles_py",          &genallparticles_py);
+    tree->SetBranchAddress("genallparticles_pz",          &genallparticles_pz);
+    tree->SetBranchAddress("genallparticles_vx",          &genallparticles_vx);
+    tree->SetBranchAddress("genallparticles_vy",          &genallparticles_vy);
+    tree->SetBranchAddress("genallparticles_vz",          &genallparticles_vz);
+    tree->SetBranchAddress("genallparticles_pdgid",       &genallparticles_pdgid);
+    tree->SetBranchAddress("genallparticles_status",      &genallparticles_status);
+    tree->SetBranchAddress("genallparticles_motherbeg",   &genallparticles_motherbeg);
+    tree->SetBranchAddress("genallparticles_daughterbeg", &genallparticles_daughterbeg);
+    tree->SetBranchAddress("genallparticles_mothers",     &genallparticles_mothers);
+    tree->SetBranchAddress("genallparticles_daughters",   &genallparticles_daughters);
 
-    //tree->SetBranchAddress("genmetcalo_ex", &genmetcalo_ex);
-    //tree->SetBranchAddress("genmetcalo_ey", &genmetcalo_ey);
-    //tree->SetBranchAddress("genmettrue_ex", &genmettrue_ex);
-    //tree->SetBranchAddress("genmettrue_ey", &genmettrue_ey);
     tree->SetBranchAddress("genmet_ex", &genmet_ex);
     tree->SetBranchAddress("genmet_ey", &genmet_ey);
 
-    tree->SetBranchAddress("genjet_count", &genjet_count);
-    tree->SetBranchAddress("genjet_e", &genjet_e);
-    tree->SetBranchAddress("genjet_px", &genjet_px);
-    tree->SetBranchAddress("genjet_py", &genjet_py);
-    tree->SetBranchAddress("genjet_pz", &genjet_pz);
-    tree->SetBranchAddress("genjet_einvisible", &genjet_einvisible);
-    //tree->SetBranchAddress("genak4jet_flavour", genak4jet_flavour);
-    //tree->SetBranchAddress("genak4jet_info", genak4jet_info);
+    tree->SetBranchAddress("genak4jet_count", &genak4jet_count);
+    tree->SetBranchAddress("genak4jet_e",          &genak4jet_e);
+    tree->SetBranchAddress("genak4jet_px",         &genak4jet_px);
+    tree->SetBranchAddress("genak4jet_py",         &genak4jet_py);
+    tree->SetBranchAddress("genak4jet_pz",         &genak4jet_pz);
+    tree->SetBranchAddress("genak4jet_einvisible", &genak4jet_einvisible);
+    tree->SetBranchAddress("genak4jet_flavour",    &genak4jet_flavour);
+    tree->SetBranchAddress("genak4jet_info",       &genak4jet_info);
 
 }
 
@@ -959,9 +951,9 @@ void Analyse::LoadGenParticles(bool select) {
 //____________________________________________________________________________________
 void Analyse::LoadGenJets(bool select) {
     if(select) {
-        loadgenjets = 1;
+        loadgenak4jets = 1;
     } else {
-        loadgenjets = 0;
+        loadgenak4jets = 0;
     }
 }
 
@@ -1075,25 +1067,24 @@ Vertex Analyse::PrimVertices(UInt_t n) const {
 
 //____________________________________________________________________________________
 GenLightParticle Analyse::GenParticles(UInt_t n) const {
-    return(GenLightParticle(genparticles_e[n], genparticles_px[n], genparticles_py[n], genparticles_pz[n], genparticles_vx[n], genparticles_vy[n], genparticles_vz[n], genparticles_status[n], genparticles_pdgid[n], genparticles_info[n], genparticles_indirectmother[n]));
+    return(GenLightParticle(genparticles_e->at(n), genparticles_px->at(n), genparticles_py->at(n), genparticles_pz->at(n), genparticles_vx->at(n), genparticles_vy->at(n), genparticles_vz->at(n), genparticles_status->at(n), genparticles_pdgid->at(n), genparticles_info->at(n), genparticles_indirectmother->at(n)));
+    //return(GenLightParticle(genparticles_e->at(n), genparticles_px->at(n), genparticles_py->at(n), genparticles_pz->at(n), genparticles_vx->at(n), genparticles_vy->at(n), genparticles_vz->at(n), genparticles_status->at(n), genparticles_pdgid->at(n)));
 }
 
 //____________________________________________________________________________________
 GenJet Analyse::GenJets(UInt_t n) const {
-    return(GenJet(genjet_e->at(n), genjet_px->at(n), genjet_py->at(n), genjet_pz->at(n), genjet_einvisible->at(n)));
+    return(GenJet(genak4jet_e->at(n), genak4jet_px->at(n), genak4jet_py->at(n), genak4jet_pz->at(n), genak4jet_einvisible->at(n)));
 }
 
-/*
 //____________________________________________________________________________________
 GenParticle Analyse::AllGenParticles(UInt_t n) const {
-    UInt_t motherend(n == genallparticles_count-1 ? genallparticlesmother_count : genallparticles_motherbeg[n+1]);
-    UInt_t daughterend(n == genallparticles_count-1 ? genallparticlesdaughter_count : genallparticles_daughterbeg[n+1]);
+    UInt_t motherend(n == genallparticles_count-1 ? genallparticlesmother_count : genallparticles_motherbeg->at(n+1));
+    UInt_t daughterend(n == genallparticles_count-1 ? genallparticlesdaughter_count : genallparticles_daughterbeg->at(n+1));
 
-    GenParticle newpart(this, n, genallparticles_e[n], genallparticles_px[n], genallparticles_py[n], genallparticles_pz[n], genallparticles_vx[n], genallparticles_vy[n], genallparticles_vz[n], genallparticles_status[n], genallparticles_pdgid[n], genallparticles_motherbeg[n], motherend - genallparticles_motherbeg[n], genallparticles_daughterbeg[n], daughterend - genallparticles_daughterbeg[n]);
+    GenParticle newpart(this, n, genallparticles_e->at(n), genallparticles_px->at(n), genallparticles_py->at(n), genallparticles_pz->at(n), genallparticles_vx->at(n), genallparticles_vy->at(n), genallparticles_vz->at(n), genallparticles_status->at(n), genallparticles_pdgid->at(n), genallparticles_motherbeg->at(n), motherend - genallparticles_motherbeg->at(n), genallparticles_daughterbeg->at(n), daughterend - genallparticles_daughterbeg->at(n));
 
     return(newpart);
 }
-*/
 
 ////____________________________________________________________________________________
 //TLorentzVector Analyse::GenMETTrue() const {

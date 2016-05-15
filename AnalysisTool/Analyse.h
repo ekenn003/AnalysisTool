@@ -83,7 +83,7 @@ class Analyse
     Int_t    loadtrigger;
     Int_t    loadgeninfo;
     Int_t    loadgenparticles;
-    Int_t    loadgenjets;
+    Int_t    loadgenak4jets;
     Int_t    loadallgenparticles;
 
     void SetLoad();
@@ -506,69 +506,55 @@ class Analyse
     Int_t numpileupinteractionsplus;
     Float_t numtruepileupinteractions;
 
-    //Float_t genmetcalo_ex;
-    //Float_t genmetcalo_ey;
-    //Float_t genmettrue_ex;
-    //Float_t genmettrue_ey;
-
     vector<Float_t> *genmet_ex;
     vector<Float_t> *genmet_ey;
-    //UInt_t genak4jet_count;
-    //Float_t genak4jet_e[M_genjetmaxcount];
-    //Float_t genak4jet_px[M_genjetmaxcount];
-    //Float_t genak4jet_py[M_genjetmaxcount];
-    //Float_t genak4jet_pz[M_genjetmaxcount];
-    //Float_t genak4jet_einvisible[M_genjetmaxcount];
-    //Int_t genak4jet_flavour[M_genjetmaxcount];
-    //UInt_t genak4jet_info[M_genjetmaxcount];
 
-    UInt_t genjet_count;
-    vector<Float_t> *genjet_e;
-    vector<Float_t> *genjet_px;
-    vector<Float_t> *genjet_py;
-    vector<Float_t> *genjet_pz;
-    vector<Float_t> *genjet_einvisible;
+    UInt_t genak4jet_count;
+    vector<Float_t> *genak4jet_e;
+    vector<Float_t> *genak4jet_px;
+    vector<Float_t> *genak4jet_py;
+    vector<Float_t> *genak4jet_pz;
+    vector<Float_t> *genak4jet_einvisible;
+    vector<Int_t> *genak4jet_flavour;
+    vector<UInt_t> *genak4jet_info;
 
     UInt_t genparticles_count;
-    Float_t genparticles_e[M_genparticlesmaxcount];
-    Float_t genparticles_px[M_genparticlesmaxcount];
-    Float_t genparticles_py[M_genparticlesmaxcount];
-    Float_t genparticles_pz[M_genparticlesmaxcount];
-    Float_t genparticles_vx[M_genparticlesmaxcount];
-    Float_t genparticles_vy[M_genparticlesmaxcount];
-    Float_t genparticles_vz[M_genparticlesmaxcount];
-    Int_t genparticles_pdgid[M_genparticlesmaxcount];
-    Int_t genparticles_status[M_genparticlesmaxcount];
-    Int_t genparticles_indirectmother[M_genparticlesmaxcount];
-    UInt_t genparticles_info[M_genparticlesmaxcount];
-
-    UInt_t genparticles_motherbeg[M_genallparticlesmaxcount];
-    UInt_t genparticles_daughterbeg[M_genallparticlesmaxcount];
     UInt_t genparticlesmother_count;
-    UInt_t genparticles_mothers[M_genmotherdaughtermaxcount];
     UInt_t genparticlesdaughter_count;
-    UInt_t genparticles_daughters[M_genmotherdaughtermaxcount];
+    vector<Float_t> *genparticles_e;
+    vector<Float_t> *genparticles_px;
+    vector<Float_t> *genparticles_py;
+    vector<Float_t> *genparticles_pz;
+    vector<Float_t> *genparticles_vx;
+    vector<Float_t> *genparticles_vy;
+    vector<Float_t> *genparticles_vz;
+    vector<Int_t>   *genparticles_pdgid;
+    vector<Int_t>   *genparticles_status;
+    vector<Int_t>   *genparticles_indirectmother;
+    vector<UInt_t>  *genparticles_info;
+    vector<UInt_t>  *genparticles_motherbeg;
+    vector<UInt_t>  *genparticles_daughterbeg;
+    vector<UInt_t>  *genparticles_mothers;
+    vector<UInt_t>  *genparticles_daughters;
 
-    //UInt_t genallparticles_count;
-    //Float_t genallparticles_e[M_genallparticlesmaxcount];
-    //Float_t genallparticles_px[M_genallparticlesmaxcount];
-    //Float_t genallparticles_py[M_genallparticlesmaxcount];
-    //Float_t genallparticles_pz[M_genallparticlesmaxcount];
-    //Float_t genallparticles_vx[M_genallparticlesmaxcount];
-    //Float_t genallparticles_vy[M_genallparticlesmaxcount];
-    //Float_t genallparticles_vz[M_genallparticlesmaxcount];
-    //Int_t genallparticles_pdgid[M_genallparticlesmaxcount];
-    //Int_t genallparticles_status[M_genallparticlesmaxcount];
-    //UInt_t genallparticles_motherbeg[M_genallparticlesmaxcount];
-    //UInt_t genallparticles_daughterbeg[M_genallparticlesmaxcount];
+    UInt_t genallparticles_count;
+    UInt_t genallparticlesmother_count;
+    UInt_t genallparticlesdaughter_count;
+    vector<Float_t> *genallparticles_e;
+    vector<Float_t> *genallparticles_px;
+    vector<Float_t> *genallparticles_py;
+    vector<Float_t> *genallparticles_pz;
+    vector<Float_t> *genallparticles_vx;
+    vector<Float_t> *genallparticles_vy;
+    vector<Float_t> *genallparticles_vz;
+    vector<Int_t>   *genallparticles_pdgid;
+    vector<Int_t>   *genallparticles_status;
+    vector<UInt_t>  *genallparticles_motherbeg;
+    vector<UInt_t>  *genallparticles_daughterbeg;
+    vector<UInt_t>  *genallparticles_mothers;
+    vector<UInt_t>  *genallparticles_daughters;
 
-    //UInt_t genallparticlesmother_count;
-    //UInt_t genallparticles_mothers[M_genmotherdaughtermaxcount];
-
-    //UInt_t genallparticlesdaughter_count;
-    //UInt_t genallparticles_daughters[M_genmotherdaughtermaxcount];
-
-public:
+  public:
     Analyse(int argc = 0, char **argv = 0, bool batchmode = false);
     virtual ~Analyse();
     Int_t AddFile(string filename);
@@ -687,11 +673,11 @@ public:
     Double_t GetPrimVertexWeight(vector<Double_t> &datadist) const;
     Int_t NumGoodPrimVertices() const;
 
-    //void LoadAllGenParticles(bool select = true);
-    //GenParticle AllGenParticles(UInt_t n) const;
-    //UInt_t NumAllGenParticles() const {
-    //    return(genallparticles_count);
-    //}
+    void LoadAllGenParticles(bool select = true);
+    GenParticle AllGenParticles(UInt_t n) const;
+    UInt_t NumAllGenParticles() const {
+        return(genallparticles_count);
+    }
 
     void LoadGenParticles(bool select = true);
     GenLightParticle GenParticles(UInt_t n) const;
@@ -702,8 +688,7 @@ public:
     void LoadGenJets(bool select = true);
     GenJet GenJets(UInt_t n) const;
     UInt_t NumGenJets() const {
-        //return(genak4jet_count);
-        return(genjet_count);
+        return(genak4jet_count);
     }
 
     //TLorentzVector GenMETCalo() const;

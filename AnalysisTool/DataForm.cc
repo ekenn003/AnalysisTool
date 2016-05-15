@@ -55,13 +55,13 @@ GenParticle::GenParticle(const Analyse *Myanalyse, UInt_t Myindex, Double_t E, D
 //______________________________________________________________
 UInt_t GenParticle::GetMotherIndex(UInt_t num) const
 {
-    return(myanalyse->genparticles_mothers[motherfirst+num]);
+    return(myanalyse->genparticles_mothers->at(motherfirst+num));
 }
 
 //______________________________________________________________
 UInt_t GenParticle::GetDaughterIndex(UInt_t num) const
 {
-    return(myanalyse->genparticles_daughters[daughterfirst+num]);
+    return(myanalyse->genparticles_daughters->at(daughterfirst+num));
 }
 // NOTE*
 //______________________________________________________________

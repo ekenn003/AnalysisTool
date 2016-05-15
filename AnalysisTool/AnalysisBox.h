@@ -181,14 +181,14 @@ public:
     Double_t GenScale() const {
         return(an->GenScale());
     }
-/*
+
     GenParticle AllGenParticles(UInt_t n) const {
         return(an->AllGenParticles(n));
     }
     UInt_t NumAllGenParticles() const {
         return(an->NumAllGenParticles());
     }
-*/
+
     GenLightParticle GenParticles(UInt_t n) const {
         return(an->GenParticles(n));
     }
@@ -203,12 +203,6 @@ public:
         return(an->NumGenJets());
     }
 
-    //TLorentzVector GenMETCalo() const {
-    //    return(an->GenMETCalo());
-    //}
-    //TLorentzVector GenMETTrue() const {
-    //    return(an->GenMETTrue());
-    //}
     TLorentzVector GenMET() const {
         return(an->GenMET());
     }

@@ -29,8 +29,8 @@ const Double_t TauMassQ = TauMass*TauMass;
 class GenJet : public TLorentzVector {
   private:
     Float_t einvisible;
-    //Int_t   flavour;
-    //UInt_t  info;
+    Int_t   flavour;
+    UInt_t  info;
     bool    myvisible;
   public:
     // constructors
@@ -39,14 +39,14 @@ class GenJet : public TLorentzVector {
         TLorentzVector(Px, Py, Pz, E),
         einvisible(Einvisible),
         myvisible(false) {}
-    //GenJet() : flavour(0) {}
-    GenJet() {}
+    GenJet() : flavour(0) {}
+    //GenJet() {}
     // methods
     Float_t InvisibleEnergy() const { return(einvisible); }
-    //Int_t   Flavour() const { return(flavour); }
+    Int_t   Flavour() const { return(flavour); }
     void    ScaleVisible(bool visible); //include or exlude invisible energy fraction
-    //enum    CONSTITUENTS { CONS_b=1<<0, CONS_bbar=1<<1, CONS_c=1<<2, CONS_cbar=1<<3, CONS_light=1<<4, CONS_gluon=1<<5 };
-    //bool    HasConstituent(UInt_t constituent) const { return(info & constituent); }
+    enum    CONSTITUENTS { CONS_b=1<<0, CONS_bbar=1<<1, CONS_c=1<<2, CONS_cbar=1<<3, CONS_light=1<<4, CONS_gluon=1<<5 };
+    bool    HasConstituent(UInt_t constituent) const { return(info & constituent); }
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -80,6 +80,7 @@ class GenLightParticle : public GenBasicParticle
   public:
     // constructors
     GenLightParticle(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t X, Float_t Y, Float_t Z, Int_t Status, Int_t Pdgid, UInt_t Info, Int_t Indirectmother);
+    //GenLightParticle(Double_t E, Double_t Px, Double_t Py, Double_t Pz, Float_t X, Float_t Y, Float_t Z, Int_t Status, Int_t Pdgid);
     GenLightParticle() {}
     // methods
     enum INFO {FromWp=1<<0, FromWm=1<<1, FromGamma=1<<2, FromZ=1<<3, Fromh=1<<4, FromH=1<<5, FromA=1<<6, FromHp=1<<7, FromHm=1<<8, Fromt=1<<9, Fromtbar=1<<10, Fromb=1<<11, Frombbar=1<<12, FromZprime=1<<13, Fromtprime=1<<14, Fromtprimebar=1<<15, Fromtaup=1<<16, Fromtaum=1<<17};
