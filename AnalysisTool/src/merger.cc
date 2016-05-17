@@ -68,19 +68,6 @@ int main() {
             lumirecorded = atof(strs[6].c_str());
             avgpu = atof(strs[7].c_str());
 
-/*
-            boost::split(strs, line, boost::is_any_of("|"));
-            if (strs.size() != 11) continue;
-            vector<std::string> runfill;
-            vector<std::string> lumisec;
-            boost::split(runfill, strs[1], boost::is_any_of(":"));
-            boost::split(lumisec, strs[2], boost::is_any_of(":"));
-            run = atoi(runfill[0].c_str());
-            block = atoi(lumisec[0].c_str()); // not sure if this should be "nls" or "ncms"
-            lumirecorded = atof(strs[7].c_str());
-            avgpu = atof(strs[8].c_str());
-*/
-
             if (lumirecorded == 0.) {
                 cout << "WARNING Lumi value is 0. Run: " << run << ", Block: " << block << endl;
                 continue;
@@ -94,15 +81,6 @@ int main() {
     } else {
         cout << "ERROR: lumi.cvs could not be opened!" << endl;
     }
-
-    //TH1D* muhist = new TH1D("mudist", "mudist", 200, 0., 100.);
-    //TFile *pufile = new TFile("MyDataPileupHistogram.root","READ");
-    //TH1 *puhist = (TH1D*)(pufile->Get("pileup")->Clone());
-    //for(int i = 0; i < puhist->GetNbinsX(); ++i) {
-    //    muhist->SetBinContent(i, puhist->GetBinContent(i));
-    //}
-    //pufile->Close();
-
 
     ana.PrintLumiOfRuns();
     ana.WriteLumiFile(dirname + string("LUMI_INFO.root"));

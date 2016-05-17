@@ -134,15 +134,15 @@ class Analyse
 
     //Data
     Bool_t   isdata;
-    UInt_t   errors;
+    //UInt_t   errors;
     Double_t event_nr;
     UInt_t   event_luminosityblock;
     UInt_t   event_run;
     UInt_t   event_timeunix;
     UInt_t   event_timemicrosec;
-    UChar_t  trigger_level1bits[8];
-    UChar_t  trigger_level1[128];
-    UChar_t  trigger_HLT[128];
+    //UChar_t  trigger_level1bits[8];
+    //UChar_t  trigger_level1[128];
+    //UChar_t  trigger_HLT[128];
 
     Int_t   IsoMu20Pass;
     Int_t   IsoTkMu20Pass;
@@ -731,16 +731,16 @@ class Analyse
 
     //trigger information
     void LoadTrigger(bool select = true);
-    TriggerSelection *AddTriggerSelection(string id, vector<string> triggernames, bool useprescaled = false);
-    TriggerSelection *GetTriggerSelection(string id);
-    bool GetL1Trigger(UInt_t bit) const;
-    bool GetL1TriggerBits(UInt_t bit) const;
-    bool GetHLTrigger(UInt_t index) const;
-    Int_t GetHLTrigger(vector<string> triggernames) const; //looks if one of the tiggers fired. Only unprescaled trigger are considered. returns -1 if non of the trigger is unprescaled, 0 non fired, 1 at least one fired.
-    Int_t GetHLTriggerIndex(string triggername) const;
-    string GetHLTriggerName(UInt_t index) const;
-    Int_t GetHLTPrescale(UInt_t triggerindex) const;
-    Int_t GetNumHLTriggers() const;
+    //TriggerSelection *AddTriggerSelection(string id, vector<string> triggernames, bool useprescaled = false);
+    //TriggerSelection *GetTriggerSelection(string id);
+    //bool GetL1Trigger(UInt_t bit) const;
+    //bool GetL1TriggerBits(UInt_t bit) const;
+    //bool GetHLTrigger(UInt_t index) const;
+    //Int_t GetHLTrigger(vector<string> triggernames) const; //looks if one of the tiggers fired. Only unprescaled trigger are considered. returns -1 if non of the trigger is unprescaled, 0 non fired, 1 at least one fired.
+    //Int_t GetHLTriggerIndex(string triggername) const;
+    //string GetHLTriggerName(UInt_t index) const;
+    //Int_t GetHLTPrescale(UInt_t triggerindex) const;
+    //Int_t GetNumHLTriggers() const;
 
     //Lumi calculation
     void AddLumiFile(string filename, string dir = "");

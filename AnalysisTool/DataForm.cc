@@ -178,7 +178,7 @@ TriggerObject::TriggerObject(const Analyse *ma, const vector<string> *Triggernam
     triggernames(Triggernames)
 {
 }
-
+/*
 //______________________________________________________________
 Int_t TriggerObject::Trigger(string triggername) const
 {
@@ -204,7 +204,7 @@ Int_t TriggerObject::Trigger(string triggername) const
     if(result) return(2);
     else return(-2);
 }
-
+*/
 
 //////////////////////////////////////////////////////////////////////
 // CLASS: MUON ///////////////////////////////////////////////////////
@@ -1071,7 +1071,7 @@ TriggerSelection::TriggerSelection(Analyse *an, vector<string> names, bool usepr
         runinfo[runnumber].Lumi(runlumi);
     }
 }
-
+/*
 //______________________________________________________________
 Int_t TriggerSelection::Result()
 {
@@ -1085,7 +1085,7 @@ Int_t TriggerSelection::Result()
         return(triggerlumi.Prescale() * -1);
     }
 }
-
+*/
 //______________________________________________________________
 Float_t TriggerSelection::LumiUsed(Int_t format)
 {

@@ -253,7 +253,7 @@ class TriggerObject {
     TriggerObject() {}
     TriggerObject(const Analyse *ma, const vector<string> *Triggernames, UInt_t Trigger);
     // methods
-    Int_t Trigger(string name) const; //0: Trigger not available or matched. 1 not prescale fired, -1 not prescaled not fired, 2 prescaled fired, -2 prescalded not fired
+    //Int_t Trigger(string name) const; //0: Trigger not available or matched. 1 not prescale fired, -1 not prescaled not fired, 2 prescaled fired, -2 prescalded not fired
     const vector<string> *TriggerNames() const { return(triggernames); }
     const Analyse *MyAn() const { return(MA); }
 };
@@ -1146,7 +1146,7 @@ private:
     map<UInt_t, TriggerRun> runinfo;
 public:
     TriggerSelection(Analyse *an, vector<string> names, bool useprescaled = false);
-    Int_t Result();
+    //Int_t Result();
     Float_t LumiUsed(Int_t format = 0);
     Float_t LumiBeforeEvent();
     string GetTriggerName(UInt_t run = 0, UInt_t lumiblock = 0);

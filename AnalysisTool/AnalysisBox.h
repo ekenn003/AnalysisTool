@@ -210,7 +210,7 @@ public:
     Long64_t Processed() const {
         return(an->Processed());
     }
-
+/*
     //trigger information
     bool GetL1Trigger(UInt_t bit) const {
         return(an->GetL1Trigger(bit));
@@ -240,7 +240,7 @@ public:
     TriggerSelection *GetTriggerSelection(string id) {
         return(an->GetTriggerSelection(id));
     }
-
+*/
     Int_t IsLumiAvailable() const {
         return(an->IsLumiAvailable());
     }

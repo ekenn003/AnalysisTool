@@ -105,7 +105,7 @@ Analyse::~Analyse() {
 //____________________________________________________________________________________
 void Analyse::SetLoad() {
     tree->SetBranchStatus("*", false);
-    tree->SetBranchStatus("errors", true);
+    //tree->SetBranchStatus("errors", true);
     tree->SetBranchStatus("event_*", true);
     tree->SetBranchStatus("numpileupinteractions*", true);
     tree->SetBranchStatus("numtruepileupinteractions", true);
@@ -182,11 +182,11 @@ void Analyse::SetLoad() {
         tree->SetBranchStatus("primvertex_*", false);
     }
 
-    if(loadtrigger == 1) {
-        tree->SetBranchStatus("trigger_*", true);
-    } else {
-        tree->SetBranchStatus("trigger_*", false);
-    }
+    //if(loadtrigger == 1) {
+    //    tree->SetBranchStatus("trigger_*", true);
+    //} else {
+    //    tree->SetBranchStatus("trigger_*", false);
+    //}
 
     if(loadgeninfo == 1) {
         tree->SetBranchStatus("genweight", true);
@@ -412,15 +412,15 @@ void Analyse::GetEvent(Long64_t num, Int_t loadtype) {
 //____________________________________________________________________________________
 void Analyse::Load() {
     tree->SetBranchAddress("isdata", &isdata);
-    tree->SetBranchAddress("errors", &errors);
+    //tree->SetBranchAddress("errors", &errors);
     tree->SetBranchAddress("event_nr", &event_nr);
     tree->SetBranchAddress("event_luminosityblock", &event_luminosityblock);
     tree->SetBranchAddress("event_run", &event_run);
     tree->SetBranchAddress("event_timeunix", &event_timeunix);
     tree->SetBranchAddress("event_timemicrosec", &event_timemicrosec);
-    tree->SetBranchAddress("trigger_level1bits", trigger_level1bits);
-    tree->SetBranchAddress("trigger_level1", trigger_level1);
-    tree->SetBranchAddress("trigger_HLT", trigger_HLT);
+    //tree->SetBranchAddress("trigger_level1bits", trigger_level1bits);
+    //tree->SetBranchAddress("trigger_level1", trigger_level1);
+    //tree->SetBranchAddress("trigger_HLT", trigger_HLT);
 
     tree->SetBranchAddress("IsoMu20Pass", &IsoMu20Pass);
     tree->SetBranchAddress("IsoTkMu20Pass", &IsoTkMu20Pass);
@@ -956,7 +956,7 @@ void Analyse::LoadGenJets(bool select) {
         loadgenak4jets = 0;
     }
 }
-
+/*
 //____________________________________________________________________________________
 bool Analyse::GetL1Trigger(UInt_t bit) const {
     if((trigger_level1[bit/8] & 1<<(bit % 8)) > 0) {
@@ -983,7 +983,7 @@ bool Analyse::GetHLTrigger(UInt_t index) const {
         return(false);
     }
 }
-
+*/
 //____________________________________________________________________________________
 BeamSpot Analyse::GetBeamSpot() const {
     return(BeamSpot(beamspot_x, beamspot_y, beamspot_z, beamspot_cov, beamspot_xwidth, beamspot_ywidth, beamspot_zsigma));
@@ -1087,8 +1087,8 @@ GenParticle Analyse::AllGenParticles(UInt_t n) const {
 }
 
 ////____________________________________________________________________________________
-//TLorentzVector Analyse::GenMETTrue() const {
-//    return(TLorentzVector(genmettrue_ex, genmettrue_ey, 0., sqrt(pow(genmettrue_ex, 2) + pow(genmettrue_ey, 2))));
+//TLorentzVector Analyse::GenMET() const {
+//    return(TLorentzVector(genmet_ex, genmet_ey, 0., sqrt(pow(genmet_ex, 2) + pow(genmet_ey, 2))));
 //}
 
 //____________________________________________________________________________________
@@ -1273,9 +1273,13 @@ void Analyse::Batch_Prepare(bool simple) {
                 lumifiles.push_back(lumifile);
             }
         }
+cerr<<"aww yeah"<<endl;
         for(size_t i = 0 ; i < lumifiles.size() ; i++) {
+cerr<<"you gotta"<<endl;
             AddLumiFile(lumifiles[i]);
+cerr<<"schwifty"<<endl;
         }
+cerr<<"gotta get schwifty in here"<<endl;
         delete[] buff;
     }
 #endif
@@ -1424,10 +1428,10 @@ Long64_t Analyse::Loop(Long64_t start, Long64_t end) {
     BeginLoop();
     if(!batch_emptyjob) {
         if(Batch_MyId() != -1) cerr << "JOB " << Batch_MyId() << ": ";
-        cerr << GetNumAddedEvents() << " Events are added." << endl;
         if(IsData()) cerr<<"Sample will be treated as DATA."<<endl;
         else cerr<<"Sample will be treated as MC."<<endl;
-        //Looping
+        cerr << GetNumAddedEvents() << " Events are added." << endl;
+        // Looping
         if(Batch_MyId() != -1) cerr << "JOB " << Batch_MyId() << ": ";
         cerr << "Events " << start << " - " << end << " will be processed (" << end - start << " Events)." << endl;
         TStopwatch watch;
@@ -1438,19 +1442,15 @@ Long64_t Analyse::Loop(Long64_t start, Long64_t end) {
             GetEvent(i);
 
             if(IsBatchSelected(Run(), LumiBlock())) {
-                errors &= ~(1<<18); //
-                errors &= ~(1<<19); //these lines are a workaround for wrong set bits in Jet samples (v1.6.0 2012). related to genMET.
-                if(errors != 0) {
-                    cerr << "ERROR " << errors << "in Event: Nr: " << UInt_t(Number()) << ", Run: " << Run() << ", LumiBlock: " << LumiBlock() << ". It's rejected!" << endl;
-                    continue;
-                }
                 if(jsonfilter) {
                     if(jsonlist[Run()][LumiBlock()]) {
                         evres = AnalyseEvent();
                     } else {
                         evres = 0;
                     }
-                } else evres = AnalyseEvent();
+                } else {
+                    evres = AnalyseEvent();
+                }
 
                 if(duplicatecheck) {
                     eventlist[Run()][LumiBlock()][Number()]++;
@@ -1835,6 +1835,7 @@ void Analyse::ResetLumiValues() {
     }
 }
 
+/*
 //____________________________________________________________________________________
 Int_t Analyse::GetNumHLTriggers() const {
     if(runlist.find(Run()) != runlist.end()) {
@@ -1842,7 +1843,6 @@ Int_t Analyse::GetNumHLTriggers() const {
     }
     return(-1);
 }
-
 //____________________________________________________________________________________
 Int_t Analyse::GetHLTriggerIndex(string triggername) const {
     if(runlist.find(Run()) != runlist.end()) {
@@ -1898,7 +1898,7 @@ Int_t Analyse::GetHLTPrescale(UInt_t triggerindex) const {
         return(-1);
     }
 }
-
+*/
 
 //____________________________________________________________________________________
 bool Analyse::EventPassesHLT(std::vector<string> hltnames) const {
