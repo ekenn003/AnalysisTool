@@ -11,7 +11,7 @@ Installation:
 
     cd $CMSSW_BASE/src/AnalysisTool/AnalysisTool
 
-    ./configure --prefix=($pwd)
+    ./configure --prefix=$CMSSW_BASE/src/AnalysisTool/AnalysisTool
     make
     make install
 
